@@ -2,25 +2,102 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1a1a1a;
+  --ink: #1d3a2a;
+  --ink-deep: #122a1d;
+  --rule: #d9dcd7;
+  --rule-soft: #ecede9;
+  --muted: #5a6b5f;
+  --muted-soft: #8a958e;
+  --paper: #ffffff;
+  --paper-green: #ecefe7;
+  --accent: #c8612e;
+  --link: #1d3a2a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-ink: var(--ink);
+  --color-ink-deep: var(--ink-deep);
+  --color-rule: var(--rule);
+  --color-rule-soft: var(--rule-soft);
+  --color-muted: var(--muted);
+  --color-muted-soft: var(--muted-soft);
+  --color-paper: var(--paper);
+  --color-paper-green: var(--paper-green);
+  --color-accent: var(--accent);
+  --color-link: var(--link);
+  --font-sans: var(--font-inter);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-feature-settings: "kern", "liga";
+}
+
+.label {
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 2px;
+}
+
+.more-link:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.more-link::after {
+  content: "›";
+  font-weight: 400;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  background: var(--ink);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 999px;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: var(--ink-deep);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  background: white;
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--ink);
+  color: white;
 }
