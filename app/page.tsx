@@ -1,32 +1,35 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const stories = [
   {
-    label: "Awards",
-    date: "10 June 2026",
+    label: "Pula, HR",
+    date: "22 May 2026",
     title:
-      "EHSA 2026 concludes with 15 medals awarded across European producers",
+      "Pula craft kitchen takes three Golds in three categories at EHSA 2026",
     excerpt:
-      "The second edition of the European Hot Sauce Awards closes its blind-tasting rounds with winners across nine categories and twelve countries represented.",
-    href: "#",
+      "OPG Ljutistra, run by chef and producer Patrik Prnjak in the Pula and Fažana area, places Gold in Extract Based, Garlic and Salt & Condiments.",
+    href: "/releases/opg-ljutistra",
     img: "/img/ehsa-istria.png",
   },
   {
-    label: "Events",
-    date: "5 June 2026",
-    title: "Berlin Chili Fest 2026 sets dates and opens stand registration",
+    label: "Murrhardt, DE",
+    date: "23 May 2026",
+    title:
+      "Schwäbischer Wald kitchen takes three Golds in three different categories",
     excerpt:
-      "The annual industry gathering returns to the capital this autumn, with producer stands, judging, and an industry day for trade and press.",
-    href: "#",
-    img: "/img/hero-berlin.png",
+      "Chilma, a kitchen in Murrhardt run by Gerd Ihle, places Gold in Chili Ketchup, Chili Oil and Salt & Condiments with Salsa Habanero, Spicy Chili Crisp and Carolina Reaper Salz.",
+    href: "/releases/chilma",
+    img: "/img/news-maker.png",
   },
   {
-    label: "Distribution",
-    date: "28 May 2026",
-    title: "Republic of Heat adds Croatian, Maltese, and Spanish producers",
+    label: "Albufeira, PT",
+    date: "21 May 2026",
+    title:
+      "Algarve piri-piri farm takes two Golds, 180 varieties grown on one Albufeira plot",
     excerpt:
-      "Twelve makers join ROH's cross-border distribution programme this quarter, with first shipments expected ahead of the autumn trade season.",
-    href: "#",
+      "Piri-Piri & Co, a 15-year piri-piri farm at Quinta do Piri-Piri run by Romeu Santos, places Gold in Extra Hot with Asinhas Infernais and Gold in Mild with Manga e Mel.",
+    href: "/releases/piri-piri-co",
     img: "/img/news-product.jpg",
   },
 ];
@@ -40,24 +43,6 @@ const members = [
     seat: "Berlin",
     founded: "Founded 2023",
     href: "https://republicofheat.com",
-  },
-  {
-    name: "Berlin Chili Fest",
-    short: "BCF",
-    remit:
-      "Annual convening of producers, judges, and trade in the German capital. Includes a public festival day and an industry day for press and buyers.",
-    seat: "Berlin",
-    founded: "Founded 2024",
-    href: null,
-  },
-  {
-    name: "European Hot Sauce Awards",
-    short: "EHSA",
-    remit:
-      "Blind-tasted competition recognising excellence across European production. Conducted by a rotating jury of producers, chefs, and writers.",
-    seat: "Brussels-adjacent",
-    founded: "Founded 2025",
-    href: "https://heatawards.eu",
   },
 ];
 
@@ -93,12 +78,12 @@ function Header() {
       <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between gap-6">
         <a href="/" className="flex items-center gap-4">
           <Image
-            src="/ehc-logo.png"
+            src="/ehc-logo-wide.png"
             alt="European Heat Council"
-            width={760}
-            height={420}
+            width={4000}
+            height={557}
             priority
-            className="h-16 w-auto"
+            className="h-11 w-auto"
           />
         </a>
         <nav aria-label="Primary" className="hidden md:flex gap-8 text-sm">
@@ -108,14 +93,20 @@ function Header() {
           <a href="#members" className="hover:text-accent">
             Members
           </a>
-          <a href="#stories" className="hover:text-accent">
-            Stories
-          </a>
+          <Link href="/releases" className="hover:text-accent">
+            Releases
+          </Link>
+          <Link href="/producers" className="hover:text-accent">
+            Producers
+          </Link>
+          <Link href="/coverage" className="hover:text-accent">
+            Coverage
+          </Link>
+          <Link href="/about" className="hover:text-accent">
+            About
+          </Link>
           <a href="#press" className="hover:text-accent">
             Press
-          </a>
-          <a href="#contact" className="hover:text-accent">
-            Contact
           </a>
         </nav>
       </div>
@@ -125,30 +116,189 @@ function Header() {
 
 function Hero() {
   return (
-    <section className="bg-paper-green border-b border-rule">
-      <div className="max-w-3xl mx-auto px-6 py-24 sm:py-32 text-center">
-        <p className="label text-ink mb-6">
-          European Heat Council &middot; Est. MMXXVI
-        </p>
-        <h1 className="text-4xl sm:text-5xl font-semibold leading-[1.15] tracking-tight text-ink">
-          Growing Europe&rsquo;s heat makers.
-        </h1>
-        <p className="mt-6 text-lg leading-relaxed text-foreground/80 max-w-xl mx-auto">
-          The European Heat Council promotes sustainable chilli cultivation,
-          preserves heritage varieties, and connects independent producers
-          across the continent.
-        </p>
-        <div className="mt-10 flex items-center justify-center gap-4">
-          <a href="#mandate" className="btn-primary">
-            About the Council
-          </a>
-          <a href="#press" className="btn-secondary">
-            Press &amp; media
-          </a>
+    <section className="relative bg-ink-deep text-white border-b border-rule overflow-hidden">
+      <Image
+        src="/img/hero-market.png"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-r from-ink-deep/95 via-ink-deep/60 to-ink-deep/10"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-t from-ink-deep/80 via-transparent to-ink-deep/30"
+      />
+      <div className="relative max-w-6xl mx-auto px-6 py-28 sm:py-36 lg:py-44">
+        <div className="max-w-xl">
+          <p className="label text-white/70 mb-6">
+            European Heat Council &middot; Est. MMXXVI
+          </p>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.05] tracking-tight text-white">
+            Uniting Europe&rsquo;s chilli community,
+            <br className="hidden sm:block" /> from seed to shelf.
+          </h1>
+          <p className="mt-7 text-lg leading-relaxed text-white/85 max-w-lg">
+            The European Heat Council connects growers, makers, retailers and
+            partners across the entire hot sauce ecosystem, driving standards,
+            trust and growth together.
+          </p>
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <a
+              href="#mandate"
+              className="inline-flex items-center px-6 py-3 rounded-full bg-white text-ink text-sm font-medium tracking-wide hover:bg-paper-green transition-colors"
+            >
+              Join. Collaborate. Elevate.
+            </a>
+            <a
+              href="#press"
+              className="inline-flex items-center px-6 py-3 rounded-full border border-white/40 text-white text-sm font-medium tracking-wide hover:bg-white/10 transition-colors"
+            >
+              Press &amp; media
+            </a>
+          </div>
+          <p className="mt-12 italic text-white/55 text-sm tracking-wide">
+            In ardore concordia
+          </p>
         </div>
-        <p className="mt-10 italic text-muted text-sm tracking-wide">
-          In ardore concordia
-        </p>
+      </div>
+    </section>
+  );
+}
+
+function SupplyChain() {
+  const iconProps = {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.4,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true,
+  };
+  const stages = [
+    {
+      label: "Growing",
+      icon: (
+        <svg {...iconProps}>
+          <path d="M9 4c1.6 0 2.4.9 2.4 2 0 .9-.6 1.5-1.5 1.6" />
+          <path d="M10 7c2.5 1.2 7 5 7 10.3 0 1.7-1.6 2.7-3.6 2.7-4 0-7.4-3.6-7.4-8 0-2.6 1.4-4.2 3-5" />
+        </svg>
+      ),
+    },
+    {
+      label: "Fermentation",
+      icon: (
+        <svg {...iconProps}>
+          <path d="M9 4h6" />
+          <path d="M9 4v2.5l-1.2 1.6c-.5.6-.8 1.4-.8 2.2V19a1 1 0 001 1h8a1 1 0 001-1v-8.7c0-.8-.3-1.6-.8-2.2L15 6.5V4" />
+          <path d="M7 13.5h10" />
+        </svg>
+      ),
+    },
+    {
+      label: "Makers",
+      icon: (
+        <svg {...iconProps}>
+          <path d="M10 4h4" />
+          <path d="M10 4v3l-1 1.8a3 3 0 00-.4 1.5V19a1 1 0 001 1h4.8a1 1 0 001-1v-8.7a3 3 0 00-.4-1.5L14 7V4" />
+          <path d="M8.6 12.5h6.8" />
+        </svg>
+      ),
+    },
+    {
+      label: "Packaging",
+      icon: (
+        <svg {...iconProps}>
+          <path d="M4 7.5l8 3.5 8-3.5" />
+          <path d="M12 11v9.5" />
+          <path d="M4 7.5v9L12 20.5l8-4V7.5L12 4z" />
+          <path d="M8 5.6l8 3.5" />
+        </svg>
+      ),
+    },
+    {
+      label: "Retail",
+      icon: (
+        <svg {...iconProps}>
+          <path d="M4 9l1.4-4h13.2L20 9" />
+          <path d="M5 9v11h14V9" />
+          <path d="M10 20v-5h4v5" />
+          <path d="M4 9a2.5 2.5 0 005 0 2.5 2.5 0 005 0 2.5 2.5 0 005 0" />
+        </svg>
+      ),
+    },
+    {
+      label: "Events",
+      icon: (
+        <svg {...iconProps}>
+          <path d="M5 5v15" />
+          <path d="M5 5h11l-2 3 2 3H5" />
+        </svg>
+      ),
+    },
+    {
+      label: "Trade",
+      icon: (
+        <svg {...iconProps}>
+          <circle cx="12" cy="12" r="8" />
+          <path d="M4 12h16" />
+          <path d="M12 4c2.5 2.2 2.5 13.6 0 16M12 4c-2.5 2.2-2.5 13.6 0 16" />
+        </svg>
+      ),
+    },
+    {
+      label: "Logistics",
+      icon: (
+        <svg {...iconProps}>
+          <path d="M3 7h10v9H3z" />
+          <path d="M13 10h4l3 3v3h-7" />
+          <circle cx="7" cy="18" r="1.6" />
+          <circle cx="17" cy="18" r="1.6" />
+        </svg>
+      ),
+    },
+  ];
+  return (
+    <section
+      aria-label="From seed to shelf"
+      className="bg-paper-green border-b border-rule"
+    >
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        <p className="label text-muted text-center mb-8">From seed to shelf</p>
+        <ol className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-y-10">
+          {stages.map((s, i) => (
+            <li
+              key={s.label}
+              className="relative flex flex-col items-center text-center px-2"
+            >
+              <div className="w-10 h-10 text-ink mb-4">{s.icon}</div>
+              <p className="label text-ink text-[11px] leading-tight">
+                {s.label}
+              </p>
+              {i < stages.length - 1 ? (
+                <span
+                  aria-hidden
+                  className="hidden lg:block absolute right-0 top-5 translate-x-1/2 text-ink/30"
+                >
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                    <path
+                      d="M1 4h9m0 0L7 1m3 3L7 7"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              ) : null}
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );
@@ -177,8 +327,8 @@ function Initiatives() {
           What we do
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted max-w-2xl mx-auto">
-          Three work programmes coordinated across the Council&rsquo;s member
-          organisations and delivered to producers throughout the year.
+          Three work programmes coordinated by the Council and delivered to
+          independent producers throughout the year.
         </p>
         <ul className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
           {items.map((it) => (
@@ -221,8 +371,7 @@ function JoinBand() {
         </h2>
         <p className="text-white/75 max-w-2xl mx-auto text-base leading-relaxed mb-8">
           Producers, journalists, and trade buyers can reach the Council
-          through any of its three member organisations or directly via the
-          press office.
+          through its member organisations or directly via the press office.
         </p>
         <a
           href="mailto:press@europeanheatcouncil.eu"
@@ -241,11 +390,11 @@ function Stories() {
       <div className="max-w-6xl mx-auto px-6 py-16">
         <div className="flex items-baseline justify-between mb-10 pb-4 border-b border-rule">
           <h2 className="text-2xl font-semibold tracking-tight text-ink">
-            Latest from the Council
+            Latest releases
           </h2>
-          <a href="#" className="more-link">
-            All updates
-          </a>
+          <Link href="/releases" className="more-link">
+            All releases
+          </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-12">
           {stories.map((s) => (
@@ -303,10 +452,9 @@ function Mandate() {
               culture.
             </p>
             <p>
-              The Council operates across distribution, competition, and
-              convening. Its members run year-round programmes serving makers
-              from Galway to Sofia, and convene the trade once a year in
-              Berlin.
+              The Council operates across distribution, heritage, and
+              quality. Its member programmes serve independent makers from
+              Galway to Sofia, working year-round across borders.
             </p>
           </div>
           <div className="mt-8 flex flex-wrap gap-8 text-sm">
@@ -319,10 +467,6 @@ function Mandate() {
               <p className="font-semibold text-ink mt-1">Berlin</p>
             </div>
             <div>
-              <p className="label text-muted">Member organisations</p>
-              <p className="font-semibold text-ink mt-1">Three</p>
-            </div>
-            <div>
               <p className="label text-muted">Producers represented</p>
               <p className="font-semibold text-ink mt-1">200+</p>
             </div>
@@ -332,15 +476,14 @@ function Mandate() {
           <div className="relative aspect-[4/5] bg-rule-soft overflow-hidden">
             <Image
               src="/img/ehsa-istria.png"
-              alt="Award-winning bottles from Croatian producer Ljutistra photographed at the Roman temple in Pula, Istria."
+              alt="Bottles from a Croatian producer photographed at the Roman temple in Pula, Istria."
               fill
               className="object-cover"
             />
           </div>
           <p className="text-xs text-muted-soft mt-2 leading-relaxed">
-            Bottles from a member-recognised Istrian producer, photographed in
-            Pula. Photo: Republic of Heat / European Hot Sauce Awards 2026
-            (AI-generated composite).
+            Bottles from an Istrian producer, photographed in Pula. Photo:
+            Republic of Heat (AI-generated composite).
           </p>
         </div>
       </div>
@@ -356,9 +499,9 @@ function Members() {
           <h2 className="text-2xl font-semibold tracking-tight text-ink">
             Member organisations
           </h2>
-          <span className="label text-muted">Three</span>
+          <span className="label text-muted">Founding member</span>
         </div>
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <ul className="grid grid-cols-1 max-w-md mx-auto gap-8">
           {members.map((m) => (
             <li
               key={m.short}
@@ -492,14 +635,6 @@ function Footer() {
                 Republic of Heat
               </a>
             </li>
-            <li>
-              <span className="text-white/70">Berlin Chili Fest</span>
-            </li>
-            <li>
-              <a href="https://heatawards.eu" className="hover:text-accent">
-                European Hot Sauce Awards
-              </a>
-            </li>
           </ul>
         </div>
         <div>
@@ -533,6 +668,7 @@ export default function Home() {
       <TopBar />
       <Header />
       <Hero />
+      <SupplyChain />
       <Mandate />
       <Initiatives />
       <Stories />
