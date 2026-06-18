@@ -12,8 +12,8 @@ function xmlEscape(s: string): string {
     .replace(/'/g, "&apos;");
 }
 
-export function GET(): Response {
-  const releases = getAllReleases();
+export async function GET(): Promise<Response> {
+  const releases = await getAllReleases();
   const now = Date.now();
   const twoDaysMs = 1000 * 60 * 60 * 48;
 

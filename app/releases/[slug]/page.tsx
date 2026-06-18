@@ -14,7 +14,7 @@ import {
 type Params = Promise<{ slug: string }>;
 
 export async function generateStaticParams() {
-  return getAllReleases().map((r) => ({ slug: r.slug }));
+  return (await getAllReleases()).map((r) => ({ slug: r.slug }));
 }
 
 export async function generateMetadata({
@@ -23,7 +23,7 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const release = getRelease(slug);
+  const release = await getRelease(slug);
   if (!release) return { title: "Release not found" };
   const canonical = releaseUrl(slug);
   const description = release.subhead || release.lead.slice(0, 200);
@@ -79,7 +79,7 @@ function TopBar() {
 
 export default async function ReleasePage({ params }: { params: Params }) {
   const { slug } = await params;
-  const release = getRelease(slug);
+  const release = await getRelease(slug);
   if (!release) notFound();
 
   const { headline, subhead, city, country, displayDate, isDraft, blocks, lead } =

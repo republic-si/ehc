@@ -20,9 +20,7 @@ const NAME_OVERRIDES: Record<string, string> = {
   "kanda-zanda": "Kanda Zanda",
 };
 
-const DUPLICATE_SLUGS = new Set<string>([
-  "big-ginger-sauce-co",
-]);
+const DUPLICATE_SLUGS = new Set<string>(["big-ginger-sauce-co"]);
 
 function isProducerSlug(slug: string): boolean {
   if (slug.startsWith("cluster-")) return false;
@@ -38,8 +36,8 @@ function slugToName(slug: string): string {
     .join(" ");
 }
 
-export function getAllProducers(): Producer[] {
-  const releases = getAllReleases();
+export async function getAllProducers(): Promise<Producer[]> {
+  const releases = await getAllReleases();
   const bySlug = new Map<string, Release[]>();
   for (const r of releases) {
     if (!isProducerSlug(r.slug)) continue;
@@ -70,10 +68,12 @@ export function getAllProducers(): Producer[] {
   return producers;
 }
 
-export function getProducer(slug: string): Producer | null {
-  return getAllProducers().find((p) => p.slug === slug) ?? null;
+export async function getProducer(slug: string): Promise<Producer | null> {
+  const all = await getAllProducers();
+  return all.find((p) => p.slug === slug) ?? null;
 }
 
-export function getProducerSlugs(): string[] {
-  return getAllProducers().map((p) => p.slug);
+export async function getProducerSlugs(): Promise<string[]> {
+  const all = await getAllProducers();
+  return all.map((p) => p.slug);
 }

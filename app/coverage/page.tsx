@@ -96,8 +96,8 @@ function hostname(url: string): string {
   }
 }
 
-export default function CoveragePage() {
-  const pickups = getPickups();
+export default async function CoveragePage() {
+  const pickups = await getPickups();
   const stats = getPickupStats(pickups);
 
   return (

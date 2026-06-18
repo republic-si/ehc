@@ -1,8 +1,4 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-import { homedir } from "node:os";
-
-const CSV_PATH = join(homedir(), "EHSA-press", "coverage", "coverage.csv");
+import { sql } from "@/db/client";
 
 export interface Pickup {
   date: string;
@@ -18,123 +14,46 @@ export interface Pickup {
   monthlyVisits: number | null;
 }
 
-function parseCsvRow(line: string): string[] {
-  const fields: string[] = [];
-  let cur = "";
-  let inQuotes = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
-    if (inQuotes) {
-      if (c === '"' && line[i + 1] === '"') {
-        cur += '"';
-        i++;
-      } else if (c === '"') {
-        inQuotes = false;
-      } else {
-        cur += c;
-      }
-    } else {
-      if (c === '"') {
-        inQuotes = true;
-      } else if (c === ",") {
-        fields.push(cur);
-        cur = "";
-      } else {
-        cur += c;
-      }
-    }
-  }
-  fields.push(cur);
-  return fields;
+interface PickupRow {
+  article_url: string;
+  date_spotted: string | null;
+  outlet_name: string;
+  outlet_url: string;
+  maker_slug: string;
+  language: string;
+  country: string;
+  scope: string;
+  est_reach: number | null;
+  monthly_visits_est: number | null;
 }
 
-function parseCsv(raw: string): string[][] {
-  const rows: string[][] = [];
-  let current = "";
-  let inQuotes = false;
-  for (let i = 0; i < raw.length; i++) {
-    const c = raw[i];
-    if (c === '"') {
-      if (inQuotes && raw[i + 1] === '"') {
-        current += '""';
-        i++;
-      } else {
-        inQuotes = !inQuotes;
-        current += c;
-      }
-    } else if (c === "\n" && !inQuotes) {
-      if (current.length > 0) rows.push(parseCsvRow(current.replace(/\r$/, "")));
-      current = "";
-    } else {
-      current += c;
-    }
-  }
-  if (current.trim().length > 0) rows.push(parseCsvRow(current));
-  return rows;
-}
-
-function toInt(v: string | undefined): number | null {
-  if (!v) return null;
-  const n = parseInt(v.replace(/[, ]/g, ""), 10);
-  return Number.isFinite(n) ? n : null;
-}
-
-export function getPickups(): Pickup[] {
-  let raw: string;
-  try {
-    raw = readFileSync(CSV_PATH, "utf8");
-  } catch {
-    return [];
-  }
-  const rows = parseCsv(raw);
-  if (rows.length < 2) return [];
-  const header = rows[0];
-  const col = (name: string) => header.indexOf(name);
-  const idx = {
-    date: col("date_spotted"),
-    outletName: col("outlet_name"),
-    outletUrl: col("outlet_url"),
-    articleUrl: col("article_url"),
-    maker: col("maker_slug"),
-    language: col("language"),
-    country: col("country"),
-    scope: col("scope"),
-    estReach: col("est_reach"),
-    monthlyVisits: col("monthly_visits_est"),
-    notes: col("notes"),
+function toPickup(row: PickupRow): Pickup {
+  const iso = row.date_spotted ? row.date_spotted.slice(0, 10) : null;
+  return {
+    date: iso ?? "",
+    isoDate: iso,
+    outletName: row.outlet_name,
+    outletUrl: row.outlet_url,
+    articleUrl: row.article_url,
+    makerSlug: row.maker_slug,
+    language: row.language,
+    country: row.country,
+    scope: row.scope,
+    estReach: row.est_reach,
+    monthlyVisits: row.monthly_visits_est,
   };
+}
 
-  const pickups: Pickup[] = [];
-  for (let i = 1; i < rows.length; i++) {
-    const r = rows[i];
-    if (r.length < header.length) continue;
-    const notes = r[idx.notes] || "";
-    if (/\[FP[:\]]/i.test(notes)) continue;
-    const articleUrl = r[idx.articleUrl] || "";
-    if (!articleUrl) continue;
-    const date = r[idx.date] || "";
-    const iso = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null;
-    pickups.push({
-      date,
-      isoDate: iso,
-      outletName: r[idx.outletName] || "",
-      outletUrl: r[idx.outletUrl] || "",
-      articleUrl,
-      makerSlug: r[idx.maker] || "",
-      language: r[idx.language] || "",
-      country: r[idx.country] || "",
-      scope: r[idx.scope] || "",
-      estReach: toInt(r[idx.estReach]),
-      monthlyVisits: toInt(r[idx.monthlyVisits]),
-    });
-  }
-  pickups.sort((a, b) => {
-    if (a.isoDate && b.isoDate) return b.isoDate.localeCompare(a.isoDate);
-    if (a.isoDate) return -1;
-    if (b.isoDate) return 1;
-    return a.outletName.localeCompare(b.outletName);
-  });
-  return pickups;
+export async function getPickups(): Promise<Pickup[]> {
+  const rows = (await sql`
+    SELECT article_url, date_spotted::text AS date_spotted,
+           outlet_name, outlet_url, maker_slug, language, country, scope,
+           est_reach, monthly_visits_est
+    FROM pickups
+    WHERE is_false_positive = false
+    ORDER BY date_spotted DESC NULLS LAST, outlet_name ASC
+  `) as PickupRow[];
+  return rows.map(toPickup);
 }
 
 export function getPickupStats(pickups: Pickup[]): {
@@ -144,7 +63,9 @@ export function getPickupStats(pickups: Pickup[]): {
   totalReach: number | null;
 } {
   const outlets = new Set(pickups.map((p) => p.outletName.toLowerCase()));
-  const countries = new Set(pickups.map((p) => p.country.toUpperCase()).filter(Boolean));
+  const countries = new Set(
+    pickups.map((p) => p.country.toUpperCase()).filter(Boolean),
+  );
   let totalReach = 0;
   let anyReach = false;
   for (const p of pickups) {

@@ -41,8 +41,8 @@ function TopBar() {
   );
 }
 
-export default function ReleasesIndex() {
-  const releases = getAllReleases();
+export default async function ReleasesIndex() {
+  const releases = await getAllReleases();
   const live = releases.filter((r) => !r.isDraft);
   const drafts = releases.filter((r) => r.isDraft);
 

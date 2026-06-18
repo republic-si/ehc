@@ -64,8 +64,8 @@ function Header() {
   );
 }
 
-export default function ProducersPage() {
-  const producers = getAllProducers();
+export default async function ProducersPage() {
+  const producers = await getAllProducers();
   const countries = new Set(producers.map((p) => p.country).filter(Boolean));
 
   return (

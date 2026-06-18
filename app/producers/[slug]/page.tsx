@@ -8,12 +8,12 @@ import { SITE_URL, SITE_NAME } from "@/lib/site";
 type Params = Promise<{ slug: string }>;
 
 export async function generateStaticParams() {
-  return getAllProducers().map((p) => ({ slug: p.slug }));
+  return (await getAllProducers()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const producer = getProducer(slug);
+  const producer = await getProducer(slug);
   if (!producer) return { title: "Producer not found" };
   const canonical = `${SITE_URL}/producers/${slug}`;
   const description = `${producer.displayName} — ${producer.city ? `${producer.city}, ` : ""}${producer.country}. Releases published on the European Heat Council wire.`;
@@ -78,7 +78,7 @@ function Header() {
 
 export default async function ProducerPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const producer = getProducer(slug);
+  const producer = await getProducer(slug);
   if (!producer) notFound();
 
   return (

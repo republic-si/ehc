@@ -3,8 +3,11 @@ import { getAllReleases } from "@/lib/releases";
 import { getAllProducers } from "@/lib/producers";
 import { SITE_URL, releaseIsoDateTime } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const releases = getAllReleases();
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [releases, producers] = await Promise.all([
+    getAllReleases(),
+    getAllProducers(),
+  ]);
   const now = new Date().toISOString();
 
   const releaseEntries: MetadataRoute.Sitemap = releases
@@ -47,7 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.7,
     },
-    ...getAllProducers().map((p) => ({
+    ...producers.map((p) => ({
       url: `${SITE_URL}/producers/${p.slug}`,
       lastModified: now,
       changeFrequency: "monthly" as const,
