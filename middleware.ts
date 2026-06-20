@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export const config = {
-  matcher: ["/2026-ehsa-press/:path*", "/admin/:path*"],
+  matcher: ["/2026-ehsa-press/:path*"],
 };
 
 export function middleware(req: NextRequest) {
