@@ -1,9 +1,9 @@
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getAllProducers, getProducer } from "@/lib/producers";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { TopBar, SiteHeader, SiteFooter } from "@/app/_components/SiteChrome";
 
 type Params = Promise<{ slug: string }>;
 
@@ -31,50 +31,6 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   };
 }
 
-function TopBar() {
-  return (
-    <div className="bg-ink text-white text-[12px]">
-      <div className="max-w-6xl mx-auto px-6 h-8 flex items-center justify-between">
-        <span className="tracking-wide opacity-80">
-          European Heat Council &middot; europeanheatcouncil.eu
-        </span>
-        <div className="hidden sm:flex gap-5 opacity-80">
-          <Link href="/" className="hover:opacity-100">Home</Link>
-          <Link href="/releases" className="hover:opacity-100">Releases</Link>
-          <Link href="/producers" className="hover:opacity-100">Producers</Link>
-          <Link href="/coverage" className="hover:opacity-100">Coverage</Link>
-          <Link href="/about" className="hover:opacity-100">About</Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Header() {
-  return (
-    <header className="border-b border-rule bg-white">
-      <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between gap-6">
-        <Link href="/" className="flex items-center gap-4">
-          <Image
-            src="/ehc-logo-wide.png"
-            alt="European Heat Council"
-            width={4000}
-            height={557}
-            priority
-            className="h-11 w-auto"
-          />
-        </Link>
-        <nav className="hidden md:flex gap-8 text-sm">
-          <Link href="/releases" className="hover:text-accent">Releases</Link>
-          <Link href="/producers" className="hover:text-accent">Producers</Link>
-          <Link href="/coverage" className="hover:text-accent">Coverage</Link>
-          <Link href="/about" className="hover:text-accent">About</Link>
-          <a href="mailto:press@europeanheatcouncil.eu" className="hover:text-accent">Press</a>
-        </nav>
-      </div>
-    </header>
-  );
-}
 
 export default async function ProducerPage({ params }: { params: Params }) {
   const { slug } = await params;
@@ -84,7 +40,7 @@ export default async function ProducerPage({ params }: { params: Params }) {
   return (
     <>
       <TopBar />
-      <Header />
+      <SiteHeader />
 
       <section className="bg-paper-green border-b border-rule">
         <div className="max-w-3xl mx-auto px-6 py-14">
@@ -182,13 +138,13 @@ export default async function ProducerPage({ params }: { params: Params }) {
               </li>
             </ul>
             <p className="mt-5 text-sm text-muted">
-              Self-serve journalist sign-in is in development. For now, email{" "}
-              <a
-                href="mailto:press@europeanheatcouncil.eu"
+              Self-serve journalist sign-in is in development. For now, use the{" "}
+              <Link
+                href="/contact?topic=Press"
                 className="text-ink underline underline-offset-2 hover:text-accent"
               >
-                press@europeanheatcouncil.eu
-              </a>{" "}
+                contact page
+              </Link>{" "}
               from a masthead address.
             </p>
           </section>
@@ -204,19 +160,7 @@ export default async function ProducerPage({ params }: { params: Params }) {
         </article>
       </main>
 
-      <footer className="bg-ink-deep text-white/80 text-sm">
-        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between gap-4">
-          <p>
-            &copy; MMXXVI European Heat Council ·{" "}
-            <Link href="/" className="hover:text-accent">Home</Link>
-          </p>
-          <p>
-            <a href="mailto:press@europeanheatcouncil.eu" className="hover:text-accent">
-              press@europeanheatcouncil.eu
-            </a>
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

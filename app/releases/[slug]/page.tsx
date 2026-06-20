@@ -10,6 +10,7 @@ import {
   releaseIsoDateTime,
   releaseUrl,
 } from "@/lib/site";
+import { TopBar, SiteFooter } from "@/app/_components/SiteChrome";
 
 type Params = Promise<{ slug: string }>;
 
@@ -49,32 +50,6 @@ export async function generateMetadata({
       images: [`${SITE_URL}${DEFAULT_RELEASE_IMAGE}`],
     },
   };
-}
-
-function TopBar() {
-  return (
-    <div className="bg-ink text-white text-[12px]">
-      <div className="max-w-6xl mx-auto px-6 h-8 flex items-center justify-between">
-        <span className="tracking-wide opacity-80">
-          European Heat Council &middot; europeanheatcouncil.eu
-        </span>
-        <div className="hidden sm:flex gap-5 opacity-80">
-          <Link href="/" className="hover:opacity-100">
-            Home
-          </Link>
-          <Link href="/releases" className="hover:opacity-100">
-            Releases
-          </Link>
-          <a
-            href="mailto:press@europeanheatcouncil.eu"
-            className="hover:opacity-100"
-          >
-            Press
-          </a>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 export default async function ReleasePage({ params }: { params: Params }) {
@@ -199,12 +174,12 @@ export default async function ReleasePage({ params }: { params: Params }) {
           <div className="mt-16 pt-8 border-t border-rule flex flex-col sm:flex-row gap-6 justify-between text-sm">
             <div>
               <p className="label text-muted">Press contact</p>
-              <a
-                href="mailto:press@europeanheatcouncil.eu"
+              <Link
+                href="/contact?topic=Press"
                 className="mt-2 inline-block text-ink hover:text-accent"
               >
-                press@europeanheatcouncil.eu
-              </a>
+                Contact the Council
+              </Link>
             </div>
             <Link href="/releases" className="more-link self-start">
               All releases
@@ -213,24 +188,7 @@ export default async function ReleasePage({ params }: { params: Params }) {
         </article>
       </main>
 
-      <footer className="bg-ink-deep text-white/80 text-sm">
-        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between gap-4">
-          <p>
-            &copy; MMXXVI European Heat Council ·{" "}
-            <Link href="/" className="hover:text-accent">
-              Home
-            </Link>
-          </p>
-          <p>
-            <a
-              href="mailto:press@europeanheatcouncil.eu"
-              className="hover:text-accent"
-            >
-              press@europeanheatcouncil.eu
-            </a>
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

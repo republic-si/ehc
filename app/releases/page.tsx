@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getAllReleases } from "@/lib/releases";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { TopBar, SiteFooter } from "@/app/_components/SiteChrome";
 
 export const metadata: Metadata = {
   title: "Releases — European Heat Council",
@@ -17,29 +18,6 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/releases`,
   },
 };
-
-function TopBar() {
-  return (
-    <div className="bg-ink text-white text-[12px]">
-      <div className="max-w-6xl mx-auto px-6 h-8 flex items-center justify-between">
-        <span className="tracking-wide opacity-80">
-          European Heat Council &middot; europeanheatcouncil.eu
-        </span>
-        <div className="hidden sm:flex gap-5 opacity-80">
-          <Link href="/" className="hover:opacity-100">
-            Home
-          </Link>
-          <Link href="/releases" className="hover:opacity-100">
-            Releases
-          </Link>
-          <a href="mailto:press@europeanheatcouncil.eu" className="hover:opacity-100">
-            Press
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default async function ReleasesIndex() {
   const releases = await getAllReleases();
@@ -131,24 +109,7 @@ export default async function ReleasesIndex() {
         </div>
       </main>
 
-      <footer className="bg-ink-deep text-white/80 text-sm">
-        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between gap-4">
-          <p>
-            &copy; MMXXVI European Heat Council &middot;{" "}
-            <Link href="/" className="hover:text-accent">
-              Home
-            </Link>
-          </p>
-          <p>
-            <a
-              href="mailto:press@europeanheatcouncil.eu"
-              className="hover:text-accent"
-            >
-              press@europeanheatcouncil.eu
-            </a>
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

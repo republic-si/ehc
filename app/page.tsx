@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { TopBar, SiteHeader } from "@/app/_components/SiteChrome";
 
 const stories = [
   {
@@ -46,73 +47,6 @@ const members = [
   },
 ];
 
-function TopBar() {
-  return (
-    <div className="bg-ink text-white text-[12px]">
-      <div className="max-w-6xl mx-auto px-6 h-8 flex items-center justify-between">
-        <span className="tracking-wide opacity-80">
-          European Heat Council &middot; europeanheatcouncil.eu
-        </span>
-        <div className="hidden sm:flex gap-5 opacity-80">
-          <a href="#" className="hover:opacity-100">
-            EN
-          </a>
-          <a href="#" className="hover:opacity-100">
-            DE
-          </a>
-          <a href="#press" className="hover:opacity-100">
-            Press
-          </a>
-          <a href="#contact" className="hover:opacity-100">
-            Contact
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Header() {
-  return (
-    <header className="border-b border-rule bg-white">
-      <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between gap-6">
-        <a href="/" className="flex items-center gap-4">
-          <Image
-            src="/ehc-logo-wide.png"
-            alt="European Heat Council"
-            width={4000}
-            height={557}
-            priority
-            className="h-11 w-auto"
-          />
-        </a>
-        <nav aria-label="Primary" className="hidden md:flex gap-8 text-sm">
-          <a href="#mandate" className="hover:text-accent">
-            Mandate
-          </a>
-          <a href="#members" className="hover:text-accent">
-            Members
-          </a>
-          <Link href="/releases" className="hover:text-accent">
-            Releases
-          </Link>
-          <Link href="/producers" className="hover:text-accent">
-            Producers
-          </Link>
-          <Link href="/coverage" className="hover:text-accent">
-            Coverage
-          </Link>
-          <Link href="/about" className="hover:text-accent">
-            About
-          </Link>
-          <a href="#press" className="hover:text-accent">
-            Press
-          </a>
-        </nav>
-      </div>
-    </header>
-  );
-}
 
 function Hero() {
   return (
@@ -136,7 +70,7 @@ function Hero() {
       <div className="relative max-w-6xl mx-auto px-6 py-28 sm:py-36 lg:py-44">
         <div className="max-w-xl">
           <p className="label text-white/70 mb-6">
-            European Heat Council &middot; Est. MMXXVI
+            The voice of Europe&rsquo;s independent hot sauce makers.
           </p>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.05] tracking-tight text-white">
             Uniting Europe&rsquo;s chilli community,
@@ -304,59 +238,94 @@ function SupplyChain() {
   );
 }
 
-function Initiatives() {
-  const items = [
-    {
-      title: "Heritage preservation",
-      body: "Documenting and protecting Europe's indigenous chilli varieties through producer partnerships and seed-saving programmes.",
-    },
-    {
-      title: "Producer support",
-      body: "Connecting independent makers with distribution, judging, and press infrastructure run through the Council's three member organisations.",
-    },
-    {
-      title: "Quality standards",
-      body: "Establishing pan-European reference standards for blind tasting, provenance, and small-batch production.",
-    },
+function Benefits() {
+  const available = [
+    "Show up at more events for less, with the Council booking group stands and splitting cost and admin across members",
+    "Lower unit costs on bottles, caps, labels and ingredients through the Council's pooled purchasing",
+    "Skip the warehouse: drop pallets at the Council's fulfilment hub and we handle storage, picking and dispatch",
+    "Public and product liability cover at group rates, without shopping the market every renewal",
+    "Ship cheaper and faster, including cross-border, on the Council's negotiated courier rates",
+  ];
+  const roadmap = [
+    "Pre-publication embargo access on Council releases",
+    "Voting rights on Council standards",
+    "Discounted European Hot Sauce Awards entry fee",
+    "Translation support across six European languages",
+    "Cross-border distribution introductions",
   ];
   return (
-    <section id="initiatives" className="bg-white border-b border-rule">
-      <div className="max-w-5xl mx-auto px-6 py-20 text-center">
-        <p className="label text-ink mb-4">Key initiatives</p>
-        <h2 className="text-3xl sm:text-4xl font-semibold leading-[1.15] tracking-tight text-ink">
-          What we do
-        </h2>
-        <p className="mt-4 text-base leading-relaxed text-muted max-w-2xl mx-auto">
-          Three work programmes coordinated by the Council and delivered to
-          independent producers throughout the year.
-        </p>
-        <ul className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
-          {items.map((it) => (
-            <li key={it.title} className="flex flex-col items-center text-center">
-              <svg
-                viewBox="0 0 48 48"
-                className="w-12 h-12 mb-5 text-ink"
-                aria-hidden
-              >
-                <circle
-                  cx="24"
-                  cy="24"
-                  r="22"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.25"
-                />
-                <circle cx="24" cy="24" r="3" fill="currentColor" />
-              </svg>
-              <h3 className="text-base font-semibold text-ink mb-2 tracking-tight">
-                {it.title}
-              </h3>
-              <p className="text-sm leading-relaxed text-muted max-w-xs">
-                {it.body}
-              </p>
-            </li>
-          ))}
-        </ul>
+    <section id="benefits" className="bg-paper-green border-b border-rule">
+      <div className="max-w-6xl mx-auto px-6 py-20">
+        <div className="max-w-3xl">
+          <p className="label text-ink mb-4">Membership</p>
+          <h2 className="text-3xl sm:text-4xl font-semibold leading-[1.15] tracking-tight text-ink">
+            Why independent producers join the Council.
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-foreground/85 max-w-2xl">
+            Membership connects producers to the Council&rsquo;s press,
+            distribution and event infrastructure. Some benefits are live today
+            through founding member Republic of Heat. Others ship as the
+            Council grows. We list both honestly.
+          </p>
+        </div>
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div>
+            <p className="label text-ink mb-4">Available now</p>
+            <ul className="space-y-3 text-sm leading-relaxed text-foreground/85">
+              {available.map((item) => (
+                <li key={item} className="flex gap-3">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="w-4 h-4 mt-1 shrink-0 text-ink"
+                    aria-hidden
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12l5 5L20 7" />
+                  </svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="label text-muted mb-4">Roadmap</p>
+            <ul className="space-y-3 text-sm leading-relaxed text-foreground/75">
+              {roadmap.map((item) => (
+                <li key={item} className="flex gap-3">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="w-4 h-4 mt-1 shrink-0 text-muted"
+                    aria-hidden
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                  >
+                    <circle cx="12" cy="12" r="4" />
+                  </svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="mt-12 flex flex-wrap gap-3">
+          <Link
+            href="/benefits"
+            className="inline-flex items-center px-6 py-3 rounded-full bg-ink text-white text-sm font-medium tracking-wide hover:bg-ink-deep transition-colors"
+          >
+            Full membership benefits
+          </Link>
+          <Link
+            href="/contact?topic=Membership"
+            className="inline-flex items-center px-6 py-3 rounded-full border border-ink/30 text-ink text-sm font-medium tracking-wide hover:bg-white transition-colors"
+          >
+            Apply for membership
+          </Link>
+        </div>
       </div>
     </section>
   );
@@ -371,14 +340,14 @@ function JoinBand() {
         </h2>
         <p className="text-white/75 max-w-2xl mx-auto text-base leading-relaxed mb-8">
           Producers, journalists, and trade buyers can reach the Council
-          through its member organisations or directly via the press office.
+          through its member organisations or directly via the contact page.
         </p>
-        <a
-          href="mailto:press@europeanheatcouncil.eu"
+        <Link
+          href="/contact"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-ink text-sm font-medium hover:bg-paper-green transition-colors"
         >
           Get in touch
-        </a>
+        </Link>
       </div>
     </section>
   );
@@ -557,9 +526,9 @@ function Press() {
             Working press are welcome at member events and tastings on
             accreditation.
           </p>
-          <a href="mailto:press@europeanheatcouncil.eu" className="more-link">
-            press@europeanheatcouncil.eu
-          </a>
+          <Link href="/contact?topic=Press" className="more-link">
+            Contact the Council
+          </Link>
         </div>
         <aside className="bg-white border border-rule p-6">
           <p className="label text-muted mb-4">Resources</p>
@@ -641,12 +610,14 @@ function Footer() {
           <p className="label text-white/60 mb-3">Contact</p>
           <ul className="space-y-2">
             <li>
-              <a
-                href="mailto:press@europeanheatcouncil.eu"
-                className="hover:text-accent break-all"
-              >
-                press@europeanheatcouncil.eu
-              </a>
+              <Link href="/contact" className="hover:text-accent">
+                Contact the Council
+              </Link>
+            </li>
+            <li>
+              <Link href="/benefits" className="hover:text-accent">
+                Membership
+              </Link>
             </li>
             <li className="text-white/70">Seat: Berlin</li>
           </ul>
@@ -666,11 +637,11 @@ export default function Home() {
   return (
     <>
       <TopBar />
-      <Header />
+      <SiteHeader />
       <Hero />
       <SupplyChain />
       <Mandate />
-      <Initiatives />
+      <Benefits />
       <Stories />
       <Members />
       <Press />

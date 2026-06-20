@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/site";
+import { TopBar, SiteHeader, SiteFooter } from "@/app/_components/SiteChrome";
 
 export const metadata: Metadata = {
   title: "About — European Heat Council",
@@ -10,61 +10,11 @@ export const metadata: Metadata = {
   alternates: { canonical: `${SITE_URL}/about` },
 };
 
-function TopBar() {
-  return (
-    <div className="bg-ink text-white text-[12px]">
-      <div className="max-w-6xl mx-auto px-6 h-8 flex items-center justify-between">
-        <span className="tracking-wide opacity-80">
-          European Heat Council &middot; europeanheatcouncil.eu
-        </span>
-        <div className="hidden sm:flex gap-5 opacity-80">
-          <Link href="/" className="hover:opacity-100">
-            Home
-          </Link>
-          <Link href="/releases" className="hover:opacity-100">
-            Releases
-          </Link>
-          <Link href="/about" className="hover:opacity-100">
-            About
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function AboutPage() {
   return (
     <>
       <TopBar />
-      <header className="border-b border-rule bg-white">
-        <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between gap-6">
-          <Link href="/" className="flex items-center gap-4">
-            <Image
-              src="/ehc-logo-wide.png"
-              alt="European Heat Council"
-              width={4000}
-              height={557}
-              priority
-              className="h-11 w-auto"
-            />
-          </Link>
-          <nav className="hidden md:flex gap-8 text-sm">
-            <Link href="/releases" className="hover:text-accent">
-              Releases
-            </Link>
-            <Link href="/about" className="hover:text-accent">
-              About
-            </Link>
-            <a
-              href="mailto:press@europeanheatcouncil.eu"
-              className="hover:text-accent"
-            >
-              Press
-            </a>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="bg-white">
         <article className="max-w-3xl mx-auto px-6 py-16">
@@ -107,8 +57,11 @@ export default function AboutPage() {
             </p>
             <p>
               Corrections are issued on the affected release page within
-              twenty-four hours of confirmation. Contact press@europeanheatcouncil.eu
-              with corrections or rights queries.
+              twenty-four hours of confirmation. Use the{" "}
+              <Link href="/contact?topic=Corrections" className="text-ink underline hover:text-accent">
+                contact page
+              </Link>{" "}
+              for corrections or rights queries.
             </p>
           </div>
 
@@ -117,14 +70,14 @@ export default function AboutPage() {
           </h2>
           <dl className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
             <div>
-              <dt className="label text-muted">Press</dt>
+              <dt className="label text-muted">Press &amp; general</dt>
               <dd className="mt-2">
-                <a
-                  href="mailto:press@europeanheatcouncil.eu"
+                <Link
+                  href="/contact"
                   className="text-ink hover:text-accent"
                 >
-                  press@europeanheatcouncil.eu
-                </a>
+                  Contact page
+                </Link>
               </dd>
             </div>
             <div>
@@ -152,24 +105,7 @@ export default function AboutPage() {
         </article>
       </main>
 
-      <footer className="bg-ink-deep text-white/80 text-sm">
-        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between gap-4">
-          <p>
-            &copy; MMXXVI European Heat Council &middot;{" "}
-            <Link href="/" className="hover:text-accent">
-              Home
-            </Link>
-          </p>
-          <p>
-            <a
-              href="mailto:press@europeanheatcouncil.eu"
-              className="hover:text-accent"
-            >
-              press@europeanheatcouncil.eu
-            </a>
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }
