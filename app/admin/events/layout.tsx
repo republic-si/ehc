@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { logoutAction } from "../login/actions";
 
 export const metadata = {
   title: "Events Pipeline — EHC Admin",
@@ -30,6 +31,14 @@ export default function AdminEventsLayout({
             <Link href="/" className="hover:opacity-100">
               Site
             </Link>
+            <form action={logoutAction}>
+              <button
+                type="submit"
+                className="hover:opacity-100 text-white/80 hover:text-white"
+              >
+                Sign out
+              </button>
+            </form>
           </div>
         </div>
       </div>
