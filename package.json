@@ -9,6 +9,7 @@
     "db:migrate": "tsx --env-file=.env.local scripts/migrate.ts",
     "ingest:releases": "tsx --env-file=.env.local scripts/ingest-releases.ts",
     "ingest:coverage": "tsx --env-file=.env.local scripts/ingest-coverage.ts",
+    "ingest:events": "tsx --env-file=.env.local scripts/ingest-events.ts",
     "ingest": "pnpm ingest:releases && pnpm ingest:coverage"
   },
   "dependencies": {

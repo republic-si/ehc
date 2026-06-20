@@ -21,9 +21,12 @@ async function main() {
   const [{ count: pickupsCount }] = await sql`
     SELECT count(*)::int AS count FROM pickups
   ` as Array<{ count: number }>;
+  const [{ count: eventsCount }] = await sql`
+    SELECT count(*)::int AS count FROM events
+  ` as Array<{ count: number }>;
 
   console.log(
-    `migrate done. releases=${releasesCount} pickups=${pickupsCount}`,
+    `migrate done. releases=${releasesCount} pickups=${pickupsCount} events=${eventsCount}`,
   );
 }
 

@@ -40,3 +40,33 @@ CREATE TABLE IF NOT EXISTS pickups (
 CREATE INDEX IF NOT EXISTS pickups_date_idx ON pickups (date_spotted DESC NULLS LAST);
 CREATE INDEX IF NOT EXISTS pickups_maker_idx ON pickups (maker_slug);
 CREATE INDEX IF NOT EXISTS pickups_fp_idx ON pickups (is_false_positive);
+
+CREATE TABLE IF NOT EXISTS events (
+  event_id          TEXT PRIMARY KEY,
+  event             TEXT NOT NULL,
+  city              TEXT NOT NULL DEFAULT '',
+  date_2026         TEXT NOT NULL DEFAULT '',
+  start_date        DATE,
+  end_date          DATE,
+  date_kind         TEXT NOT NULL DEFAULT 'unknown' CHECK (date_kind IN ('single','span','weekly','seasonal','various','unknown')),
+  weekday           TEXT NOT NULL DEFAULT '',
+  organiser_website TEXT NOT NULL DEFAULT '',
+  email             TEXT NOT NULL DEFAULT '',
+  status            TEXT NOT NULL DEFAULT 'cold',
+  target_tier       TEXT NOT NULL DEFAULT 'watching' CHECK (target_tier IN ('watching','target','locked','skip')),
+  stall_cost        TEXT NOT NULL DEFAULT '',
+  crowd_size        TEXT NOT NULL DEFAULT '',
+  last_contact      DATE,
+  priority          INTEGER,
+  notes             TEXT NOT NULL DEFAULT '',
+  deadline          DATE,
+  distance_km       INTEGER,
+  distance_band     TEXT NOT NULL DEFAULT '',
+  ingested_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at        TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS events_start_date_idx ON events (start_date NULLS LAST);
+CREATE INDEX IF NOT EXISTS events_status_idx     ON events (status);
+CREATE INDEX IF NOT EXISTS events_tier_idx       ON events (target_tier);
+CREATE INDEX IF NOT EXISTS events_dist_band_idx  ON events (distance_band);
