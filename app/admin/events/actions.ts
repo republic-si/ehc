@@ -65,33 +65,27 @@ export async function updateEventAction(formData: FormData): Promise<void> {
       ? await getEvent(id)
       : null;
 
-  let notesEn: string | undefined;
-  if (newNotes !== undefined && newNotes !== "") {
-    if (current && current.notes !== newNotes) {
-      try {
-        notesEn = await translateNoteToEnglish(newNotes);
-      } catch (err) {
-        console.error("Note translation failed, falling back:", err);
-        notesEn = newNotes;
-      }
+  async function ensureTranslated(
+    field: "notes" | "updates",
+    newValue: string | undefined,
+  ): Promise<string | undefined> {
+    if (newValue === undefined) return undefined;
+    if (newValue === "") return "";
+    if (!current) return undefined;
+    const enField = field === "notes" ? "notesEn" : "updatesEn";
+    const changed = current[field] !== newValue;
+    const stillEmpty = current[enField] === "";
+    if (!changed && !stillEmpty) return undefined;
+    try {
+      return await translateNoteToEnglish(newValue);
+    } catch (err) {
+      console.error(`${field} translation failed, leaving empty:`, err);
+      return "";
     }
-  } else if (newNotes === "") {
-    notesEn = "";
   }
 
-  let updatesEn: string | undefined;
-  if (newUpdates !== undefined && newUpdates !== "") {
-    if (current && current.updates !== newUpdates) {
-      try {
-        updatesEn = await translateNoteToEnglish(newUpdates);
-      } catch (err) {
-        console.error("Updates translation failed, falling back:", err);
-        updatesEn = newUpdates;
-      }
-    }
-  } else if (newUpdates === "") {
-    updatesEn = "";
-  }
+  const notesEn = await ensureTranslated("notes", newNotes);
+  const updatesEn = await ensureTranslated("updates", newUpdates);
 
   await updateEvent(id, {
     notes: newNotes,

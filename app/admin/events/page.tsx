@@ -443,11 +443,12 @@ function Card({ e }: { e: EventModel }) {
               <ExternalLink size={13} aria-hidden="true" />
             </a>
           ) : null}
-          {e.notes !== "" && e.notesEn === e.notes ? (
+          {(e.notes !== "" && e.notesEn === "") ||
+          (e.updates !== "" && e.updatesEn === "") ? (
             <span
               className="card-untranslated"
-              title="Notes not yet translated to English"
-              aria-label="Untranslated notes"
+              title="Notes or updates not yet translated to English"
+              aria-label="Untranslated text"
             >
               <Languages size={12} aria-hidden="true" />
             </span>

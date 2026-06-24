@@ -98,8 +98,8 @@ UPDATE events SET booked = true
   WHERE booked = false
     AND (status = 'confirmed' OR stall_cost ILIKE 'booked%');
 
-UPDATE events SET notes_en = notes
-  WHERE notes_en = '' AND notes <> '';
+-- (Removed: initial notes_en = notes copy backfill. Empty notes_en is the canonical
+-- "untranslated" signal; E2 hook + translate:notes script populate it on demand.)
 
 -- D2/D3 auto-rules (applied as one-shot UPDATEs, idempotent because of the tier guards)
 UPDATE events SET target_tier = 'not_interested'
