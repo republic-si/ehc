@@ -1,5 +1,12 @@
 import Link from "next/link";
 import {
+  ExternalLink,
+  Send,
+  Inbox,
+  CheckCircle2,
+  Languages,
+} from "lucide-react";
+import {
   listEvents,
   buildPipeline,
   scoreEvent,
@@ -10,10 +17,24 @@ import {
   daysUntil,
   DISTANCE_CSS,
   STATUS_META,
+  TARGET_TIERS,
+  TARGET_TIER_LABELS,
   type EventModel,
   type Tier,
   type WeekWindow,
 } from "@/lib/events";
+import { NotInterestedButton } from "./_components/NotInterestedButton";
+
+function organiserHref(raw: string): string {
+  const t = raw.trim();
+  return t.startsWith("http") ? t : `https://${t}`;
+}
+
+function OutreachGlyph({ glyph }: { glyph: "↗" | "↙" | "✓" }) {
+  if (glyph === "↗") return <Send size={11} aria-hidden="true" />;
+  if (glyph === "↙") return <Inbox size={11} aria-hidden="true" />;
+  return <CheckCircle2 size={12} aria-hidden="true" />;
+}
 
 const PIPELINE_CSS = `
 .plan { font-family: var(--font-inter), system-ui, -apple-system, sans-serif; color: var(--ink); background: #fafaf7; padding: 32px 22px 96px; }
@@ -49,11 +70,23 @@ const PIPELINE_CSS = `
 .wlabel { font-weight: 600; color: var(--ink); font-size: 13px; font-variant-numeric: tabular-nums; align-self: flex-start; line-height: 1.3; }
 .wlabel .iso { display: block; font-size: 10.5px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; }
 .cards { display: flex; flex-wrap: wrap; gap: 10px; }
-.card { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: 4px; border: 1px solid var(--rule); background: #fcfbf7; min-width: 280px; max-width: 360px; flex: 1 1 300px; color: var(--ink); text-decoration: none; transition: background-color 0.12s ease; }
+.card { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: 4px; border: 1px solid var(--rule); background: #fcfbf7; min-width: 280px; max-width: 360px; flex: 1 1 300px; color: var(--ink); text-decoration: none; transition: background-color 0.12s ease; }
 .card:hover { background: #f5f3eb; }
-.card[data-ptier="locked"] { border-left: 3px solid #2a6b3f; padding-left: 12px; }
-.card[data-ptier="target"] { border-left: 3px solid var(--accent); padding-left: 12px; }
-.card[data-ptier="skip"]   { opacity: 0.5; }
+.card-stretch { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.card-stretch:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.card-ext, .card-find-date, .card-not-interested { position: relative; z-index: 2; }
+.card-ext { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; font-size: 13px; line-height: 1; color: var(--muted); text-decoration: none; border-radius: 50%; }
+.card-ext:hover { background: #e3f3f5; color: #1f6470; }
+.card-find-date { font-size: 11px; color: #1f6470; font-weight: 600; text-decoration: none; padding: 1px 6px; background: #e3f3f5; border-radius: 3px; }
+.card-find-date:hover { text-decoration: underline; }
+.card-not-interested { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: transparent; border: 1px solid var(--rule); border-radius: 50%; cursor: pointer; padding: 0; font-size: 14px; line-height: 1; color: var(--muted); }
+.card-not-interested:hover { background: #fde8e6; border-color: #f4b7b1; color: #c8261c; }
+.card-not-interested:disabled { opacity: 0.4; cursor: wait; }
+.card-untranslated { position: relative; z-index: 2; display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; color: #b88a1e; }
+.card-find-date { display: inline-flex; align-items: center; gap: 4px; }
+.card[data-ptier="we_want_to_go"]   { border-left: 3px solid #2a6b3f; padding-left: 12px; }
+.card[data-ptier="priority_for_us"] { border-left: 3px solid #d97706; padding-left: 12px; }
+.card[data-ptier="not_interested"]  { opacity: 0.45; }
 .card[data-attention="urgent"] { background: #fdecea; border-color: #f0a8a0; box-shadow: 0 0 0 1px #f0a8a0 inset; }
 .card[data-attention="urgent"]:hover { background: #fbddd9; }
 .card[data-attention="urgent"] .ename { color: #a01a12; }
@@ -70,9 +103,9 @@ const PIPELINE_CSS = `
 .ename { flex: 1; min-width: 0; font-weight: 600; font-size: 14px; line-height: 1.35; color: var(--ink); display: flex; align-items: baseline; gap: 6px; }
 .ename .ename-text { word-break: break-word; }
 .tier-mark { flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; line-height: 1; align-self: center; }
-.tier-mark.tier-locked { background: #2a6b3f; color: #fff; }
-.tier-mark.tier-target { background: var(--accent); color: #fff; }
-.tier-mark.tier-skip   { background: #ededed; color: #888; text-decoration: line-through; }
+.tier-mark.tier-we_want_to_go   { background: #2a6b3f; color: #fff; }
+.tier-mark.tier-priority_for_us { background: #d97706; color: #fff; }
+.tier-mark.tier-not_interested  { background: #ededed; color: #888; text-decoration: line-through; }
 .tier { font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 3px; white-space: nowrap; text-transform: uppercase; cursor: help; line-height: 1; }
 .tier-S { background: #2a6b3f; color: #fff; }
 .tier-A { background: #5f8b3f; color: #fff; }
@@ -93,7 +126,8 @@ const PIPELINE_CSS = `
 .c-cell.c-dist .c-val.c-near    { color: #2a6b3f; }
 .c-cell.c-dist .c-val.c-mid     { color: #b88a1e; }
 .c-cell.c-dist .c-val.c-far     { color: #c8261c; }
-.c-cell.c-cost .c-val.c-booked  { color: #2a6b3f; }
+.c-cell.c-cost .c-val.c-booked  { color: #2a6b3f; font-weight: 700; }
+.c-cell .c-hotel { font-size: 10px; color: var(--muted); margin-top: 2px; font-weight: 500; }
 .c-pipeline { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 11.5px; line-height: 1.4; min-height: 18px; }
 .c-pipeline .card-action { margin-left: auto; color: var(--muted); font-weight: 500; font-style: italic; }
 .dist { font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 3px; background: #f5f5f5; color: #555; border: 1px solid #ddd; }
@@ -136,6 +170,7 @@ const PIPELINE_CSS = `
 .st-unsure    { background: #fff7ec; color: #b88a1e; border-color: #ebd29a; }
 .st-late      { background: #fde8e6; color: #c8261c; border-color: #f4b7b1; }
 .st-cold      { background: #f0eee8; color: #666; border-color: #d8d4ca; }
+.st-refused   { background: #fde8e6; color: #a01a12; border-color: #f0a8a0; }
 .tag { align-self: flex-start; justify-self: end; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 9px; border-radius: 3px; white-space: nowrap; line-height: 1.2; }
 .tag-locked   { background: #2a6b3f; color: #fff; }
 .tag-busy     { background: #d97706; color: #fff; }
@@ -143,10 +178,22 @@ const PIPELINE_CSS = `
 .tag-free     { background: #c8261c; color: #fff; }
 .tag-conflict { background: #a01a12; color: #fff; margin-right: 4px; }
 .free-prompt { color: #c8261c; font-style: italic; font-weight: 500; padding: 8px 0; font-size: 12.5px; }
+.wbody { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.wsummary { display: flex; flex-direction: column; gap: 3px; font-size: 12px; line-height: 1.45; }
+.wsum-line { color: var(--ink); }
+.wsum-lab  { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.wsum-val  { font-weight: 600; }
+.wsum-val em { font-style: normal; font-weight: 500; color: var(--muted); margin-left: 2px; }
+.wsum-empty { color: #c8261c; font-style: italic; font-weight: 500; }
 .bucket { margin: 32px 0 14px; }
 .bucket h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin: 0 0 10px; border-bottom: 1px solid var(--rule); padding-bottom: 6px; }
 .bucket .cards { background: #fff; border: 1px solid var(--rule); border-radius: 4px; padding: 12px; }
 .bucket.inactive { opacity: 0.7; }
+details.bucket { margin: 32px 0 14px; opacity: 0.85; }
+details.bucket summary { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin: 0 0 10px; border-bottom: 1px solid var(--rule); padding-bottom: 6px; cursor: pointer; list-style: none; }
+details.bucket summary::-webkit-details-marker { display: none; }
+details.bucket summary::before { content: "▸ "; }
+details.bucket[open] summary::before { content: "▾ "; }
 `;
 
 const FILTER_JS = `
@@ -175,7 +222,7 @@ const FILTER_JS = `
   function apply(){
     var tiers=active('tier'), bands=active('band'), groups=active('status-group'), pTiers=active('ptier');
     $$('.card').forEach(function(card){
-      var t=card.dataset.tier, b=card.dataset.band, s=card.dataset.status, pt=card.dataset.ptier||'watching';
+      var t=card.dataset.tier, b=card.dataset.band, s=card.dataset.status, pt=card.dataset.ptier||'potential';
       var isCold=s==='cold';
       var groupOk=(isCold && groups.has('cold')) || (!isCold && groups.has('active'));
       var tierOk=tiers.has(t);
@@ -246,8 +293,13 @@ function DistanceBadge({ e }: { e: EventModel }) {
 }
 
 function TierMark({ t }: { t: string }) {
-  if (t === "watching") return null;
-  const label = t === "locked" ? "Locked" : t === "target" ? "Target" : "Skip";
+  if (t === "potential") return null;
+  const label =
+    t === "we_want_to_go"
+      ? "Going"
+      : t === "priority_for_us"
+        ? "Priority"
+        : "Skip";
   return <span className={`tier-mark tier-${t}`}>{label}</span>;
 }
 
@@ -264,11 +316,25 @@ function crowdDisplay(raw: string): { value: string; mute: boolean } {
   return { value: s, mute: false };
 }
 
-function costDisplay(raw: string): { value: string; cls: string; mute: boolean } {
-  const s = (raw || "").trim();
-  if (!s || s === "?") return { value: "€?", cls: "", mute: true };
-  if (s.toLowerCase() === "booked") return { value: "booked", cls: "c-booked", mute: false };
-  return { value: s, cls: "", mute: false };
+function costDisplay(e: EventModel): {
+  value: string;
+  cls: string;
+  mute: boolean;
+  hotel: string | null;
+} {
+  const hotel = e.hotelCost != null ? `+€${e.hotelCost} hotel` : null;
+  if (e.booked) {
+    const v = e.standCost != null ? `€${e.standCost}` : "booked";
+    return { value: v, cls: "c-booked", mute: false, hotel };
+  }
+  if (e.standCost != null) {
+    return { value: `€${e.standCost}`, cls: "", mute: false, hotel };
+  }
+  const s = (e.stallCost || "").trim();
+  if (!s || s === "?") return { value: "€?", cls: "", mute: true, hotel };
+  if (s.toLowerCase() === "booked")
+    return { value: "booked", cls: "c-booked", mute: false, hotel };
+  return { value: s, cls: "", mute: false, hotel };
 }
 
 function distDisplay(e: EventModel): { value: string; cls: string; mute: boolean } {
@@ -330,23 +396,28 @@ function Card({ e }: { e: EventModel }) {
   const breakdown = `Crowd ${score.crowd} · Duration ${score.duration} · Fit ${score.fit} · Status ${score.status} · Distance ${score.distance} = ${score.total}`;
   const action = actionFor(e);
   const crowd = crowdDisplay(e.crowdSize);
-  const cost = costDisplay(e.stallCost);
+  const cost = costDisplay(e);
   const dist = distDisplay(e);
   const attention = attentionFor(e);
   const hasPipelineMeta = Boolean(
     e.status !== "cold" || e.deadline || action,
   );
+  const noFixedDate = e.dateKind === "unknown" || e.dateKind === "various";
   return (
-    <Link
-      href={`/admin/events/${e.eventId}`}
+    <article
       className="card"
       data-tier={tier}
       data-status={e.status}
       data-band={e.distanceBand || "unknown"}
       data-ptier={e.targetTier}
       data-attention={attention ?? undefined}
-      title={e.notes}
+      title={e.notesEn || e.notes}
     >
+      <Link
+        href={`/admin/events/${e.eventId}`}
+        className="card-stretch"
+        aria-label={`Edit ${e.event}`}
+      />
       {attention === "urgent" ? (
         <span className="card-banner b-urgent">Decide this week</span>
       ) : attention === "reply" ? (
@@ -360,19 +431,51 @@ function Card({ e }: { e: EventModel }) {
           <span className="ename-text">{e.event}</span>
         </span>
         <span className="c-flags">
+          {e.organiserWebsite ? (
+            <a
+              href={organiserHref(e.organiserWebsite)}
+              target="_blank"
+              rel="noopener nofollow"
+              className="card-ext"
+              title="Open organiser site"
+              aria-label="Organiser site"
+            >
+              <ExternalLink size={13} aria-hidden="true" />
+            </a>
+          ) : null}
+          {e.notes !== "" && e.notesEn === e.notes ? (
+            <span
+              className="card-untranslated"
+              title="Notes not yet translated to English"
+              aria-label="Untranslated notes"
+            >
+              <Languages size={12} aria-hidden="true" />
+            </span>
+          ) : null}
           {oi ? (
             <span className={`oicon ${oi.cls}`} title={oi.title}>
-              {oi.glyph}
+              <OutreachGlyph glyph={oi.glyph} />
             </span>
           ) : null}
           <span className={`tier tier-${tier}`} title={breakdown}>
             {tier}
           </span>
+          <NotInterestedButton eventId={e.eventId} />
         </span>
       </div>
       <div className="card-sub">
         <span className="city">{e.city}</span>
         <span className="dates">{formatDateRange(e)}</span>
+        {noFixedDate && e.organiserWebsite ? (
+          <a
+            href={organiserHref(e.organiserWebsite)}
+            target="_blank"
+            rel="noopener nofollow"
+            className="card-find-date"
+          >
+            Find date <ExternalLink size={10} aria-hidden="true" />
+          </a>
+        ) : null}
       </div>
       <div className="c-decide">
         <div className="c-cell c-crowd">
@@ -382,6 +485,7 @@ function Card({ e }: { e: EventModel }) {
         <div className="c-cell c-cost">
           <span className="c-lab">Stall</span>
           <span className={`c-val ${cost.cls} ${cost.mute ? "c-mute" : ""}`}>{cost.value}</span>
+          {cost.hotel ? <span className="c-hotel">{cost.hotel}</span> : null}
         </div>
         <div className="c-cell c-dist">
           <span className="c-lab">Distance</span>
@@ -396,30 +500,73 @@ function Card({ e }: { e: EventModel }) {
           {action ? <span className="card-action">{action}</span> : null}
         </div>
       ) : null}
-    </Link>
+    </article>
   );
 }
 
+function pickTopFestival(events: EventModel[]): EventModel | null {
+  if (events.length === 0) return null;
+  return events[0];
+}
+
+function pickNextDeadline(
+  events: EventModel[],
+  sunStr: string,
+): EventModel | null {
+  const candidates = events
+    .filter((e) => e.deadline && e.deadline <= sunStr)
+    .sort((a, b) => (a.deadline! < b.deadline! ? -1 : 1));
+  return candidates[0] ?? null;
+}
+
 function WeekRow({ w }: { w: WeekWindow }) {
-  const tagLabel = w.kind === "free" ? "Free" : w.kind[0].toUpperCase() + w.kind.slice(1);
+  const tagLabel =
+    w.kind === "free" || w.kind === "pipeline"
+      ? "Free"
+      : w.kind[0].toUpperCase() + w.kind.slice(1);
   const cls = `wrow r-${w.kind}${w.hasConflict ? " r-conflict" : ""}`;
+  const top = pickTopFestival(w.events);
+  const deadline = pickNextDeadline(w.events, w.end);
   return (
     <div className={cls}>
       <div className="wlabel">
         {w.label}
         <span className="iso">Week {w.isoWeek}</span>
       </div>
-      {w.events.length > 0 ? (
-        <div className="cards">
-          {w.events.map((e) => (
-            <Card key={e.eventId} e={e} />
-          ))}
+      <div className="wbody">
+        <div className="wsummary">
+          <div className="wsum-line">
+            <span className="wsum-lab">Festival:</span>{" "}
+            {top ? (
+              <span className="wsum-val">{top.event}</span>
+            ) : (
+              <span className="wsum-empty">Free weekend. Find one.</span>
+            )}
+          </div>
+          {deadline ? (
+            <div className="wsum-line">
+              <span className="wsum-lab">Next deadline:</span>{" "}
+              <span className="wsum-val">
+                {deadline.event}{" "}
+                <em>
+                  ({deadline.deadline}
+                  {(() => {
+                    const d = daysUntil(deadline.deadline!);
+                    return d != null && d >= 0 ? `, ${d}d` : "";
+                  })()})
+                </em>
+              </span>
+            </div>
+          ) : null}
         </div>
-      ) : (
-        <div className="free-prompt">
-          No events tracked. Find one to fill this week.
-        </div>
-      )}
+        {w.events.length > 0 ? (
+          <div className="cards">
+            {w.events.map((e) => (
+              <Card key={e.eventId} e={e} />
+            ))}
+          </div>
+        ) : null}
+      </div>
       <div>
         {w.hasConflict ? <span className="tag tag-conflict">Conflict</span> : null}
         <span className={`tag tag-${w.kind}`}>{tagLabel}</span>
@@ -528,14 +675,14 @@ export default async function WeekendPage() {
               cold
             </span>
             <label style={{ marginLeft: "18px" }}>Pin</label>
-            {(["locked", "target", "watching", "skip"] as const).map((p) => (
+            {TARGET_TIERS.map((p) => (
               <span
                 key={p}
                 className="filter-chip active"
                 data-filter="ptier"
                 data-value={p}
               >
-                {p}
+                {TARGET_TIER_LABELS[p]}
               </span>
             ))}
           </div>
@@ -579,6 +726,21 @@ export default async function WeekendPage() {
 
           <Bucket title="Weekly / recurring markets" events={p.weeklyRecurring} />
           <Bucket title="TBC / portfolio / no fixed date" events={p.portfolio} />
+          {p.archivedByDeadline.length > 0 ? (
+            <details className="bucket archived">
+              <summary>
+                Archived (deadline passed){" "}
+                <span style={{ color: "#666", fontWeight: 500 }}>
+                  ({p.archivedByDeadline.length})
+                </span>
+              </summary>
+              <div className="cards" style={{ marginTop: 12 }}>
+                {p.archivedByDeadline.map((e) => (
+                  <Card key={e.eventId} e={e} />
+                ))}
+              </div>
+            </details>
+          ) : null}
           <Bucket
             title="Inactive (declined / withdrawn / closed)"
             events={p.inactive}

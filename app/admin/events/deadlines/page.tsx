@@ -94,9 +94,9 @@ function relLabel(days: number): string {
 }
 
 function tierLabel(t: string): string {
-  if (t === "locked") return "★ locked";
-  if (t === "target") return "● target";
-  if (t === "skip") return "× skip";
+  if (t === "we_want_to_go") return "★ Going";
+  if (t === "priority_for_us") return "● Priority";
+  if (t === "not_interested") return "× Skip";
   return "—";
 }
 
@@ -123,7 +123,9 @@ export default async function DeadlinesPage() {
   for (const r of rows) byKey[bucketFor(r.days)].rows.push(r.e);
 
   const targetCount = rows.filter(
-    (r) => r.e.targetTier === "locked" || r.e.targetTier === "target",
+    (r) =>
+      r.e.targetTier === "we_want_to_go" ||
+      r.e.targetTier === "priority_for_us",
   ).length;
 
   return (

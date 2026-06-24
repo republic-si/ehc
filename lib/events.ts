@@ -1,7 +1,19 @@
 import { sql } from "@/db/client";
 
-export const TARGET_TIERS = ["watching", "target", "locked", "skip"] as const;
+export const TARGET_TIERS = [
+  "we_want_to_go",
+  "priority_for_us",
+  "potential",
+  "not_interested",
+] as const;
 export type TargetTier = (typeof TARGET_TIERS)[number];
+
+export const TARGET_TIER_LABELS: Record<TargetTier, string> = {
+  we_want_to_go: "We want to go",
+  priority_for_us: "Priority for us",
+  potential: "Potential",
+  not_interested: "Not interested",
+};
 
 export const DISTANCE_BANDS = [
   "drive 1 day",
@@ -27,7 +39,7 @@ const SCHEDULED = new Set([
 ]);
 const REPLIED = new Set(["form-link", "priced", "pdf-pending", "asking-more"]);
 const WAITING = new Set(["new", "late"]);
-const INACTIVE = new Set(["declined", "withdrawn", "closed-unsure"]);
+const INACTIVE = new Set(["declined", "withdrawn", "closed-unsure", "refused"]);
 const BLOCKED = new Set([
   "form-only",
   "unsure",
@@ -50,6 +62,7 @@ export const STATUS_VALUES = [
   "declined",
   "withdrawn",
   "closed-unsure",
+  "refused",
 ] as const;
 export type EventStatus = (typeof STATUS_VALUES)[number];
 
@@ -81,9 +94,13 @@ export interface EventRow {
   last_contact: string | null;
   priority: number | null;
   notes: string;
+  notes_en: string;
   deadline: string | null;
   distance_km: number | null;
   distance_band: string;
+  booked: boolean;
+  stand_cost: string | null;
+  hotel_cost: string | null;
 }
 
 export interface EventModel {
@@ -104,9 +121,13 @@ export interface EventModel {
   lastContact: string | null;
   priority: number | null;
   notes: string;
+  notesEn: string;
   deadline: string | null;
   distanceKm: number | null;
   distanceBand: string;
+  booked: boolean;
+  standCost: number | null;
+  hotelCost: number | null;
 }
 
 function toEvent(row: EventRow): EventModel {
@@ -122,15 +143,19 @@ function toEvent(row: EventRow): EventModel {
     organiserWebsite: row.organiser_website,
     email: row.email,
     status: row.status,
-    targetTier: (row.target_tier as TargetTier) ?? "watching",
+    targetTier: (row.target_tier as TargetTier) ?? "potential",
     stallCost: row.stall_cost,
     crowdSize: row.crowd_size,
     lastContact: row.last_contact ? row.last_contact.slice(0, 10) : null,
     priority: row.priority,
     notes: row.notes,
+    notesEn: row.notes_en ?? "",
     deadline: row.deadline ? row.deadline.slice(0, 10) : null,
     distanceKm: row.distance_km,
     distanceBand: row.distance_band,
+    booked: row.booked ?? false,
+    standCost: row.stand_cost != null ? Number(row.stand_cost) : null,
+    hotelCost: row.hotel_cost != null ? Number(row.hotel_cost) : null,
   };
 }
 
@@ -155,7 +180,7 @@ const SORT_SQL: Record<SortKey, string> = {
   distance: "distance_km ASC NULLS LAST, start_date ASC NULLS LAST",
   crowd: "crowd_size DESC, start_date ASC NULLS LAST",
   tier:
-    "CASE target_tier WHEN 'locked' THEN 1 WHEN 'target' THEN 2 WHEN 'watching' THEN 3 WHEN 'skip' THEN 4 ELSE 5 END, start_date ASC NULLS LAST",
+    "CASE target_tier WHEN 'we_want_to_go' THEN 1 WHEN 'priority_for_us' THEN 2 WHEN 'potential' THEN 3 WHEN 'not_interested' THEN 4 ELSE 5 END, start_date ASC NULLS LAST",
   status: "status ASC, start_date ASC NULLS LAST",
   name: "event ASC",
 };
@@ -193,9 +218,12 @@ export async function listEvents(
            date_kind, weekday, organiser_website, email, status, target_tier,
            stall_cost, crowd_size,
            last_contact::text AS last_contact,
-           priority, notes,
+           priority, notes, notes_en,
            deadline::text AS deadline,
-           distance_km, distance_band
+           distance_km, distance_band,
+           booked,
+           stand_cost::text AS stand_cost,
+           hotel_cost::text AS hotel_cost
     FROM events
     ${whereSql}
     ORDER BY ${sortSql}
@@ -213,9 +241,12 @@ export async function getEvent(eventId: string): Promise<EventModel | null> {
            date_kind, weekday, organiser_website, email, status, target_tier,
            stall_cost, crowd_size,
            last_contact::text AS last_contact,
-           priority, notes,
+           priority, notes, notes_en,
            deadline::text AS deadline,
-           distance_km, distance_band
+           distance_km, distance_band,
+           booked,
+           stand_cost::text AS stand_cost,
+           hotel_cost::text AS hotel_cost
     FROM events
     WHERE event_id = ${eventId}
     LIMIT 1
@@ -226,6 +257,7 @@ export async function getEvent(eventId: string): Promise<EventModel | null> {
 
 export interface EventPatch {
   notes?: string;
+  notesEn?: string;
   stallCost?: string;
   crowdSize?: string;
   targetTier?: TargetTier;
@@ -234,6 +266,9 @@ export interface EventPatch {
   email?: string;
   organiserWebsite?: string;
   deadline?: string | null;
+  booked?: boolean;
+  standCost?: number | null;
+  hotelCost?: number | null;
 }
 
 export async function updateEvent(
@@ -278,6 +313,22 @@ export async function updateEvent(
   if (patch.deadline !== undefined) {
     sets.push(`deadline = $${i++}::date`);
     params.push(patch.deadline);
+  }
+  if (patch.notesEn !== undefined) {
+    sets.push(`notes_en = $${i++}`);
+    params.push(patch.notesEn);
+  }
+  if (patch.booked !== undefined) {
+    sets.push(`booked = $${i++}`);
+    params.push(patch.booked);
+  }
+  if (patch.standCost !== undefined) {
+    sets.push(`stand_cost = $${i++}`);
+    params.push(patch.standCost);
+  }
+  if (patch.hotelCost !== undefined) {
+    sets.push(`hotel_cost = $${i++}`);
+    params.push(patch.hotelCost);
   }
   if (sets.length === 0) return;
   sets.push(`updated_at = now()`);
@@ -358,6 +409,7 @@ export const STATUS_META: Record<string, { label: string; cls: string }> = {
   late: { label: "Late chase", cls: "st-late" },
   "closed-unsure": { label: "Closed", cls: "st-declined" },
   cold: { label: "Cold", cls: "st-cold" },
+  refused: { label: "Refused", cls: "st-refused" },
 };
 
 export const DISTANCE_CSS: Record<string, string> = {
@@ -600,6 +652,7 @@ export interface PipelineBuckets {
   weeklyRecurring: EventModel[];
   portfolio: EventModel[];
   inactive: EventModel[];
+  archivedByDeadline: EventModel[];
   funnel: {
     waiting: number;
     replied: number;
@@ -611,6 +664,15 @@ export interface PipelineBuckets {
   conflicts: { booked: EventModel; clash: EventModel }[];
 }
 
+const STILL_OURS_TO_ACT_LIB = new Set([
+  "cold",
+  "new",
+  "late",
+  "form-only",
+  "unsure",
+  "low-confidence",
+]);
+
 export function buildPipeline(
   events: EventModel[],
   today: Date = new Date(),
@@ -619,14 +681,28 @@ export function buildPipeline(
   const todayUtc = new Date(
     Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()),
   );
+  const todayStr = todayUtc.toISOString().slice(0, 10);
   const datedActive: EventModel[] = [];
   const weeklyRecurring: EventModel[] = [];
   const portfolio: EventModel[] = [];
   const inactive: EventModel[] = [];
+  const archivedByDeadline: EventModel[] = [];
 
   for (const e of events) {
     if (INACTIVE.has(e.status)) {
       inactive.push(e);
+      continue;
+    }
+    // Auto-archive: deadline passed AND still ours to act AND not booked.
+    // These rot in the pipeline view; tuck them into an archived bucket
+    // so the active calendar stays focused on what needs doing.
+    if (
+      e.deadline &&
+      e.deadline < todayStr &&
+      STILL_OURS_TO_ACT_LIB.has(e.status) &&
+      !e.booked
+    ) {
+      archivedByDeadline.push(e);
       continue;
     }
     if (e.dateKind === "weekly" || e.dateKind === "seasonal") {
@@ -736,6 +812,7 @@ export function buildPipeline(
     weeklyRecurring: [...weeklyRecurring].sort(tierSortCmp),
     portfolio: [...portfolio].sort(tierSortCmp),
     inactive: [...inactive].sort(tierSortCmp),
+    archivedByDeadline: [...archivedByDeadline].sort(tierSortCmp),
     funnel,
     urgent,
     conflicts,

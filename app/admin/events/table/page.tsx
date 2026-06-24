@@ -4,6 +4,7 @@ import {
   STATUS_VALUES,
   DISTANCE_BANDS,
   TARGET_TIERS,
+  TARGET_TIER_LABELS,
   type SortKey,
   type EventModel,
 } from "@/lib/events";
@@ -35,16 +36,17 @@ const SORTS: { v: SortKey; label: string }[] = [
 
 function tierBadge(t: string) {
   const map: Record<string, string> = {
-    locked: "bg-ink text-white",
-    target: "bg-accent/15 text-accent border border-accent/40",
-    watching: "bg-rule-soft text-muted",
-    skip: "bg-rule-soft text-muted-soft line-through",
+    we_want_to_go: "bg-[#2a6b3f] text-white",
+    priority_for_us: "bg-[#d97706] text-white",
+    potential: "bg-rule-soft text-muted",
+    not_interested: "bg-rule-soft text-muted-soft line-through",
   };
+  const label = TARGET_TIER_LABELS[t as keyof typeof TARGET_TIER_LABELS] ?? t;
   return (
     <span
       className={`inline-block text-[11px] px-2 py-0.5 rounded-sm ${map[t] ?? "text-muted"}`}
     >
-      {t}
+      {label}
     </span>
   );
 }
@@ -65,6 +67,7 @@ function statusBadge(s: string) {
     declined: "bg-[#f3dada] text-[#7a2424]",
     withdrawn: "bg-[#f3dada] text-[#7a2424]",
     "closed-unsure": "bg-rule-soft text-muted",
+    refused: "bg-[#fde8e6] text-[#a01a12]",
   };
   return (
     <span
@@ -116,8 +119,8 @@ export default async function EventsListPage({
 
   const counts = {
     total: events.length,
-    locked: events.filter((e) => e.targetTier === "locked").length,
-    target: events.filter((e) => e.targetTier === "target").length,
+    going: events.filter((e) => e.targetTier === "we_want_to_go").length,
+    priority: events.filter((e) => e.targetTier === "priority_for_us").length,
     confirmed: events.filter((e) => e.status === "confirmed").length,
   };
 
@@ -141,18 +144,18 @@ export default async function EventsListPage({
           </div>
           <div>
             <span className="block text-[11px] uppercase tracking-wider">
-              Locked
+              Going
             </span>
             <span className="text-base text-ink font-medium">
-              {counts.locked}
+              {counts.going}
             </span>
           </div>
           <div>
             <span className="block text-[11px] uppercase tracking-wider">
-              Target
+              Priority
             </span>
             <span className="text-base text-ink font-medium">
-              {counts.target}
+              {counts.priority}
             </span>
           </div>
           <div>
@@ -210,7 +213,7 @@ export default async function EventsListPage({
             <option value="">Any</option>
             {TARGET_TIERS.map((t) => (
               <option key={t} value={t}>
-                {t}
+                {TARGET_TIER_LABELS[t]}
               </option>
             ))}
           </select>

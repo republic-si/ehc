@@ -10,10 +10,13 @@
     "ingest:releases": "tsx --env-file=.env.local scripts/ingest-releases.ts",
     "ingest:coverage": "tsx --env-file=.env.local scripts/ingest-coverage.ts",
     "ingest:events": "tsx --env-file=.env.local scripts/ingest-events.ts",
-    "ingest": "pnpm ingest:releases && pnpm ingest:coverage"
+    "ingest": "pnpm ingest:releases && pnpm ingest:coverage",
+    "translate:notes": "tsx --env-file=.env.local scripts/translate-notes.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.106.0",
     "@neondatabase/serverless": "^1.1.0",
+    "lucide-react": "^1.21.0",
     "next": "16.2.9",
     "react": "19.2.4",
     "react-dom": "19.2.4"

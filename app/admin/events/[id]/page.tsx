@@ -4,6 +4,7 @@ import {
   getEvent,
   listEvents,
   TARGET_TIERS,
+  TARGET_TIER_LABELS,
   STATUS_VALUES,
   type EventModel,
 } from "@/lib/events";
@@ -136,7 +137,7 @@ export default async function EventDetailPage({
             >
               {TARGET_TIERS.map((t) => (
                 <option key={t} value={t}>
-                  {t}
+                  {TARGET_TIER_LABELS[t]}
                 </option>
               ))}
             </select>
@@ -158,7 +159,41 @@ export default async function EventDetailPage({
           </label>
 
           <label className="text-xs text-muted">
-            Stall cost
+            Stand cost (€)
+            <input
+              type="number"
+              step="0.01"
+              name="stand_cost"
+              defaultValue={e.standCost ?? ""}
+              className="mt-1 w-full bg-white border border-rule px-2 py-1.5 text-sm text-ink"
+              placeholder="e.g. 350"
+            />
+          </label>
+
+          <label className="text-xs text-muted">
+            Hotel cost (€)
+            <input
+              type="number"
+              step="0.01"
+              name="hotel_cost"
+              defaultValue={e.hotelCost ?? ""}
+              className="mt-1 w-full bg-white border border-rule px-2 py-1.5 text-sm text-ink"
+              placeholder="e.g. 120"
+            />
+          </label>
+
+          <label className="text-xs text-muted flex items-center gap-2 pt-5">
+            <input
+              type="checkbox"
+              name="booked"
+              defaultChecked={e.booked}
+              className="h-4 w-4"
+            />
+            <span className="text-ink">Booked</span>
+          </label>
+
+          <label className="text-xs text-muted">
+            Stall cost (legacy free-text)
             <input
               name="stall_cost"
               defaultValue={e.stallCost}
@@ -251,7 +286,7 @@ export default async function EventDetailPage({
                   <div className="col-span-4 font-medium">{x.event}</div>
                   <div className="col-span-3 text-muted">{x.city || "—"}</div>
                   <div className="col-span-2 text-right text-muted text-xs">
-                    {x.targetTier} · {x.status}
+                    {TARGET_TIER_LABELS[x.targetTier]} · {x.status}
                   </div>
                 </Link>
               </li>

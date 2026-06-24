@@ -70,3 +70,42 @@ CREATE INDEX IF NOT EXISTS events_start_date_idx ON events (start_date NULLS LAS
 CREATE INDEX IF NOT EXISTS events_status_idx     ON events (status);
 CREATE INDEX IF NOT EXISTS events_tier_idx       ON events (target_tier);
 CREATE INDEX IF NOT EXISTS events_dist_band_idx  ON events (distance_band);
+
+-- A1: tier rename (watching/target/locked/skip -> potential/priority_for_us/we_want_to_go/not_interested)
+-- Idempotent: re-running is a no-op because CASE only matches old values which are gone after first run.
+ALTER TABLE events DROP CONSTRAINT IF EXISTS events_target_tier_check;
+
+UPDATE events SET target_tier = CASE target_tier
+  WHEN 'locked'   THEN 'we_want_to_go'
+  WHEN 'target'   THEN 'priority_for_us'
+  WHEN 'watching' THEN 'potential'
+  WHEN 'skip'     THEN 'not_interested'
+  ELSE target_tier
+END;
+
+ALTER TABLE events ALTER COLUMN target_tier SET DEFAULT 'potential';
+
+ALTER TABLE events ADD CONSTRAINT events_target_tier_check
+  CHECK (target_tier IN ('we_want_to_go','priority_for_us','potential','not_interested'));
+
+-- A2: split booking off tier, add numeric costs, add notes_en
+ALTER TABLE events ADD COLUMN IF NOT EXISTS booked     BOOLEAN       NOT NULL DEFAULT false;
+ALTER TABLE events ADD COLUMN IF NOT EXISTS stand_cost NUMERIC(10,2);
+ALTER TABLE events ADD COLUMN IF NOT EXISTS hotel_cost NUMERIC(10,2);
+ALTER TABLE events ADD COLUMN IF NOT EXISTS notes_en   TEXT          NOT NULL DEFAULT '';
+
+UPDATE events SET booked = true
+  WHERE booked = false
+    AND (status = 'confirmed' OR stall_cost ILIKE 'booked%');
+
+UPDATE events SET notes_en = notes
+  WHERE notes_en = '' AND notes <> '';
+
+-- D2/D3 auto-rules (applied as one-shot UPDATEs, idempotent because of the tier guards)
+UPDATE events SET target_tier = 'not_interested'
+  WHERE event ILIKE ANY (ARRAY['%lollapalooza%','%rock am ring%','%hurricane%','%wacken%'])
+    AND target_tier <> 'we_want_to_go';
+
+UPDATE events SET target_tier = 'we_want_to_go'
+  WHERE (event ILIKE '%chili%' OR event ILIKE '%chilli%' OR notes ILIKE '%chili%')
+    AND target_tier IN ('potential','priority_for_us');

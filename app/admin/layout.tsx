@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { AdminNav } from "./_layout/AdminNav";
 
 export const metadata: Metadata = {
   title: "Admin — EHSA 2026",
@@ -16,7 +15,6 @@ export default function AdminLayout({
 }) {
   return (
     <div style={{ background: "#fafafa", minHeight: "100vh", color: "#111" }}>
-      <AdminNav />
       <main
         style={{
           maxWidth: 1480,
