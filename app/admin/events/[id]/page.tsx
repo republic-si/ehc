@@ -254,9 +254,25 @@ export default async function EventDetailPage({
 
         <label className="block text-xs text-muted">
           Notes
+          <span className="block text-[10px] text-muted-soft mt-0.5">
+            What the event is, who's there, fit, audience.
+          </span>
           <textarea
             name="notes"
             defaultValue={e.notes}
+            rows={5}
+            className="mt-1 w-full bg-white border border-rule px-2 py-1.5 text-sm text-ink font-mono"
+          />
+        </label>
+
+        <label className="block text-xs text-muted">
+          Updates
+          <span className="block text-[10px] text-muted-soft mt-0.5">
+            Email log, status changes, contact history. Newest at top.
+          </span>
+          <textarea
+            name="updates"
+            defaultValue={e.updates}
             rows={6}
             className="mt-1 w-full bg-white border border-rule px-2 py-1.5 text-sm text-ink font-mono"
           />

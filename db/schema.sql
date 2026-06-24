@@ -109,3 +109,7 @@ UPDATE events SET target_tier = 'not_interested'
 UPDATE events SET target_tier = 'we_want_to_go'
   WHERE (event ILIKE '%chili%' OR event ILIKE '%chilli%' OR notes ILIKE '%chili%')
     AND target_tier IN ('potential','priority_for_us');
+
+-- Split notes from updates: notes = what the event IS, updates = email/contact log.
+ALTER TABLE events ADD COLUMN IF NOT EXISTS updates    TEXT NOT NULL DEFAULT '';
+ALTER TABLE events ADD COLUMN IF NOT EXISTS updates_en TEXT NOT NULL DEFAULT '';

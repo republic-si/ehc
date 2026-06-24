@@ -59,9 +59,14 @@ export async function updateEventAction(formData: FormData): Promise<void> {
   }
 
   const newNotes = str(formData, "notes");
+  const newUpdates = str(formData, "updates");
+  const current =
+    newNotes !== undefined || newUpdates !== undefined
+      ? await getEvent(id)
+      : null;
+
   let notesEn: string | undefined;
   if (newNotes !== undefined && newNotes !== "") {
-    const current = await getEvent(id);
     if (current && current.notes !== newNotes) {
       try {
         notesEn = await translateNoteToEnglish(newNotes);
@@ -74,9 +79,25 @@ export async function updateEventAction(formData: FormData): Promise<void> {
     notesEn = "";
   }
 
+  let updatesEn: string | undefined;
+  if (newUpdates !== undefined && newUpdates !== "") {
+    if (current && current.updates !== newUpdates) {
+      try {
+        updatesEn = await translateNoteToEnglish(newUpdates);
+      } catch (err) {
+        console.error("Updates translation failed, falling back:", err);
+        updatesEn = newUpdates;
+      }
+    }
+  } else if (newUpdates === "") {
+    updatesEn = "";
+  }
+
   await updateEvent(id, {
     notes: newNotes,
     notesEn,
+    updates: newUpdates,
+    updatesEn,
     stallCost: str(formData, "stall_cost"),
     crowdSize: str(formData, "crowd_size"),
     targetTier: tier as TargetTier | undefined,

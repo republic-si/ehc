@@ -56,37 +56,44 @@ async function translateBatch(notes: string[]): Promise<string[]> {
   return parsed.map((s) => String(s));
 }
 
-async function main() {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.error("ANTHROPIC_API_KEY not set. Add it to .env.local.");
-    process.exit(2);
-  }
+async function translateColumn(
+  src: "notes" | "updates",
+  enCol: "notes_en" | "updates_en",
+): Promise<void> {
+  const rows = (await sql.query(
+    `SELECT event_id, ${src} AS text
+     FROM events
+     WHERE ${src} <> '' AND ${enCol} = ${src}
+     ORDER BY event_id`,
+  )) as Array<{ event_id: string; text: string }>;
 
-  const rows = (await sql`
-    SELECT event_id, notes
-    FROM events
-    WHERE notes <> '' AND notes_en = notes
-    ORDER BY event_id
-  `) as Array<{ event_id: string; notes: string }>;
-
-  console.log(`Found ${rows.length} untranslated notes.`);
+  console.log(`${src}: ${rows.length} untranslated`);
   if (rows.length === 0) return;
 
   const total = Math.ceil(rows.length / BATCH_SIZE);
   for (let i = 0; i < rows.length; i += BATCH_SIZE) {
     const batch = rows.slice(i, i + BATCH_SIZE);
-    const inputs = batch.map((r) => r.notes);
+    const inputs = batch.map((r) => r.text);
     const num = Math.floor(i / BATCH_SIZE) + 1;
-    process.stdout.write(`Batch ${num}/${total} (${batch.length} notes)... `);
+    process.stdout.write(`  ${src} batch ${num}/${total} (${batch.length})... `);
     const translations = await translateBatch(inputs);
     for (let j = 0; j < batch.length; j++) {
-      await sql`
-        UPDATE events SET notes_en = ${translations[j]}
-        WHERE event_id = ${batch[j].event_id}
-      `;
+      await sql.query(
+        `UPDATE events SET ${enCol} = $1 WHERE event_id = $2`,
+        [translations[j], batch[j].event_id],
+      );
     }
     console.log("ok");
   }
+}
+
+async function main() {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error("ANTHROPIC_API_KEY not set. Add it to .env.local.");
+    process.exit(2);
+  }
+  await translateColumn("notes", "notes_en");
+  await translateColumn("updates", "updates_en");
   console.log("translate-notes done.");
 }
 

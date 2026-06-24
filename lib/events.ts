@@ -95,6 +95,8 @@ export interface EventRow {
   priority: number | null;
   notes: string;
   notes_en: string;
+  updates: string;
+  updates_en: string;
   deadline: string | null;
   distance_km: number | null;
   distance_band: string;
@@ -122,6 +124,8 @@ export interface EventModel {
   priority: number | null;
   notes: string;
   notesEn: string;
+  updates: string;
+  updatesEn: string;
   deadline: string | null;
   distanceKm: number | null;
   distanceBand: string;
@@ -150,6 +154,8 @@ function toEvent(row: EventRow): EventModel {
     priority: row.priority,
     notes: row.notes,
     notesEn: row.notes_en ?? "",
+    updates: row.updates ?? "",
+    updatesEn: row.updates_en ?? "",
     deadline: row.deadline ? row.deadline.slice(0, 10) : null,
     distanceKm: row.distance_km,
     distanceBand: row.distance_band,
@@ -218,7 +224,7 @@ export async function listEvents(
            date_kind, weekday, organiser_website, email, status, target_tier,
            stall_cost, crowd_size,
            last_contact::text AS last_contact,
-           priority, notes, notes_en,
+           priority, notes, notes_en, updates, updates_en,
            deadline::text AS deadline,
            distance_km, distance_band,
            booked,
@@ -241,7 +247,7 @@ export async function getEvent(eventId: string): Promise<EventModel | null> {
            date_kind, weekday, organiser_website, email, status, target_tier,
            stall_cost, crowd_size,
            last_contact::text AS last_contact,
-           priority, notes, notes_en,
+           priority, notes, notes_en, updates, updates_en,
            deadline::text AS deadline,
            distance_km, distance_band,
            booked,
@@ -258,6 +264,8 @@ export async function getEvent(eventId: string): Promise<EventModel | null> {
 export interface EventPatch {
   notes?: string;
   notesEn?: string;
+  updates?: string;
+  updatesEn?: string;
   stallCost?: string;
   crowdSize?: string;
   targetTier?: TargetTier;
@@ -317,6 +325,14 @@ export async function updateEvent(
   if (patch.notesEn !== undefined) {
     sets.push(`notes_en = $${i++}`);
     params.push(patch.notesEn);
+  }
+  if (patch.updates !== undefined) {
+    sets.push(`updates = $${i++}`);
+    params.push(patch.updates);
+  }
+  if (patch.updatesEn !== undefined) {
+    sets.push(`updates_en = $${i++}`);
+    params.push(patch.updatesEn);
   }
   if (patch.booked !== undefined) {
     sets.push(`booked = $${i++}`);
