@@ -709,14 +709,17 @@ export function buildPipeline(
       inactive.push(e);
       continue;
     }
-    // Auto-archive: deadline passed AND still ours to act AND not booked.
-    // These rot in the pipeline view; tuck them into an archived bucket
-    // so the active calendar stays focused on what needs doing.
+    // Auto-archive: deadline passed AND still ours to act AND not booked
+    // AND not a priority (we_want_to_go / priority_for_us still need decisions).
+    // Tucks rotted cold leads into an archived bucket without hiding live decisions.
+    const isPriorityTier =
+      e.targetTier === "we_want_to_go" || e.targetTier === "priority_for_us";
     if (
       e.deadline &&
       e.deadline < todayStr &&
       STILL_OURS_TO_ACT_LIB.has(e.status) &&
-      !e.booked
+      !e.booked &&
+      !isPriorityTier
     ) {
       archivedByDeadline.push(e);
       continue;

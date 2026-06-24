@@ -179,12 +179,12 @@ const PIPELINE_CSS = `
 .tag-conflict { background: #a01a12; color: #fff; margin-right: 4px; }
 .free-prompt { color: #c8261c; font-style: italic; font-weight: 500; padding: 8px 0; font-size: 12.5px; }
 .wbody { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.wsummary { display: flex; flex-direction: column; gap: 3px; font-size: 12px; line-height: 1.45; }
-.wsum-line { color: var(--ink); }
-.wsum-lab  { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.wsum-deadlines { list-style: none; margin: 0; padding: 8px 10px; background: #fff7ec; border-left: 3px solid #d97706; font-size: 12px; line-height: 1.5; display: flex; flex-direction: column; gap: 3px; }
+.wsum-deadlines li { color: var(--ink); }
+.wsum-lab  { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #d97706; }
 .wsum-val  { font-weight: 600; }
-.wsum-val em { font-style: normal; font-weight: 500; color: var(--muted); margin-left: 2px; }
-.wsum-empty { color: #c8261c; font-style: italic; font-weight: 500; }
+.wsum-deadlines em { font-style: normal; font-weight: 500; color: var(--muted); margin-left: 2px; }
+.wsum-empty { color: #c8261c; font-style: italic; font-weight: 500; padding: 8px 0; font-size: 12.5px; }
 .bucket { margin: 32px 0 14px; }
 .bucket h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin: 0 0 10px; border-bottom: 1px solid var(--rule); padding-bottom: 6px; }
 .bucket .cards { background: #fff; border: 1px solid var(--rule); border-radius: 4px; padding: 12px; }
@@ -505,19 +505,14 @@ function Card({ e }: { e: EventModel }) {
   );
 }
 
-function pickTopFestival(events: EventModel[]): EventModel | null {
-  if (events.length === 0) return null;
-  return events[0];
-}
-
-function pickNextDeadline(
+function deadlinesThisWeek(
   events: EventModel[],
   sunStr: string,
-): EventModel | null {
-  const candidates = events
+): { event: EventModel; days: number | null }[] {
+  return events
     .filter((e) => e.deadline && e.deadline <= sunStr)
-    .sort((a, b) => (a.deadline! < b.deadline! ? -1 : 1));
-  return candidates[0] ?? null;
+    .sort((a, b) => (a.deadline! < b.deadline! ? -1 : 1))
+    .map((e) => ({ event: e, days: daysUntil(e.deadline!) }));
 }
 
 function WeekRow({ w }: { w: WeekWindow }) {
@@ -526,8 +521,8 @@ function WeekRow({ w }: { w: WeekWindow }) {
       ? "Free"
       : w.kind[0].toUpperCase() + w.kind.slice(1);
   const cls = `wrow r-${w.kind}${w.hasConflict ? " r-conflict" : ""}`;
-  const top = pickTopFestival(w.events);
-  const deadline = pickNextDeadline(w.events, w.end);
+  const deadlines = deadlinesThisWeek(w.events, w.end);
+  const isEmpty = w.events.length === 0;
   return (
     <div className={cls}>
       <div className="wlabel">
@@ -535,32 +530,24 @@ function WeekRow({ w }: { w: WeekWindow }) {
         <span className="iso">Week {w.isoWeek}</span>
       </div>
       <div className="wbody">
-        <div className="wsummary">
-          <div className="wsum-line">
-            <span className="wsum-lab">Festival:</span>{" "}
-            {top ? (
-              <span className="wsum-val">{top.event}</span>
-            ) : (
-              <span className="wsum-empty">Free weekend. Find one.</span>
-            )}
-          </div>
-          {deadline ? (
-            <div className="wsum-line">
-              <span className="wsum-lab">Next deadline:</span>{" "}
-              <span className="wsum-val">
-                {deadline.event}{" "}
+        {isEmpty ? (
+          <div className="wsum-empty">Free weekend. Find one.</div>
+        ) : null}
+        {deadlines.length > 0 ? (
+          <ul className="wsum-deadlines">
+            {deadlines.map((d) => (
+              <li key={d.event.eventId}>
+                <span className="wsum-lab">Decide:</span>{" "}
+                <span className="wsum-val">{d.event.event}</span>{" "}
                 <em>
-                  ({deadline.deadline}
-                  {(() => {
-                    const d = daysUntil(deadline.deadline!);
-                    return d != null && d >= 0 ? `, ${d}d` : "";
-                  })()})
+                  ({d.event.deadline}
+                  {d.days != null && d.days >= 0 ? `, ${d.days}d` : ""})
                 </em>
-              </span>
-            </div>
-          ) : null}
-        </div>
-        {w.events.length > 0 ? (
+              </li>
+            ))}
+          </ul>
+        ) : null}
+        {!isEmpty ? (
           <div className="cards">
             {w.events.map((e) => (
               <Card key={e.eventId} e={e} />
