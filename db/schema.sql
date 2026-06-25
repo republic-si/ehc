@@ -106,8 +106,16 @@ UPDATE events SET target_tier = 'not_interested'
   WHERE event ILIKE ANY (ARRAY['%lollapalooza%','%rock am ring%','%hurricane%','%wacken%'])
     AND target_tier <> 'we_want_to_go';
 
+-- Auto-lock Neil's chili-fest portfolio only (Berlin Chili Fest x2 + ICF Cork).
+-- The earlier broad chili/chilli regex grabbed unrelated events (Stuttgart Chili
+-- Fest, Pflanzenraritätenmarkt, Grillcamp Hamburg, Master of Peppers, HOT and
+-- SPICY food festival) that aren't Neil's. Explicit list keeps it tight.
 UPDATE events SET target_tier = 'we_want_to_go'
-  WHERE (event ILIKE '%chili%' OR event ILIKE '%chilli%' OR notes ILIKE '%chili%')
+  WHERE event_id IN (
+    'icf-cork',
+    'berlin-chili-fest-spring-event',
+    'berlin-chili-fest-harvest-event'
+  )
     AND target_tier IN ('potential','priority_for_us');
 
 -- Split notes from updates: notes = what the event IS, updates = email/contact log.
