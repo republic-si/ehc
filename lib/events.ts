@@ -12,8 +12,8 @@ export const TARGET_TIERS = [
 export type TargetTier = (typeof TARGET_TIERS)[number];
 
 export const TARGET_TIER_LABELS: Record<TargetTier, string> = {
-  we_want_to_go: "We want to go",
-  priority_for_us: "Priority for us",
+  we_want_to_go: "Interested",
+  priority_for_us: "Priority",
   potential: "Potential",
   not_interested: "Not interested",
 };
@@ -562,7 +562,19 @@ export function tierForEvent(e: EventModel, total?: number): Tier {
 
 const TIER_ORDER: Record<Tier, number> = { S: 0, A: 1, B: 2, C: 3 };
 
+// Interest level pin order: Interested + Priority always float above Potential,
+// Not Interested always sinks to the bottom.
+const TARGET_TIER_ORDER: Record<TargetTier, number> = {
+  we_want_to_go: 0,
+  priority_for_us: 1,
+  potential: 2,
+  not_interested: 3,
+};
+
 export function tierSortCmp(a: EventModel, b: EventModel): number {
+  const pa = TARGET_TIER_ORDER[a.targetTier];
+  const pb = TARGET_TIER_ORDER[b.targetTier];
+  if (pa !== pb) return pa - pb;
   const sa = scoreEvent(a);
   const sb = scoreEvent(b);
   const ta = TIER_ORDER[tierForEvent(a, sa.total)];

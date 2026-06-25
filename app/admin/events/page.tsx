@@ -23,7 +23,8 @@ import {
   type Tier,
   type WeekWindow,
 } from "@/lib/events";
-import { NotInterestedButton } from "./_components/NotInterestedButton";
+import { TierActions } from "./_components/TierActions";
+import { RefreshButton } from "./_components/RefreshButton";
 
 function organiserHref(raw: string): string {
   const t = raw.trim();
@@ -43,6 +44,12 @@ const PIPELINE_CSS = `
 .plan h1 { font-size: 32px; line-height: 1.1; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px; color: var(--ink); }
 .plan h1 .dot { color: var(--accent); margin-left: 2px; }
 .plan-header { border-bottom: 1px solid var(--rule); padding-bottom: 22px; margin-bottom: 22px; }
+.plan-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.refresh-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; border: 1px solid var(--rule); background: #fff; color: var(--muted); border-radius: 3px; cursor: pointer; line-height: 1; transition: all 0.12s ease; }
+.refresh-btn:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); }
+.refresh-btn:disabled { opacity: 0.5; cursor: wait; }
+.refresh-btn .rotating { animation: spin 0.8s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .plan-lede { font-size: 14px; color: var(--muted); margin: 0; max-width: 60ch; line-height: 1.55; }
 .plan-built { font-size: 11px; color: var(--muted-soft); margin-top: 6px; letter-spacing: 0.02em; }
 .plan-funnel { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
@@ -79,9 +86,6 @@ const PIPELINE_CSS = `
 .card-ext:hover { background: #e3f3f5; color: #1f6470; }
 .card-find-date { font-size: 11px; color: #1f6470; font-weight: 600; text-decoration: none; padding: 1px 6px; background: #e3f3f5; border-radius: 3px; }
 .card-find-date:hover { text-decoration: underline; }
-.card-not-interested { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: transparent; border: 1px solid var(--rule); border-radius: 50%; cursor: pointer; padding: 0; font-size: 14px; line-height: 1; color: var(--muted); }
-.card-not-interested:hover { background: #fde8e6; border-color: #f4b7b1; color: #c8261c; }
-.card-not-interested:disabled { opacity: 0.4; cursor: wait; }
 .card-untranslated { position: relative; z-index: 2; display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; color: #b88a1e; }
 .card-find-date { display: inline-flex; align-items: center; gap: 4px; }
 .card[data-ptier="we_want_to_go"]   { border-left: 3px solid #2a6b3f; padding-left: 12px; }
@@ -102,10 +106,18 @@ const PIPELINE_CSS = `
 .c-flags { flex-shrink: 0; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; line-height: 1; padding-top: 2px; }
 .ename { flex: 1; min-width: 0; font-weight: 600; font-size: 14px; line-height: 1.35; color: var(--ink); display: flex; align-items: baseline; gap: 6px; }
 .ename .ename-text { word-break: break-word; }
-.tier-mark { flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; line-height: 1; align-self: center; }
-.tier-mark.tier-we_want_to_go   { background: #2a6b3f; color: #fff; }
-.tier-mark.tier-priority_for_us { background: #d97706; color: #fff; }
-.tier-mark.tier-not_interested  { background: #ededed; color: #888; text-decoration: line-through; }
+.tier-actions { display: inline-flex; gap: 2px; position: relative; z-index: 2; }
+.ta-btn { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; padding: 0; border-radius: 3px; border: 1px solid var(--rule); background: #fff; color: var(--muted); cursor: pointer; line-height: 1; transition: all 0.12s ease; }
+.ta-btn:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); }
+.ta-btn:disabled { opacity: 0.4; cursor: wait; }
+.ta-int.is-active { background: #2a6b3f; border-color: #2a6b3f; color: #fff; }
+.ta-int:hover:not(:disabled) { color: #2a6b3f; border-color: #2a6b3f; }
+.ta-int.is-active:hover:not(:disabled) { color: #fff; background: #245f37; }
+.ta-pri.is-active { background: #d97706; border-color: #d97706; color: #fff; }
+.ta-pri:hover:not(:disabled) { color: #d97706; border-color: #d97706; }
+.ta-pri.is-active:hover:not(:disabled) { color: #fff; background: #c46a04; }
+.ta-skip.is-active { background: #fde8e6; border-color: #f4b7b1; color: #c8261c; }
+.ta-skip:hover:not(:disabled) { color: #c8261c; border-color: #f4b7b1; background: #fde8e6; }
 .tier { font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 3px; white-space: nowrap; text-transform: uppercase; cursor: help; line-height: 1; }
 .tier-S { background: #2a6b3f; color: #fff; }
 .tier-A { background: #5f8b3f; color: #fff; }
@@ -297,16 +309,6 @@ function DistanceBadge({ e }: { e: EventModel }) {
   return <span className={`dist ${cls}`}>{band} · {km}</span>;
 }
 
-function TierMark({ t }: { t: string }) {
-  if (t === "potential") return null;
-  const label =
-    t === "we_want_to_go"
-      ? "Going"
-      : t === "priority_for_us"
-        ? "Priority"
-        : "Skip";
-  return <span className={`tier-mark tier-${t}`}>{label}</span>;
-}
 
 function WaitingBadge({ e }: { e: EventModel }) {
   if (e.status !== "new" || !e.lastContact) return null;
@@ -516,7 +518,6 @@ function Card({ e }: { e: EventModel }) {
       ) : null}
       <div className="card-top">
         <span className="ename">
-          <TierMark t={e.targetTier} />
           <span className="ename-text">{e.event}</span>
         </span>
         <span className="c-flags">
@@ -550,7 +551,7 @@ function Card({ e }: { e: EventModel }) {
           <span className={`tier tier-${tier}`} title={breakdown}>
             {tier}
           </span>
-          <NotInterestedButton eventId={e.eventId} />
+          <TierActions eventId={e.eventId} current={e.targetTier} />
         </span>
       </div>
       <div className="card-sub">
@@ -695,7 +696,10 @@ export default async function WeekendPage() {
       <div className="plan">
         <div className="plan-wrap">
           <header className="plan-header">
-            <p className="plan-eyebrow">European Heat Council · Admin</p>
+            <div className="plan-header-top">
+              <p className="plan-eyebrow">European Heat Council · Admin</p>
+              <RefreshButton />
+            </div>
             <h1>
               Events pipeline<span className="dot">.</span>
             </h1>

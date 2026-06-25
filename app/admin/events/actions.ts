@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { revalidateTag } from "next/cache";
+import { revalidateTag, revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   updateEvent,
@@ -13,6 +13,16 @@ import {
   type EventStatus,
 } from "@/lib/events";
 import { translateNoteToEnglish } from "@/lib/translate";
+
+// Bust both the shared events tag AND the current event-admin paths so the
+// user sees their own write on the next render (read-your-own-writes).
+function bustEventsCache(eventId?: string): void {
+  revalidateTag(EVENTS_CACHE_TAG, "max");
+  revalidatePath("/admin/events");
+  revalidatePath("/admin/events/table");
+  revalidatePath("/admin/events/deadlines");
+  if (eventId) revalidatePath(`/admin/events/${eventId}`);
+}
 
 async function assertAuth(): Promise<void> {
   const expected = process.env.ADMIN_PASS;
@@ -105,13 +115,37 @@ export async function updateEventAction(formData: FormData): Promise<void> {
     hotelCost: numberOrNull(str(formData, "hotel_cost")),
   });
 
-  revalidateTag(EVENTS_CACHE_TAG, "max");
+  bustEventsCache(id);
   redirect(`/admin/events/${id}?saved=1`);
 }
 
-export async function markNotInterestedAction(eventId: string): Promise<void> {
+async function setTierAction(
+  eventId: string,
+  tier: TargetTier,
+): Promise<void> {
   await assertAuth();
   if (!eventId) throw new Error("Missing eventId");
-  await updateEvent(eventId, { targetTier: "not_interested" });
-  revalidateTag(EVENTS_CACHE_TAG, "max");
+  await updateEvent(eventId, { targetTier: tier });
+  bustEventsCache(eventId);
+}
+
+export async function markInterestedAction(eventId: string): Promise<void> {
+  return setTierAction(eventId, "we_want_to_go");
+}
+
+export async function markPriorityAction(eventId: string): Promise<void> {
+  return setTierAction(eventId, "priority_for_us");
+}
+
+export async function markPotentialAction(eventId: string): Promise<void> {
+  return setTierAction(eventId, "potential");
+}
+
+export async function markNotInterestedAction(eventId: string): Promise<void> {
+  return setTierAction(eventId, "not_interested");
+}
+
+export async function refreshEventsAction(): Promise<void> {
+  await assertAuth();
+  bustEventsCache();
 }
