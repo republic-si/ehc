@@ -313,7 +313,57 @@ function WaitingBadge({ e }: { e: EventModel }) {
 function crowdDisplay(raw: string): { value: string; mute: boolean } {
   const s = (raw || "").trim();
   if (!s || s === "?") return { value: "—", mute: true };
-  return { value: s, mute: false };
+  const lower = s.toLowerCase();
+
+  // "150-200k" / "25-30k" / "150–200k"
+  const range = lower.match(/(\d+)\s*[-–]\s*(\d+)\s*k\b/);
+  if (range) return { value: `${range[1]}-${range[2]}k`, mute: false };
+
+  // "800,000+ visitors" / "161,000 visitors"
+  const commaVisitors = lower.match(
+    /(\d{1,3}(?:,\d{3})+)\s*\+?\s*(?:visitors|attendees|guests|besucher)/,
+  );
+  if (commaVisitors) {
+    const n = parseInt(commaVisitors[1].replace(/,/g, ""), 10);
+    if (n >= 1000) {
+      return { value: `${Math.round(n / 1000)}k`, mute: false };
+    }
+  }
+
+  // "400k visitors" / "150k+" / "~400k visitors"
+  const kVisitors = lower.match(
+    /~?(\d+(?:\.\d+)?)\s*k\+?\s*(?:visitors|attendees|guests|besucher)/,
+  );
+  if (kVisitors) return { value: `${kVisitors[1]}k`, mute: false };
+
+  // "hundreds of thousands"
+  if (/hundreds of thousands/.test(lower))
+    return { value: "100k+", mute: false };
+
+  // First "Xk" anywhere, but only if NOT preceded by "exhibitors/stalls" type words
+  const anyK = lower.match(/(\d+(?:\.\d+)?)\s*k\b/);
+  if (anyK) return { value: `${anyK[1]}k`, mute: false };
+
+  // Plain number with thousands separator
+  const plainComma = lower.match(/(\d{1,3}(?:,\d{3})+)/);
+  if (plainComma) {
+    const n = parseInt(plainComma[1].replace(/,/g, ""), 10);
+    if (n >= 1000) {
+      return { value: `${Math.round(n / 1000)}k`, mute: false };
+    }
+  }
+
+  // Bare number — skip 4-digit years
+  for (const m of s.matchAll(/(\d+(?:[.,]\d+)?)/g)) {
+    const n = parseFloat(m[1].replace(",", "."));
+    if (n >= 1900 && n <= 2099 && Number.isInteger(n)) continue;
+    if (n >= 1000) return { value: `${Math.round(n / 1000)}k`, mute: false };
+    return { value: `${n}`, mute: false };
+  }
+
+  // No number — show truncated label
+  if (s.length <= 14) return { value: s, mute: true };
+  return { value: s.slice(0, 12) + "…", mute: true };
 }
 
 function parseMinCostFromText(raw: string): number | null {
@@ -514,7 +564,7 @@ function Card({ e }: { e: EventModel }) {
         ) : null}
       </div>
       <div className="c-decide">
-        <div className="c-cell c-crowd">
+        <div className="c-cell c-crowd" title={e.crowdSize || undefined}>
           <span className="c-lab">Crowd</span>
           <span className={`c-val ${crowd.mute ? "c-mute" : ""}`}>{crowd.value}</span>
         </div>
