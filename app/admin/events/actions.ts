@@ -1,6 +1,6 @@
 "use server";
 
-import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
@@ -14,13 +14,12 @@ import {
 import { translateNoteToEnglish } from "@/lib/translate";
 
 async function assertAuth(): Promise<void> {
-  const user = process.env.DASH_USER;
-  const pass = process.env.DASH_PASS;
-  if (!user || !pass) throw new Error("Auth not configured");
-  const h = await headers();
-  const got = h.get("authorization");
-  const expected = "Basic " + Buffer.from(`${user}:${pass}`).toString("base64");
-  if (got !== expected) throw new Error("Unauthorized");
+  const expected = process.env.ADMIN_PASS;
+  if (!expected) throw new Error("Auth not configured");
+  const jar = await cookies();
+  if (jar.get("admin_auth")?.value !== expected) {
+    throw new Error("Unauthorized");
+  }
 }
 
 function str(formData: FormData, key: string): string | undefined {
