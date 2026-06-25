@@ -316,6 +316,16 @@ function crowdDisplay(raw: string): { value: string; mute: boolean } {
   return { value: s, mute: false };
 }
 
+function parseMinCostFromText(raw: string): number | null {
+  const t = (raw || "").toLowerCase();
+  if (!t || t === "?" || t === "free") return null;
+  // Grab the first euro-looking number. Handles "350", "€350", "350 EUR",
+  // "from €350/m²", "€350-€500/day", "3669 HT minimum", etc.
+  const m = t.match(/(\d{2,5}(?:[.,]\d{1,2})?)/);
+  if (!m) return null;
+  return parseFloat(m[1].replace(",", "."));
+}
+
 function costDisplay(e: EventModel): {
   value: string;
   cls: string;
@@ -330,11 +340,20 @@ function costDisplay(e: EventModel): {
   if (e.standCost != null) {
     return { value: `€${e.standCost}`, cls: "", mute: false, hotel };
   }
-  const s = (e.stallCost || "").trim();
-  if (!s || s === "?") return { value: "€?", cls: "", mute: true, hotel };
-  if (s.toLowerCase() === "booked")
+  const legacy = (e.stallCost || "").trim();
+  if (legacy.toLowerCase() === "booked")
     return { value: "booked", cls: "c-booked", mute: false, hotel };
-  return { value: s, cls: "", mute: false, hotel };
+  const parsed = parseMinCostFromText(legacy);
+  if (parsed != null) {
+    return { value: `from €${parsed}`, cls: "", mute: true, hotel };
+  }
+  if (!legacy || legacy === "?") {
+    return { value: "€?", cls: "", mute: true, hotel };
+  }
+  if (legacy.toLowerCase() === "free") {
+    return { value: "free", cls: "", mute: false, hotel };
+  }
+  return { value: "€?", cls: "", mute: true, hotel };
 }
 
 function distDisplay(e: EventModel): { value: string; cls: string; mute: boolean } {
