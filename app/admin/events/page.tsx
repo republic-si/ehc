@@ -128,6 +128,11 @@ const PIPELINE_CSS = `
 .c-cell.c-dist .c-val.c-far     { color: #c8261c; }
 .c-cell.c-cost .c-val.c-booked  { color: #2a6b3f; font-weight: 700; }
 .c-cell .c-hotel { font-size: 10px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+.c-cell .c-detail { font-size: 10px; color: var(--muted); margin-top: 2px; font-weight: 400; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.c-content { display: flex; flex-direction: column; gap: 4px; margin-top: 2px; padding-top: 6px; border-top: 1px dashed var(--rule); }
+.c-content p { margin: 0; font-size: 11px; line-height: 1.45; }
+.c-notes { color: var(--ink); }
+.c-updates { color: #1f6470; font-weight: 500; padding-left: 8px; border-left: 2px solid #b1d8de; }
 .c-pipeline { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 11.5px; line-height: 1.4; min-height: 18px; }
 .c-pipeline .card-action { margin-left: auto; color: var(--muted); font-weight: 500; font-style: italic; }
 .dist { font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 3px; background: #f5f5f5; color: #555; border: 1px solid #ddd; }
@@ -496,7 +501,6 @@ function Card({ e }: { e: EventModel }) {
       data-band={e.distanceBand || "unknown"}
       data-ptier={e.targetTier}
       data-attention={attention ?? undefined}
-      title={e.notesEn || e.notes}
     >
       <Link
         href={`/admin/events/${e.eventId}`}
@@ -564,9 +568,12 @@ function Card({ e }: { e: EventModel }) {
         ) : null}
       </div>
       <div className="c-decide">
-        <div className="c-cell c-crowd" title={e.crowdSize || undefined}>
+        <div className="c-cell c-crowd">
           <span className="c-lab">Crowd</span>
           <span className={`c-val ${crowd.mute ? "c-mute" : ""}`}>{crowd.value}</span>
+          {e.crowdSize && e.crowdSize !== crowd.value ? (
+            <span className="c-detail">{e.crowdSize}</span>
+          ) : null}
         </div>
         <div className="c-cell c-cost">
           <span className="c-lab">Stall</span>
@@ -586,6 +593,17 @@ function Card({ e }: { e: EventModel }) {
           {action ? <span className="card-action">{action}</span> : null}
         </div>
       ) : null}
+      {(() => {
+        const notesText = e.notesEn || e.notes;
+        const updatesText = e.updatesEn || e.updates;
+        if (!notesText && !updatesText) return null;
+        return (
+          <div className="c-content">
+            {notesText ? <p className="c-notes">{notesText}</p> : null}
+            {updatesText ? <p className="c-updates">{updatesText}</p> : null}
+          </div>
+        );
+      })()}
     </article>
   );
 }
