@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {
-  listEvents,
+  listEventsCached,
   STATUS_VALUES,
   DISTANCE_BANDS,
   TARGET_TIERS,
@@ -109,7 +109,7 @@ export default async function EventsListPage({
   const sp = await searchParams;
   const month = sp.month ? Number(sp.month) : undefined;
   const sort = (sp.sort as SortKey) || "date";
-  const events = await listEvents({
+  const events = await listEventsCached({
     distanceBand: sp.band || undefined,
     status: sp.status || undefined,
     tier: sp.tier || undefined,

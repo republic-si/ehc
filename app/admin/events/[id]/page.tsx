@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
-  getEvent,
-  listEvents,
+  getEventCached,
+  listEventsCached,
   TARGET_TIERS,
   TARGET_TIER_LABELS,
   STATUS_VALUES,
@@ -40,10 +40,10 @@ export default async function EventDetailPage({
 }) {
   const { id } = await params;
   const { saved } = await searchParams;
-  const e = await getEvent(id);
+  const e = await getEventCached(id);
   if (!e) notFound();
 
-  const all = e.startDate ? await listEvents({}) : [];
+  const all = e.startDate ? await listEventsCached({}) : [];
   const myKey = e.startDate ? mondayKeyFor(e.startDate) : null;
   const sameWeekend = myKey
     ? all.filter(

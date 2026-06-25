@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {
-  listEvents,
+  listEventsCached,
   actionFor,
   formatDateRange,
   daysUntil,
@@ -101,7 +101,7 @@ function tierLabel(t: string): string {
 }
 
 export default async function DeadlinesPage() {
-  const all = await listEvents({});
+  const all = await listEventsCached({});
   const rows: { e: EventModel; days: number }[] = [];
   for (const e of all) {
     if (INACTIVE.has(e.status)) continue;

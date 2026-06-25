@@ -1,4 +1,7 @@
+import { unstable_cache } from "next/cache";
 import { sql } from "@/db/client";
+
+export const EVENTS_CACHE_TAG = "events";
 
 export const TARGET_TIERS = [
   "we_want_to_go",
@@ -260,6 +263,22 @@ export async function getEvent(eventId: string): Promise<EventModel | null> {
   if (rows.length === 0) return null;
   return toEvent(rows[0]);
 }
+
+// Cached read variants for view surfaces (admin Pipeline / Table / Deadlines / Detail
+// and future producer-facing views). Tag-busted by EVENTS_CACHE_TAG in actions.
+// Do NOT use these inside mutating server actions that need to compare against
+// the live row before writing - use the uncached listEvents/getEvent for that.
+export const listEventsCached = unstable_cache(
+  async (filters: ListFilters = {}) => listEvents(filters),
+  ["events-list-v1"],
+  { tags: [EVENTS_CACHE_TAG], revalidate: 3600 },
+);
+
+export const getEventCached = unstable_cache(
+  async (id: string) => getEvent(id),
+  ["events-by-id-v1"],
+  { tags: [EVENTS_CACHE_TAG], revalidate: 3600 },
+);
 
 export interface EventPatch {
   notes?: string;

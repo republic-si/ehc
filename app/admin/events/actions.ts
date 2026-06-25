@@ -1,11 +1,12 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   updateEvent,
   getEvent,
+  EVENTS_CACHE_TAG,
   TARGET_TIERS,
   STATUS_VALUES,
   type TargetTier,
@@ -104,9 +105,7 @@ export async function updateEventAction(formData: FormData): Promise<void> {
     hotelCost: numberOrNull(str(formData, "hotel_cost")),
   });
 
-  revalidatePath("/admin/events");
-  revalidatePath(`/admin/events/${id}`);
-  revalidatePath("/admin/events/weekend");
+  revalidateTag(EVENTS_CACHE_TAG, "max");
   redirect(`/admin/events/${id}?saved=1`);
 }
 
@@ -114,6 +113,5 @@ export async function markNotInterestedAction(eventId: string): Promise<void> {
   await assertAuth();
   if (!eventId) throw new Error("Missing eventId");
   await updateEvent(eventId, { targetTier: "not_interested" });
-  revalidatePath("/admin/events");
-  revalidatePath(`/admin/events/${eventId}`);
+  revalidateTag(EVENTS_CACHE_TAG, "max");
 }

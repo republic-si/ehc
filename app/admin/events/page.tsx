@@ -7,7 +7,7 @@ import {
   Languages,
 } from "lucide-react";
 import {
-  listEvents,
+  listEventsCached,
   buildPipeline,
   scoreEvent,
   tierForEvent,
@@ -685,7 +685,7 @@ function Bucket({
 }
 
 export default async function WeekendPage() {
-  const events = await listEvents({});
+  const events = await listEventsCached({});
   const today = new Date();
   const p = buildPipeline(events, today);
 
