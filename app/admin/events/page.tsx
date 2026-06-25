@@ -319,11 +319,27 @@ function crowdDisplay(raw: string): { value: string; mute: boolean } {
 function parseMinCostFromText(raw: string): number | null {
   const t = (raw || "").toLowerCase();
   if (!t || t === "?" || t === "free") return null;
-  // Grab the first euro-looking number. Handles "350", "€350", "350 EUR",
-  // "from €350/m²", "€350-€500/day", "3669 HT minimum", etc.
-  const m = t.match(/(\d{2,5}(?:[.,]\d{1,2})?)/);
-  if (!m) return null;
-  return parseFloat(m[1].replace(",", "."));
+  const toNum = (s: string) => parseFloat(s.replace(",", "."));
+  const isYear = (n: number) => n >= 1900 && n <= 2099 && Number.isInteger(n);
+
+  // 1) Number immediately after € sign
+  const afterEuro = t.match(/€\s*(\d+(?:[.,]\d{1,2})?)/);
+  if (afterEuro) {
+    const n = toNum(afterEuro[1]);
+    if (!isYear(n)) return n;
+  }
+  // 2) Number immediately before € or EUR
+  const beforeEuro = t.match(/(\d+(?:[.,]\d{1,2})?)\s*(?:€|eur\b)/);
+  if (beforeEuro) {
+    const n = toNum(beforeEuro[1]);
+    if (!isYear(n)) return n;
+  }
+  // 3) Fallback: first non-year number in the text
+  for (const m of t.matchAll(/(\d+(?:[.,]\d{1,2})?)/g)) {
+    const n = toNum(m[1]);
+    if (!isYear(n) && n > 0) return n;
+  }
+  return null;
 }
 
 function costDisplay(e: EventModel): {
