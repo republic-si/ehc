@@ -619,6 +619,7 @@ export interface WeekWindow {
   label: string;
   monthHead: string | null;
   events: EventModel[];
+  deadlinesDue: EventModel[]; // events whose deadline falls in this week
   kind: "locked" | "busy" | "pipeline" | "free";
   hasConflict: boolean;
 }
@@ -763,6 +764,19 @@ export function buildPipeline(
     }
     const klass = classifyWeek(evs);
 
+    // Deadlines DUE this week: every still-actionable event whose deadline
+    // date falls within [monStr, sunStr], no matter when the event itself is.
+    const deadlinesDue = events
+      .filter(
+        (e) =>
+          e.deadline != null &&
+          e.deadline >= monStr &&
+          e.deadline <= sunStr &&
+          !INACTIVE.has(e.status) &&
+          !e.booked,
+      )
+      .sort((a, b) => (a.deadline! < b.deadline! ? -1 : 1));
+
     let monthHead: string | null = null;
     if (mon.getUTCMonth() !== curMonth || mon.getUTCFullYear() !== curYear) {
       curMonth = mon.getUTCMonth();
@@ -781,6 +795,7 @@ export function buildPipeline(
       label: weekLabel(mon, sun),
       monthHead,
       events: evs,
+      deadlinesDue,
       kind: klass.kind,
       hasConflict: klass.hasConflict,
     });

@@ -540,23 +540,16 @@ function Card({ e }: { e: EventModel }) {
   );
 }
 
-function deadlinesThisWeek(
-  events: EventModel[],
-  sunStr: string,
-): { event: EventModel; days: number | null }[] {
-  return events
-    .filter((e) => e.deadline && e.deadline <= sunStr)
-    .sort((a, b) => (a.deadline! < b.deadline! ? -1 : 1))
-    .map((e) => ({ event: e, days: daysUntil(e.deadline!) }));
-}
-
 function WeekRow({ w }: { w: WeekWindow }) {
   const tagLabel =
     w.kind === "free" || w.kind === "pipeline"
       ? "Free"
       : w.kind[0].toUpperCase() + w.kind.slice(1);
   const cls = `wrow r-${w.kind}${w.hasConflict ? " r-conflict" : ""}`;
-  const deadlines = deadlinesThisWeek(w.events, w.end);
+  const deadlines = w.deadlinesDue.map((e) => ({
+    event: e,
+    days: daysUntil(e.deadline!),
+  }));
   const isEmpty = w.events.length === 0;
   return (
     <div className={cls}>
