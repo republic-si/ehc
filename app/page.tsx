@@ -31,7 +31,8 @@ const stories = [
     excerpt:
       "Piri-Piri & Co, a 15-year piri-piri farm at Quinta do Piri-Piri run by Romeu Santos, places Gold in Extra Hot with Asinhas Infernais and Gold in Mild with Manga e Mel.",
     href: "/releases/piri-piri-co",
-    img: "/img/news-product.jpg",
+    img: "/img/producers/piri-piri-co.jpg",
+    imgPosition: "top" as const,
   },
 ];
 
@@ -376,7 +377,7 @@ function Stories() {
                   src={s.img}
                   alt=""
                   fill
-                  className="object-cover"
+                  className={`object-cover ${s.imgPosition === "top" ? "object-top" : ""}`}
                 />
               </a>
               <p className="label text-ink mb-3">
