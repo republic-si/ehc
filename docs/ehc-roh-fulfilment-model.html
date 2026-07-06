@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EHC as ROH's fulfilment layer, working-capital view</title>
+<style>
+  :root {
+    --forest: #1d3a2a;
+    --habanero: #c8612e;
+    --cream: #f5ecd9;
+    --cream-deep: #ecdfc4;
+    --charcoal: #1a1a1a;
+    --stone: #6b6b6b;
+    --rule: #c9c0a8;
+    --amber: #b8912a;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--cream-deep);
+    font-family: Georgia, "Source Serif Pro", "Times New Roman", serif;
+    color: var(--charcoal);
+    line-height: 1.5;
+  }
+
+  .page {
+    max-width: 1400px;
+    margin: 24px auto;
+    background: var(--cream);
+    padding: 32px 40px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  }
+
+  header {
+    border-bottom: 2px solid var(--rule);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-family: Georgia, serif;
+    color: var(--forest);
+    font-weight: normal;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px 0;
+  }
+
+  header .sub {
+    color: var(--stone);
+    font-style: italic;
+    font-size: 15px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .diagram {
+    background: #fff;
+    border: 1px solid var(--rule);
+    padding: 24px;
+    min-height: 520px;
+  }
+
+  .diagram .mermaid { display: flex; justify-content: center; }
+
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .callout {
+    background: #fff;
+    border-left: 4px solid var(--forest);
+    padding: 14px 16px;
+  }
+
+  .callout h3 {
+    margin: 0 0 6px 0;
+    font-family: Georgia, serif;
+    color: var(--forest);
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 0.01em;
+  }
+
+  .callout p { margin: 0; font-size: 14px; color: var(--charcoal); }
+
+  .callout.orange { border-left-color: var(--habanero); }
+  .callout.orange h3 { color: var(--habanero); }
+  .callout.amber { border-left-color: var(--amber); }
+  .callout.amber h3 { color: var(--amber); }
+
+  .legend {
+    background: var(--cream-deep);
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .legend h3 {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--stone);
+    font-family: Georgia, serif;
+    font-weight: normal;
+  }
+
+  .legend .row { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+  .legend .line { width: 34px; height: 0; border-top: 2px solid var(--charcoal); }
+  .legend .line.dashed { border-top: 2px dashed var(--charcoal); }
+
+  .compare {
+    margin-top: 26px;
+    padding: 18px 22px;
+    background: var(--forest);
+    color: var(--cream);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .compare h3 {
+    margin: 0 0 6px 0;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--habanero);
+    font-family: Georgia, serif;
+    font-weight: normal;
+  }
+
+  .compare p { margin: 0; font-size: 15px; }
+
+  footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--stone);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>EHC as ROH's fulfilment layer</h1>
+    <div class="sub">Working-capital view. Consignment stock at Wildau, COGS at pick.</div>
+  </header>
+
+  <div class="layout">
+
+    <div class="diagram">
+      <div class="mermaid">
+flowchart LR
+  classDef maker fill:#efe9d9,stroke:#8a7f65,color:#3a3428,font-size:13px;
+  classDef ehc fill:#c8612e,stroke:#7a3814,color:#fff,font-size:13px;
+  classDef roh fill:#1d3a2a,stroke:#0d1f16,color:#fff,font-size:13px;
+  classDef trigger fill:#fff2c7,stroke:#b8912a,color:#3a2f10,stroke-width:3px,font-size:13px;
+  classDef sub fill:#fff,stroke:#333,color:#111,font-size:13px;
+
+  subgraph MK["Producers (n)"]
+    direction TB
+    M1["Maker A"]:::maker
+    M2["Maker B"]:::maker
+    M3["Maker C"]:::maker
+  end
+
+  subgraph EHCZ["EHC, Wildau"]
+    direction TB
+    Shelf["Consignment shelf<br/>maker-owned stock, EHC held"]:::ehc
+    Pack["Pick, pack, ship<br/><b>ROH ownership starts here</b>"]:::trigger
+    Shelf -->|monthly pull| Pack
+  end
+
+  subgraph ROHZ["Republic of Heat"]
+    direction TB
+    Curate["Monthly curation<br/>3 SKUs picked"]:::roh
+    Bill["Subscription billing<br/>prepaid monthly"]:::roh
+  end
+
+  Sub(["Subscriber"]):::sub
+
+  M1 --> Shelf
+  M2 --> Shelf
+  M3 --> Shelf
+  Curate -->|pick list| Pack
+  Pack -->|packed box| Sub
+
+  Sub -.->|EUR monthly| Bill
+  Bill -.->|EUR per pick| Pack
+  Pack -.->|per-pick settlement<br/>minus handling| MK
+      </div>
+    </div>
+
+    <aside class="side">
+
+      <div class="callout">
+        <h3>Zero ROH working capital pre-pick</h3>
+        <p>Bottles sit on EHC's shelf as maker-owned stock. ROH holds nothing, buys nothing, until a subscription box is picked.</p>
+      </div>
+
+      <div class="callout orange">
+        <h3>Curation pool scales for free</h3>
+        <p>Every maker on the EHC shelf is a curation option. Adding a maker to the pool costs ROH nothing, unlike direct pre-buys.</p>
+      </div>
+
+      <div class="callout amber">
+        <h3>COGS event = pick, not ship-in</h3>
+        <p>The moment EHC pulls a bottle for a ROH box is the moment cash leaves ROH. Cost timing matches revenue timing.</p>
+      </div>
+
+      <div class="legend">
+        <h3>Lines</h3>
+        <div class="row"><span class="line"></span><span>Physical stock flow</span></div>
+        <div class="row"><span class="line dashed"></span><span>Money flow</span></div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <div class="compare">
+    <div>
+      <h3>Today</h3>
+      <p>ROH pre-buys from each maker to hold subscription stock. Cash out at ship-in, sits on shelves for weeks. Adding a maker means a fresh purchase order.</p>
+    </div>
+    <div>
+      <h3>Under EHC</h3>
+      <p>Makers consign to Wildau. ROH picks from the shared shelf per box. Cash leaves ROH only at pick. Adding a maker is a shelf entry, not a purchase.</p>
+    </div>
+  </div>
+
+  <footer>
+    Internal working note. Nathan / Simon. Not for producer or customer distribution.
+  </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: 'Georgia, serif',
+      primaryColor: '#f5ecd9',
+      primaryTextColor: '#1a1a1a',
+      primaryBorderColor: '#c9c0a8',
+      lineColor: '#3a3428',
+      clusterBkg: '#faf5e6',
+      clusterBorder: '#c9c0a8'
+    },
+    flowchart: { curve: 'basis', padding: 16 }
+  });
+</script>
+
+</body>
+</html>
