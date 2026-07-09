@@ -70,9 +70,10 @@ const PIPELINE_CSS = `
 .wrow { display: grid; grid-template-columns: 150px 1fr 110px; gap: 16px; align-items: stretch; padding: 14px 16px; margin: 10px 0; background: #fff; border: 1px solid var(--rule); border-left: 4px solid var(--rule); border-radius: 4px; }
 .wrow.r-locked   { border-left-color: #2a6b3f; background: #f1f7f3; border-color: #cfe3d6; }
 .wrow.r-locked .wlabel { color: #2a6b3f; }
-.wrow.r-busy     { border-left-color: #d97706; }
-.wrow.r-pipeline { border-left-color: #b1d8de; }
-.wrow.r-free     { border-left-color: #c8261c; border-style: dashed; background: #fff7f6; }
+.wrow.r-busy     { border-left-color: #d9a406; background: #fdf7dc; border-color: #ecdb99; }
+.wrow.r-busy .wlabel { color: #8a6a04; }
+.wrow.r-free     { border-left-color: #cfcfcf; background: #f4f4f2; border-color: #e5e5e0; }
+.wrow.r-free .wlabel { color: #999; }
 .wrow.r-conflict { box-shadow: inset 4px 0 0 0 #a01a12; }
 .wlabel { font-weight: 600; color: var(--ink); font-size: 13px; font-variant-numeric: tabular-nums; align-self: flex-start; line-height: 1.3; }
 .wlabel .iso { display: block; font-size: 10.5px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; }
@@ -190,18 +191,17 @@ const PIPELINE_CSS = `
 .st-refused   { background: #fde8e6; color: #a01a12; border-color: #f0a8a0; }
 .tag { align-self: flex-start; justify-self: end; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 9px; border-radius: 3px; white-space: nowrap; line-height: 1.2; }
 .tag-locked   { background: #2a6b3f; color: #fff; }
-.tag-busy     { background: #d97706; color: #fff; }
-.tag-pipeline { background: #e3f3f5; color: #1f6470; }
-.tag-free     { background: #c8261c; color: #fff; }
+.tag-busy     { background: #d9a406; color: #fff; }
+.tag-free     { background: #cfcfcf; color: #555; }
 .tag-conflict { background: #a01a12; color: #fff; margin-right: 4px; }
-.free-prompt { color: #c8261c; font-style: italic; font-weight: 500; padding: 8px 0; font-size: 12.5px; }
+.free-prompt { color: #999; font-style: italic; font-weight: 500; padding: 8px 0; font-size: 12.5px; }
 .wbody { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .wsum-deadlines { list-style: none; margin: 0; padding: 8px 10px; background: #fff7ec; border-left: 3px solid #d97706; font-size: 12px; line-height: 1.5; display: flex; flex-direction: column; gap: 3px; }
 .wsum-deadlines li { color: var(--ink); }
 .wsum-lab  { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #d97706; }
 .wsum-val  { font-weight: 600; }
 .wsum-deadlines em { font-style: normal; font-weight: 500; color: var(--muted); margin-left: 2px; }
-.wsum-empty { color: #c8261c; font-style: italic; font-weight: 500; padding: 8px 0; font-size: 12.5px; }
+.wsum-empty { color: #999; font-style: italic; font-weight: 500; padding: 8px 0; font-size: 12.5px; }
 .bucket { margin: 32px 0 14px; }
 .bucket h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin: 0 0 10px; border-bottom: 1px solid var(--rule); padding-bottom: 6px; }
 .bucket .cards { background: #fff; border: 1px solid var(--rule); border-radius: 4px; padding: 12px; }
@@ -611,9 +611,7 @@ function Card({ e }: { e: EventModel }) {
 
 function WeekRow({ w }: { w: WeekWindow }) {
   const tagLabel =
-    w.kind === "free" || w.kind === "pipeline"
-      ? "Free"
-      : w.kind[0].toUpperCase() + w.kind.slice(1);
+    w.kind === "locked" ? "Booked" : w.kind === "busy" ? "Decide" : "Free";
   const cls = `wrow r-${w.kind}${w.hasConflict ? " r-conflict" : ""}`;
   const deadlines = w.deadlinesDue.map((e) => ({
     event: e,
@@ -628,7 +626,7 @@ function WeekRow({ w }: { w: WeekWindow }) {
       </div>
       <div className="wbody">
         {isEmpty ? (
-          <div className="wsum-empty">Free weekend. Find one.</div>
+          <div className="wsum-empty">No events this weekend.</div>
         ) : null}
         {deadlines.length > 0 ? (
           <ul className="wsum-deadlines">

@@ -651,7 +651,7 @@ export interface WeekWindow {
   monthHead: string | null;
   events: EventModel[];
   deadlinesDue: EventModel[]; // events whose deadline falls in this week
-  kind: "locked" | "busy" | "pipeline" | "free";
+  kind: "locked" | "busy" | "free";
   hasConflict: boolean;
 }
 
@@ -681,18 +681,16 @@ function weekLabel(mon: Date, sun: Date): string {
 }
 
 function classifyWeek(events: EventModel[]): {
-  kind: "locked" | "busy" | "pipeline" | "free";
+  kind: "locked" | "busy" | "free";
   hasConflict: boolean;
 } {
   if (events.length === 0) return { kind: "free", hasConflict: false };
-  const statuses = events.map((e) => e.status);
-  const locked = statuses.includes("confirmed");
-  const scheduled = statuses.filter((s) => SCHEDULED.has(s));
-  if (locked)
+  const hasBooked = events.some((e) => e.booked || e.status === "confirmed");
+  if (hasBooked) {
+    const scheduled = events.filter((e) => SCHEDULED.has(e.status));
     return { kind: "locked", hasConflict: scheduled.length > 1 };
-  if (scheduled.length > 0)
-    return { kind: "busy", hasConflict: scheduled.length > 1 };
-  return { kind: "pipeline", hasConflict: false };
+  }
+  return { kind: "busy", hasConflict: false };
 }
 
 export interface PipelineBuckets {
@@ -764,7 +762,17 @@ export function buildPipeline(
       portfolio.push(e);
       continue;
     }
-    datedActive.push(e);
+    // Weeks show only events we've decided we want to attend (or already booked).
+    // Every other dated event drops into the portfolio bucket below.
+    if (
+      e.targetTier === "we_want_to_go" ||
+      e.booked ||
+      e.status === "confirmed"
+    ) {
+      datedActive.push(e);
+    } else {
+      portfolio.push(e);
+    }
   }
 
   // full weeks from this Monday to end
