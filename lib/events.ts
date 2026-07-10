@@ -762,10 +762,12 @@ export function buildPipeline(
       portfolio.push(e);
       continue;
     }
-    // Weeks show only events we've decided we want to attend (or already booked).
-    // Every other dated event drops into the portfolio bucket below.
+    // Weeks show events we've decided we want to attend, plus parked
+    // yes-pending (priority_for_us) so nothing decision-worthy disappears.
+    // Everything else (potential / not_interested) drops into portfolio.
     if (
       e.targetTier === "we_want_to_go" ||
+      e.targetTier === "priority_for_us" ||
       e.booked ||
       e.status === "confirmed"
     ) {
