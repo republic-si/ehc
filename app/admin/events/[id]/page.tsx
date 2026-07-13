@@ -7,6 +7,7 @@ import {
   TARGET_TIER_LABELS,
   STATUS_VALUES,
   type EventModel,
+  type YesNo,
 } from "@/lib/events";
 import { updateEventAction } from "../actions";
 
@@ -21,6 +22,41 @@ function formatDate(e: EventModel): string {
   if (e.startDate && e.endDate && e.startDate !== e.endDate)
     return `${e.startDate} → ${e.endDate}`;
   return e.startDate ?? "—";
+}
+
+function YesNoRadio({
+  label,
+  name,
+  value,
+}: {
+  label: string;
+  name: string;
+  value: YesNo | null;
+}) {
+  const options: { v: "" | YesNo; label: string }[] = [
+    { v: "", label: "—" },
+    { v: "yes", label: "Yes" },
+    { v: "no", label: "No" },
+  ];
+  return (
+    <label className="text-xs text-muted flex flex-col gap-1">
+      <span>{label}</span>
+      <span className="inline-flex gap-3 mt-1 text-sm text-ink">
+        {options.map((o) => (
+          <label key={o.v} className="inline-flex items-center gap-1 cursor-pointer">
+            <input
+              type="radio"
+              name={name}
+              value={o.v}
+              defaultChecked={(value ?? "") === o.v}
+              className="h-4 w-4"
+            />
+            <span>{o.label}</span>
+          </label>
+        ))}
+      </span>
+    </label>
+  );
 }
 
 function mondayKeyFor(isoDate: string): string {
@@ -126,6 +162,16 @@ export default async function EventDetailPage({
         className="mt-10 space-y-6 p-6 bg-paper-green rounded-sm"
       >
         <input type="hidden" name="id" value={e.eventId} />
+
+        <fieldset className="grid grid-cols-2 gap-x-6 gap-y-4 pb-4 border-b border-rule">
+          <legend className="text-xs text-muted uppercase tracking-wider mb-2 col-span-2">
+            Us
+          </legend>
+          <YesNoRadio label="Simon — decision"    name="simon_decision"    value={e.simonDecision} />
+          <YesNoRadio label="Nathan — decision"   name="nathan_decision"   value={e.nathanDecision} />
+          <YesNoRadio label="Simon — available"   name="simon_available"   value={e.simonAvailable} />
+          <YesNoRadio label="Nathan — available"  name="nathan_available"  value={e.nathanAvailable} />
+        </fieldset>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <label className="text-xs text-muted">

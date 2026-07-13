@@ -121,3 +121,13 @@ UPDATE events SET target_tier = 'we_want_to_go'
 -- Split notes from updates: notes = what the event IS, updates = email/contact log.
 ALTER TABLE events ADD COLUMN IF NOT EXISTS updates    TEXT NOT NULL DEFAULT '';
 ALTER TABLE events ADD COLUMN IF NOT EXISTS updates_en TEXT NOT NULL DEFAULT '';
+
+-- Per-founder decision + availability. Nullable so we can distinguish unset from 'no'.
+ALTER TABLE events ADD COLUMN IF NOT EXISTS simon_decision   TEXT NULL
+  CHECK (simon_decision   IS NULL OR simon_decision   IN ('yes','no'));
+ALTER TABLE events ADD COLUMN IF NOT EXISTS nathan_decision  TEXT NULL
+  CHECK (nathan_decision  IS NULL OR nathan_decision  IN ('yes','no'));
+ALTER TABLE events ADD COLUMN IF NOT EXISTS simon_available  TEXT NULL
+  CHECK (simon_available  IS NULL OR simon_available  IN ('yes','no'));
+ALTER TABLE events ADD COLUMN IF NOT EXISTS nathan_available TEXT NULL
+  CHECK (nathan_available IS NULL OR nathan_available IN ('yes','no'));

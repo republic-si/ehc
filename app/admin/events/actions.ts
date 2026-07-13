@@ -11,6 +11,7 @@ import {
   STATUS_VALUES,
   type TargetTier,
   type EventStatus,
+  type YesNo,
 } from "@/lib/events";
 import { translateNoteToEnglish } from "@/lib/translate";
 
@@ -52,6 +53,12 @@ function numberOrNull(v: string | undefined): number | null | undefined {
   if (t === "") return null;
   const n = Number(t);
   return Number.isFinite(n) ? n : null;
+}
+
+function yesNoOrNull(v: string | undefined): YesNo | null | undefined {
+  if (v === undefined) return undefined;
+  if (v === "yes" || v === "no") return v;
+  return null;
 }
 
 export async function updateEventAction(formData: FormData): Promise<void> {
@@ -113,6 +120,10 @@ export async function updateEventAction(formData: FormData): Promise<void> {
     booked: formData.get("booked") === "on",
     standCost: numberOrNull(str(formData, "stand_cost")),
     hotelCost: numberOrNull(str(formData, "hotel_cost")),
+    simonDecision: yesNoOrNull(str(formData, "simon_decision")),
+    nathanDecision: yesNoOrNull(str(formData, "nathan_decision")),
+    simonAvailable: yesNoOrNull(str(formData, "simon_available")),
+    nathanAvailable: yesNoOrNull(str(formData, "nathan_available")),
   });
 
   bustEventsCache(id);

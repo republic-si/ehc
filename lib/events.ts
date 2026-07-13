@@ -3,6 +3,8 @@ import { sql } from "@/db/client";
 
 export const EVENTS_CACHE_TAG = "events";
 
+export type YesNo = "yes" | "no";
+
 export const TARGET_TIERS = [
   "we_want_to_go",
   "priority_for_us",
@@ -106,6 +108,10 @@ export interface EventRow {
   booked: boolean;
   stand_cost: string | null;
   hotel_cost: string | null;
+  simon_decision: string | null;
+  nathan_decision: string | null;
+  simon_available: string | null;
+  nathan_available: string | null;
 }
 
 export interface EventModel {
@@ -135,6 +141,10 @@ export interface EventModel {
   booked: boolean;
   standCost: number | null;
   hotelCost: number | null;
+  simonDecision: YesNo | null;
+  nathanDecision: YesNo | null;
+  simonAvailable: YesNo | null;
+  nathanAvailable: YesNo | null;
 }
 
 function toEvent(row: EventRow): EventModel {
@@ -165,6 +175,10 @@ function toEvent(row: EventRow): EventModel {
     booked: row.booked ?? false,
     standCost: row.stand_cost != null ? Number(row.stand_cost) : null,
     hotelCost: row.hotel_cost != null ? Number(row.hotel_cost) : null,
+    simonDecision: row.simon_decision as YesNo | null,
+    nathanDecision: row.nathan_decision as YesNo | null,
+    simonAvailable: row.simon_available as YesNo | null,
+    nathanAvailable: row.nathan_available as YesNo | null,
   };
 }
 
@@ -232,7 +246,9 @@ export async function listEvents(
            distance_km, distance_band,
            booked,
            stand_cost::text AS stand_cost,
-           hotel_cost::text AS hotel_cost
+           hotel_cost::text AS hotel_cost,
+           simon_decision, nathan_decision,
+           simon_available, nathan_available
     FROM events
     ${whereSql}
     ORDER BY ${sortSql}
@@ -255,7 +271,9 @@ export async function getEvent(eventId: string): Promise<EventModel | null> {
            distance_km, distance_band,
            booked,
            stand_cost::text AS stand_cost,
-           hotel_cost::text AS hotel_cost
+           hotel_cost::text AS hotel_cost,
+           simon_decision, nathan_decision,
+           simon_available, nathan_available
     FROM events
     WHERE event_id = ${eventId}
     LIMIT 1
@@ -296,6 +314,10 @@ export interface EventPatch {
   booked?: boolean;
   standCost?: number | null;
   hotelCost?: number | null;
+  simonDecision?: YesNo | null;
+  nathanDecision?: YesNo | null;
+  simonAvailable?: YesNo | null;
+  nathanAvailable?: YesNo | null;
 }
 
 export async function updateEvent(
@@ -364,6 +386,22 @@ export async function updateEvent(
   if (patch.hotelCost !== undefined) {
     sets.push(`hotel_cost = $${i++}`);
     params.push(patch.hotelCost);
+  }
+  if (patch.simonDecision !== undefined) {
+    sets.push(`simon_decision = $${i++}`);
+    params.push(patch.simonDecision);
+  }
+  if (patch.nathanDecision !== undefined) {
+    sets.push(`nathan_decision = $${i++}`);
+    params.push(patch.nathanDecision);
+  }
+  if (patch.simonAvailable !== undefined) {
+    sets.push(`simon_available = $${i++}`);
+    params.push(patch.simonAvailable);
+  }
+  if (patch.nathanAvailable !== undefined) {
+    sets.push(`nathan_available = $${i++}`);
+    params.push(patch.nathanAvailable);
   }
   if (sets.length === 0) return;
   sets.push(`updated_at = now()`);
