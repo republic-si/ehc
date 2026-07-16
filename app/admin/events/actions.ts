@@ -1,8 +1,8 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { revalidateTag, revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireSession } from "@/lib/auth-helpers";
 import {
   updateEvent,
   getEvent,
@@ -23,6 +23,15 @@ function bustEventsCache(eventId?: string): void {
   revalidatePath("/admin/events/table");
   revalidatePath("/admin/events/deadlines");
   if (eventId) revalidatePath(`/admin/events/${eventId}`);
+}
+
+async function assertAuth(): Promise<void> {
+  const expected = process.env.ADMIN_PASS;
+  if (!expected) throw new Error("Auth not configured");
+  const jar = await cookies();
+  if (jar.get("admin_auth")?.value !== expected) {
+    throw new Error("Unauthorized");
+  }
 }
 
 function str(formData: FormData, key: string): string | undefined {
@@ -53,7 +62,7 @@ function yesNoOrNull(v: string | undefined): YesNo | null | undefined {
 }
 
 export async function updateEventAction(formData: FormData): Promise<void> {
-  await requireSession();
+  await assertAuth();
   const id = str(formData, "id");
   if (!id) throw new Error("Missing id");
 
@@ -125,7 +134,7 @@ async function setTierAction(
   eventId: string,
   tier: TargetTier,
 ): Promise<void> {
-  await requireSession();
+  await assertAuth();
   if (!eventId) throw new Error("Missing eventId");
   await updateEvent(eventId, { targetTier: tier });
   bustEventsCache(eventId);
@@ -148,6 +157,6 @@ export async function markNotInterestedAction(eventId: string): Promise<void> {
 }
 
 export async function refreshEventsAction(): Promise<void> {
-  await requireSession();
+  await assertAuth();
   bustEventsCache();
 }

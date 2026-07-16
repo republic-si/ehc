@@ -1,4 +1,4 @@
-import { signIn } from "@/auth";
+import { loginAction } from "./actions";
 
 export const metadata = {
   title: "Admin login — EHC",
@@ -26,42 +26,29 @@ export default async function LoginPage({
           Sign in
         </h1>
         <p className="text-sm text-muted mb-8 leading-relaxed">
-          Enter your email. We'll send a one-click sign-in link.
+          Enter the admin password to access the events pipeline.
         </p>
 
-        <form
-          action={async (formData) => {
-            "use server";
-            await signIn("nodemailer", {
-              email: String(formData.get("email") ?? ""),
-              redirectTo: next,
-            });
-          }}
-          className="space-y-4"
-        >
+        <form action={loginAction} className="space-y-4">
+          <input type="hidden" name="next" value={next} />
           <label className="block">
             <span className="text-[11px] font-semibold tracking-wider uppercase text-muted">
-              Email
+              Password
             </span>
             <input
-              type="email"
-              name="email"
+              type="password"
+              name="password"
               autoFocus
-              autoComplete="email"
-              required
+              autoComplete="current-password"
               className="mt-2 w-full bg-white border border-rule px-3 py-2 text-base text-ink rounded-sm focus:outline-none focus:border-ink"
             />
           </label>
 
-          {err === "forbidden" ? (
-            <p className="text-sm text-[#c8261c]">You don't have access to this area.</p>
-          ) : err === "user_missing" ? (
-            <p className="text-sm text-[#c8261c]">Session expired. Sign in again.</p>
-          ) : err === "no_org" ? (
-            <p className="text-sm text-[#c8261c]">Your account has no organisations yet.</p>
+          {err === "wrong" ? (
+            <p className="text-sm text-[#c8261c]">Wrong password.</p>
           ) : err === "config" ? (
             <p className="text-sm text-[#c8261c]">
-              Auth not configured (EMAIL_SERVER_* or DATABASE_URL missing).
+              Auth not configured (ADMIN_PASS env var missing).
             </p>
           ) : null}
 
@@ -69,7 +56,7 @@ export default async function LoginPage({
             type="submit"
             className="w-full px-4 py-2.5 text-sm font-medium bg-ink text-white rounded-sm hover:bg-ink-deep transition-colors"
           >
-            Send sign-in link
+            Sign in
           </button>
         </form>
       </div>
