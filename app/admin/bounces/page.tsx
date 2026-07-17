@@ -19,7 +19,7 @@ export default async function BouncesPage({ searchParams }: Props) {
     <>
       <PageTitle
         title="Inbox events"
-        subtitle="Bounces (DSN) and unsubscribe replies from Gmail."
+        subtitle="Bounces (DSN) and unsubscribe replies from Gmail. Tracked globally, not per project — only ~60% of bounces carry an outlet link."
       />
 
       <div style={{ display: "flex", gap: 6, marginBottom: 18 }}>

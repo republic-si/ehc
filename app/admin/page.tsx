@@ -62,13 +62,17 @@ export default async function AdminHome() {
         <Link href="/admin/bounces" style={cardStyle}>
           <div style={labelStyle}>Bounces (7d)</div>
           <div style={valueStyle}>{s.bounces7d}</div>
-          <div style={{ fontSize: 13, color: "#666" }}>From Gmail DSNs</div>
+          <div style={{ fontSize: 13, color: "#666" }}>
+            From Gmail DSNs · all projects
+          </div>
         </Link>
 
         <Link href="/admin/bounces?tab=unsubs" style={cardStyle}>
           <div style={labelStyle}>Unsubscribes (30d)</div>
           <div style={valueStyle}>{s.unsubs30d}</div>
-          <div style={{ fontSize: 13, color: "#666" }}>Inbox replies</div>
+          <div style={{ fontSize: 13, color: "#666" }}>
+            Inbox replies · all projects
+          </div>
         </Link>
 
         <Link href="/admin/sends" style={cardStyle}>

@@ -44,6 +44,10 @@ function toPickup(row: PickupRow): Pickup {
   };
 }
 
+// Not project-scoped: this powers the PUBLIC /coverage page (no session/scope),
+// and there is no admin pickups view. Per-campaign coverage lives in the
+// committed HTML reports at /admin/coverage/[campaign]. Revisit if an admin
+// pickups surface is added.
 export async function getPickups(): Promise<Pickup[]> {
   const rows = (await sql`
     SELECT article_url, date_spotted::text AS date_spotted,
