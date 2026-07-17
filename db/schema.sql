@@ -17,6 +17,11 @@ CREATE INDEX IF NOT EXISTS releases_iso_date_idx ON releases (iso_date DESC NULL
 CREATE INDEX IF NOT EXISTS releases_country_idx ON releases (country);
 CREATE INDEX IF NOT EXISTS releases_is_draft_idx ON releases (is_draft);
 
+-- Optional campaign scope (e.g. 'berlin-chili-fest') so a microsite can show
+-- only its own releases. NULL = global / unscoped.
+ALTER TABLE releases ADD COLUMN IF NOT EXISTS campaign TEXT;
+CREATE INDEX IF NOT EXISTS releases_campaign_idx ON releases (campaign);
+
 CREATE TABLE IF NOT EXISTS pickups (
   article_url TEXT PRIMARY KEY,
   date_spotted DATE,

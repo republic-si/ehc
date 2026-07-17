@@ -13,6 +13,7 @@ import {
   PRESS_EVENING,
 } from "@/lib/chilifest/media";
 import { MAKERS } from "@/lib/chilifest/makers";
+import { getReleasesByCampaign } from "@/lib/releases";
 
 // Single source of truth for the festival facts, per ~/BCF-press/BCF-MASTER.md.
 // Berlin Chili Fest is organised by Neil Numb (chilifest.eu); the European Heat
@@ -121,7 +122,8 @@ function LaneHeading({
   );
 }
 
-export default function ChiliFestPage() {
+export default async function ChiliFestPage() {
+  const releases = await getReleasesByCampaign("berlin-chili-fest");
   return (
     <>
       <script
@@ -304,8 +306,28 @@ export default function ChiliFestPage() {
               and Berlin&rsquo;s Best Homemade Hot Sauce Competition, with
               datelines and paste-ready quotes.
             </p>
+            {releases.length > 0 ? (
+              <ol className="mt-8 space-y-5 max-w-2xl">
+                {releases.map((r) => (
+                  <li key={r.slug} className="border-t border-rule pt-4">
+                    <Link href={`/releases/${r.slug}`} className="group block">
+                      <p className="label text-muted">
+                        {r.displayDate ?? (r.isDraft ? "Forthcoming" : "")}
+                      </p>
+                      <p className="mt-1 text-lg text-ink group-hover:text-accent">
+                        {r.headline}
+                      </p>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p className="mt-6 text-muted">
+                Releases for Berlin Chili Fest are on the way.
+              </p>
+            )}
             <Link href="/releases" className="mt-6 inline-block more-link">
-              Read all releases
+              All Council releases
             </Link>
           </section>
 

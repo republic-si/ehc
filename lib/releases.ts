@@ -67,13 +67,29 @@ function toRelease(row: ReleaseRow): Release {
   };
 }
 
-// Releases are global — the `releases` table has no campaign column, and
-// they're shown the same across projects. Out of scope for project scoping.
+// Releases are global by default. The optional `campaign` column scopes a
+// release to a microsite (e.g. 'berlin-chili-fest'); getAllReleases stays
+// unfiltered, getReleasesByCampaign filters.
 export async function getAllReleases(): Promise<Release[]> {
   const rows = (await sql`
     SELECT slug, headline, subhead, dateline_raw, city, country,
            iso_date::text AS iso_date, is_draft, lead, blocks
     FROM releases
+    ORDER BY iso_date DESC NULLS LAST, slug ASC
+  `) as ReleaseRow[];
+  return rows.map(toRelease);
+}
+
+// Releases tagged to a campaign (microsite scope). NULL-campaign releases are
+// excluded. Returns [] when nothing is tagged yet.
+export async function getReleasesByCampaign(
+  campaign: string,
+): Promise<Release[]> {
+  const rows = (await sql`
+    SELECT slug, headline, subhead, dateline_raw, city, country,
+           iso_date::text AS iso_date, is_draft, lead, blocks
+    FROM releases
+    WHERE campaign = ${campaign}
     ORDER BY iso_date DESC NULLS LAST, slug ASC
   `) as ReleaseRow[];
   return rows.map(toRelease);
