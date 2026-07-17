@@ -19,11 +19,17 @@ import Nodemailer from "next-auth/providers/nodemailer";
 import NeonAdapter from "@auth/neon-adapter";
 import { Pool } from "@neondatabase/serverless";
 
-export const { handlers, auth, signIn, signOut } = NextAuth(() => {
-  // Neon serverless expects a Pool per request; DO NOT hoist to module scope.
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// Module-scope Pool (reused across warm invocations). The earlier lazy
+// `NextAuth(() => ...)` form created a Pool per request, but that form makes
+// the `auth` export ASYNC — so `auth((req) => ...)` returns a Promise, not a
+// function, and Next.js 16's proxy loader (which does a synchronous
+// `typeof handler === "function"` check) 500s with "must export a function
+// named `proxy`". The object config form keeps `auth` synchronous, which the
+// `proxy.ts` middleware wrapper requires. For a ~10-user admin surface a
+// shared pool is the right call anyway.
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-  return {
+export const { handlers, auth, signIn, signOut } = NextAuth({
     adapter: NeonAdapter(pool),
     providers: [
       Nodemailer({
@@ -86,5 +92,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth(() => {
       },
     },
     trustHost: true,
-  };
 });

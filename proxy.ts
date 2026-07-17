@@ -22,7 +22,12 @@ export const config = {
   matcher: ["/admin/:path*", "/portal/:path*"],
 };
 
-export default auth((req) => {
+// Next.js 16 proxy files are loaded via the named `proxy` export (the
+// loader reads `mod.proxy` first and only falls back to `mod.default`,
+// which the edge bundle drops). A default export 500s with
+// "must export a function named `proxy`". Auth.js `auth(cb)` returns an
+// async handler function, so the named const satisfies the loader.
+export const proxy = auth((req) => {
   const path = req.nextUrl.pathname;
 
   // Set x-pathname so server layouts can read it via headers() and skip
