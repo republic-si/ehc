@@ -89,7 +89,7 @@ export const MAKERS: Maker[] = [
     awards: "",
     story: "In the Czech steel city of Ostrava, Petr Schejbal bottles chilli sauce with no preservatives. His first one ever, the smoky 'Zpečený Indián', was voted product of the year at the Mechov chilli festival.",
     angles: ["An Ostrava maker bottling preservative-free chilli sauce since 2020.", "Central-European craft chilli, an award-winner out of the Czech steel belt.", "'Zpečený Indián', a mild smoky tikka-style sauce, his first ever and a festival product of the year."],
-    photo: null,
+    photo: "/chilifest/makers/chillipeterson.jpg",
   },
   {
     id: "marie-sharp-s",
@@ -103,7 +103,7 @@ export const MAKERS: Maker[] = [
     awards: "",
     story: "Marie Sharp built a Belize hot sauce name by replacing the vinegar in the bottle with carrots. Her German champions bring the mango version, the gentlest in the range, to Berlin.",
     angles: ["A German importer championing Marie Sharp's, the Belize brand that swapped vinegar for carrots.", "A heritage-brand story: carrot-and-habanero as the original flavour-first hot sauce.", "Mango Pepper at 2/10, gentle enough for watermelon salad or breakfast cereal."],
-    photo: null,
+    photo: "/chilifest/makers/marie-sharp-s.jpg",
   },
   {
     id: "chiliwerk",
@@ -117,7 +117,7 @@ export const MAKERS: Maker[] = [
     awards: "Silver · 2025",
     story: "A Berlin maker that took EHSA 2025 Silver for its roasted lemon-habanero sauce wants to lead here with something gentler: a hot honey.",
     angles: ["A Berlin maker spanning citrus-mild to Carolina Reaper, leading with a gentler idea.", "Hot honey, the crossover condiment breaking out of the chilli aisle.", "A hot honey to open with, and the EHSA 2025 Silver lemon-habanero for the heat desk."],
-    photo: null,
+    photo: "/chilifest/makers/chiliwerk.jpg",
   },
   {
     id: "don-cabron",
@@ -131,7 +131,7 @@ export const MAKERS: Maker[] = [
     awards: "Bronze · 2026",
     story: "A Northern-Mexican cook bottles her family's regional salsas from a base in the Netherlands, bringing salsa macha, Mexico's crispy chilli oil, to Europe just as it takes off.",
     angles: ["A Northern-Mexican cook bottling her family's regional salsas from the Netherlands.", "Salsa macha, Mexico's crispy chilli oil, arriving in Europe as it takes off.", "A crispy salsa macha as the bestseller, for the crunchy-oil crowd."],
-    photo: null,
+    photo: "/chilifest/makers/don-cabron.jpg",
   },
   {
     id: "moja",
@@ -159,7 +159,7 @@ export const MAKERS: Maker[] = [
     awards: "Gold ×3 · 2026",
     story: "The name is the promise: flavour over burn, no extracts. This Berlin maker just took three Golds at the 2026 European Hot Sauce Awards to back it up.",
     angles: ["A Berlin maker who put his whole philosophy in the brand name.", "Flavour over heat, no extracts: the anti-superhot movement, with three 2026 Golds.", "Princess Passion, a flavour-first sauce built for taste, not punishment."],
-    photo: null,
+    photo: "/chilifest/makers/not-that-spicy.jpg",
   },
   {
     id: "qudo-tjes",

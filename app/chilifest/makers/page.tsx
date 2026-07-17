@@ -69,33 +69,6 @@ const itemListJsonLd = {
   })),
 };
 
-function heatLevel(h: string): number | null {
-  // Heat is written "N/10" or "N–M/10". The level is the numerator (upper of a
-  // range), NOT the "/10" denominator — otherwise every sauce reads 10/10.
-  const before = h.split("/")[0] ?? "";
-  const nums = before.match(/\d+/g);
-  if (!nums) return null;
-  return Math.min(10, Math.max(...nums.map((x) => parseInt(x, 10))));
-}
-
-function Heat({ heat }: { heat: string }) {
-  const n = heatLevel(heat);
-  if (n === null) return null;
-  return (
-    <div className="flex items-center gap-2">
-      <div className="flex gap-[3px]" aria-hidden>
-        {Array.from({ length: 10 }).map((_, i) => (
-          <span
-            key={i}
-            className={`h-1.5 w-3 rounded-[1px] ${i < n ? "bg-accent" : "bg-rule"}`}
-          />
-        ))}
-      </div>
-      <span className="text-xs text-muted font-mono">{heat}</span>
-    </div>
-  );
-}
-
 function MakerCard({ maker: m }: { maker: Maker }) {
   return (
     <article
@@ -148,22 +121,12 @@ function MakerCard({ maker: m }: { maker: Maker }) {
             {m.story}
           </p>
 
-          <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-3 text-sm">
-            {m.flagship ? (
-              <div>
-                <dt className="label text-muted">Flagship</dt>
-                <dd className="mt-1 text-foreground/90">{m.flagship}</dd>
-              </div>
-            ) : null}
-            {heatLevel(m.heat) !== null ? (
-              <div>
-                <dt className="label text-muted">Heat</dt>
-                <dd className="mt-1">
-                  <Heat heat={m.heat} />
-                </dd>
-              </div>
-            ) : null}
-          </dl>
+          {m.flagship ? (
+            <dl className="mt-4 text-sm">
+              <dt className="label text-muted">Flagship</dt>
+              <dd className="mt-1 text-foreground/90">{m.flagship}</dd>
+            </dl>
+          ) : null}
         </div>
       </div>
 
