@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAdminSummary } from "@/lib/admin";
+import { resolveScope } from "@/lib/scope";
 
 const cardStyle: React.CSSProperties = {
   display: "block",
@@ -28,7 +29,8 @@ const valueStyle: React.CSSProperties = {
 };
 
 export default async function AdminHome() {
-  const s = await getAdminSummary();
+  const { scope } = await resolveScope();
+  const s = await getAdminSummary(scope);
   const total = s.outlets.reduce((acc, o) => acc + o.count, 0);
   const byStatus: Record<string, number> = {};
   for (const o of s.outlets) byStatus[o.status] = o.count;

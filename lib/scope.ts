@@ -16,6 +16,7 @@
 // The Python pipeline write-side (--campaign send plumbing) is a deferred
 // follow-up; this file is read-side only.
 
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { sql } from "@/db/client";
 import { requireSession, type UserRow } from "@/lib/auth-helpers";
@@ -172,19 +173,25 @@ export function scopeFromToken(
   return defaultScope(user, projects);
 }
 
-/** Read the cookie, resolve + gate it, and also return the allowed project list. */
-export async function resolveScope(): Promise<{
-  scope: Scope;
-  projects: AllowedProject[];
-  user: UserRow;
-}> {
-  const { user } = await requireSession();
-  const projects = await getUserProjects(user);
-  const store = await cookies();
-  const token = store.get(PROJECT_COOKIE)?.value ?? null;
-  const scope = scopeFromToken(token, user, projects);
-  return { scope, projects, user };
-}
+/**
+ * Read the cookie, resolve + gate it, and also return the allowed project list.
+ * Wrapped in React cache() so the layout and the page in the same request share
+ * one session + project lookup instead of re-querying.
+ */
+export const resolveScope = cache(
+  async (): Promise<{
+    scope: Scope;
+    projects: AllowedProject[];
+    user: UserRow;
+  }> => {
+    const { user } = await requireSession();
+    const projects = await getUserProjects(user);
+    const store = await cookies();
+    const token = store.get(PROJECT_COOKIE)?.value ?? null;
+    const scope = scopeFromToken(token, user, projects);
+    return { scope, projects, user };
+  },
+);
 
 /**
  * Append the campaign predicate to a dynamic `where[]` / `params[]` builder

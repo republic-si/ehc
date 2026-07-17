@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getOutletsByStatus, type OutletStatus } from "@/lib/admin";
+import { resolveScope } from "@/lib/scope";
 import {
   PageTitle,
   StatusPill,
@@ -24,7 +25,8 @@ interface Props {
 export default async function OutletsPage({ searchParams }: Props) {
   const sp = await searchParams;
   const status = (sp.status as OutletStatus) || "bounced";
-  const outlets = await getOutletsByStatus(status, 500);
+  const { scope } = await resolveScope();
+  const outlets = await getOutletsByStatus(scope, status, 500);
 
   return (
     <>

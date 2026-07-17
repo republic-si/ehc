@@ -1,4 +1,5 @@
 import { sql } from "@/db/client";
+import { pushScope, type Scope } from "@/lib/scope";
 
 // ---------- types ----------
 
@@ -81,21 +82,41 @@ export interface AdminSummary {
 
 // ---------- queries ----------
 
-export async function getOutletStatusCounts(): Promise<OutletStatusCount[]> {
-  const rows = (await sql`
-    SELECT status, count(*)::int AS count
-      FROM press_outlets
-     GROUP BY status
-     ORDER BY status
-  `) as { status: string; count: number }[];
+export async function getOutletStatusCounts(
+  scope: Scope,
+): Promise<OutletStatusCount[]> {
+  const where: string[] = [];
+  const params: unknown[] = [];
+  pushScope(scope, where, params, "outlet");
+  const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
+  const rows = (await sql.query(
+    `SELECT status, count(*)::int AS count
+       FROM press_outlets
+      ${whereSql}
+      GROUP BY status
+      ORDER BY status`,
+    params,
+  )) as { status: string; count: number }[];
   return rows.map((r) => ({
     status: (r.status as OutletStatus | "other") ?? "other",
     count: r.count,
   }));
 }
 
-export async function getAdminSummary(): Promise<AdminSummary> {
-  const outlets = await getOutletStatusCounts();
+export async function getAdminSummary(scope: Scope): Promise<AdminSummary> {
+  const outlets = await getOutletStatusCounts(scope);
+
+  // sends24h is scoped by campaign_slug.
+  const sWhere = ["sent_at >= now() - interval '24 hours'"];
+  const sParams: unknown[] = [];
+  pushScope(scope, sWhere, sParams, "send");
+  const [sends] = (await sql.query(
+    `SELECT count(*)::int AS n FROM outlet_sends WHERE ${sWhere.join(" AND ")}`,
+    sParams,
+  )) as { n: number }[];
+
+  // bounces / unsubs / signoffs are still global here; scoped in later steps
+  // (bounces have no campaign column — see step 8).
   const [bounces] = (await sql`
     SELECT count(*)::int AS n FROM dsn_log
      WHERE received_at >= now() - interval '7 days'
@@ -103,10 +124,6 @@ export async function getAdminSummary(): Promise<AdminSummary> {
   const [unsubs] = (await sql`
     SELECT count(*)::int AS n FROM unsubscribe_log
      WHERE received_at >= now() - interval '30 days'
-  `) as { n: number }[];
-  const [sends] = (await sql`
-    SELECT count(*)::int AS n FROM outlet_sends
-     WHERE sent_at >= now() - interval '24 hours'
   `) as { n: number }[];
   const [signoffs] = (await sql`
     SELECT count(*)::int AS n FROM signoff_sends
@@ -122,21 +139,28 @@ export async function getAdminSummary(): Promise<AdminSummary> {
 }
 
 export async function getOutletsByStatus(
+  scope: Scope,
   status: OutletStatus,
   limit = 200,
 ): Promise<OutletRow[]> {
-  const rows = (await sql`
-    SELECT outlet_id, outlet_name, url, country, language, scope,
-           email_primary, editor_name, status,
-           unsubscribed_at::text AS unsubscribed_at,
-           last_sent_at::text AS last_sent_at,
-           last_dsn_at::text AS last_dsn_at,
-           dsn_count
-      FROM press_outlets
-     WHERE status = ${status}
-     ORDER BY COALESCE(last_dsn_at, updated_at) DESC NULLS LAST
-     LIMIT ${limit}
-  `) as Record<string, unknown>[];
+  const where = ["status = $1"];
+  const params: unknown[] = [status];
+  pushScope(scope, where, params, "outlet");
+  const limitIdx = params.length + 1;
+  params.push(limit);
+  const rows = (await sql.query(
+    `SELECT outlet_id, outlet_name, url, country, language, scope,
+            email_primary, editor_name, status,
+            unsubscribed_at::text AS unsubscribed_at,
+            last_sent_at::text AS last_sent_at,
+            last_dsn_at::text AS last_dsn_at,
+            dsn_count
+       FROM press_outlets
+      WHERE ${where.join(" AND ")}
+      ORDER BY COALESCE(last_dsn_at, updated_at) DESC NULLS LAST
+      LIMIT $${limitIdx}`,
+    params,
+  )) as Record<string, unknown>[];
   return rows.map(rowToOutlet);
 }
 
@@ -183,19 +207,26 @@ export async function getRecentUnsubscribes(
 }
 
 export async function getRecentSends(
+  scope: Scope,
   hours = 72,
   limit = 200,
 ): Promise<RecentSendRow[]> {
-  const rows = (await sql`
-    SELECT os.outlet_id, po.outlet_name, os.maker_slug, os.batch,
-           os.sent_at::text AS sent_at, os.subject, os.transport,
-           COALESCE(os.bounced, false) AS bounced, os.reply_kind
-      FROM outlet_sends os
-      LEFT JOIN press_outlets po ON po.outlet_id = os.outlet_id
-     WHERE os.sent_at >= now() - (${hours}::text || ' hours')::interval
-     ORDER BY os.sent_at DESC
-     LIMIT ${limit}
-  `) as Record<string, unknown>[];
+  const params: unknown[] = [hours];
+  const where = [`os.sent_at >= now() - ($1::text || ' hours')::interval`];
+  pushScope(scope, where, params, "send", "os.campaign_slug");
+  const limitIdx = params.length + 1;
+  params.push(limit);
+  const rows = (await sql.query(
+    `SELECT os.outlet_id, po.outlet_name, os.maker_slug, os.batch,
+            os.sent_at::text AS sent_at, os.subject, os.transport,
+            COALESCE(os.bounced, false) AS bounced, os.reply_kind
+       FROM outlet_sends os
+       LEFT JOIN press_outlets po ON po.outlet_id = os.outlet_id
+      WHERE ${where.join(" AND ")}
+      ORDER BY os.sent_at DESC
+      LIMIT $${limitIdx}`,
+    params,
+  )) as Record<string, unknown>[];
   return rows.map((r) => ({
     outletId: (r.outlet_id as string) ?? "",
     outletName: (r.outlet_name as string) ?? null,

@@ -1,4 +1,5 @@
 import { getRecentSends } from "@/lib/admin";
+import { resolveScope } from "@/lib/scope";
 import {
   PageTitle,
   codeStyle,
@@ -8,7 +9,8 @@ import {
 } from "../_layout/Table";
 
 export default async function SendsPage() {
-  const rows = await getRecentSends(72, 500);
+  const { scope } = await resolveScope();
+  const rows = await getRecentSends(scope, 72, 500);
   return (
     <>
       <PageTitle
