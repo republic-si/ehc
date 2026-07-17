@@ -1,4 +1,4 @@
-// Sauce catalogue for the Berlin ChiliFest press hub.
+// Sauce catalogue for the Berlin Chili Fest press hub.
 //
 // This is the data source for /chilifest/catalogue. Replace the placeholder
 // entries below with the real roster we are building. Rules that apply to the

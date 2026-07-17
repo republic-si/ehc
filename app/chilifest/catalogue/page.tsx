@@ -9,15 +9,15 @@ import {
 
 const CANONICAL = `${SITE_URL}/chilifest/catalogue`;
 const DESCRIPTION =
-  "The producers and sauces on the table at Berlin ChiliFest: origin, heat and tasting notes, maintained by the European Heat Council.";
+  "The producers and sauces on the table at Berlin Chili Fest: origin, heat and tasting notes, maintained by the European Heat Council.";
 
 export const metadata: Metadata = {
-  title: `Sauce catalogue — Berlin ChiliFest — ${SITE_NAME}`,
+  title: `Sauce catalogue — Berlin Chili Fest — ${SITE_NAME}`,
   description: DESCRIPTION,
   alternates: { canonical: CANONICAL },
   openGraph: {
     type: "website",
-    title: `Sauce catalogue — Berlin ChiliFest`,
+    title: `Sauce catalogue — Berlin Chili Fest`,
     description: DESCRIPTION,
     siteName: SITE_NAME,
     url: CANONICAL,
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 const itemListJsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  name: "Berlin ChiliFest sauce catalogue",
+  name: "Berlin Chili Fest sauce catalogue",
   description: DESCRIPTION,
   url: CANONICAL,
   numberOfItems: CATALOGUE.length,
@@ -57,14 +57,14 @@ export default function CataloguePage() {
             href="/chilifest"
             className="label text-muted hover:text-accent print:hidden"
           >
-            ← Berlin ChiliFest press hub
+            ← Berlin Chili Fest press hub
           </Link>
 
           <h1 className="mt-8 text-3xl sm:text-4xl font-semibold tracking-tight text-ink leading-[1.15]">
             Sauce catalogue
           </h1>
           <p className="mt-4 text-base leading-relaxed text-foreground/85 max-w-2xl">
-            The producers and sauces on the table at Berlin ChiliFest, with
+            The producers and sauces on the table at Berlin Chili Fest, with
             origin, heat and tasting notes. Maintained by the European Heat
             Council for press reference.
           </p>

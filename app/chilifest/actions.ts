@@ -69,9 +69,9 @@ export async function submitSampleRequest(
     await sendMail({
       to: "simon@republicofheat.com",
       replyTo: email,
-      subject: `[ChiliFest] Sample request from ${name} (${organisation})`,
+      subject: `[Chili Fest] Sample request from ${name} (${organisation})`,
       text: [
-        "New journalist sample request via the ChiliFest press hub.",
+        "New journalist sample request via the Chili Fest press hub.",
         "",
         `Name:         ${name}`,
         `Email:        ${email}`,
@@ -142,9 +142,9 @@ export async function submitPressEveningRequest(
     await sendMail({
       to: "simon@republicofheat.com",
       replyTo: email,
-      subject: `[ChiliFest] Press-evening access request from ${name} (${organisation})`,
+      subject: `[Chili Fest] Press-evening access request from ${name} (${organisation})`,
       text: [
-        "New press-evening accreditation request via the ChiliFest press hub.",
+        "New press-evening accreditation request via the Chili Fest press hub.",
         "",
         `Name:         ${name}`,
         `Email:        ${email}`,

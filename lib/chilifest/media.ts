@@ -1,4 +1,4 @@
-// Media + config for the Berlin ChiliFest press hub.
+// Media + config for the Berlin Chili Fest press hub.
 // Photos: Berlin Chili Fest, free for editorial use when credited.
 
 export const PHOTO_CREDIT = "Berlin Chili Fest";
@@ -17,27 +17,27 @@ export interface FestImage {
 export const IMAGES: Record<string, FestImage> = {
   hero: {
     src: "/chilifest/hero.jpg",
-    alt: "Tasters working down a long bench at Berlin ChiliFest, sampling hot sauces at Berliner Berg Brauerei.",
+    alt: "Tasters working down a long bench at Berlin Chili Fest, sampling hot sauces at Berliner Berg Brauerei.",
   },
   sauces: {
     src: "/chilifest/sauces.jpg",
-    alt: "A line-up of hot sauce bottles with handwritten chalkboard tasting notes at Berlin ChiliFest.",
+    alt: "A line-up of hot sauce bottles with handwritten chalkboard tasting notes at Berlin Chili Fest.",
   },
   makers: {
     src: "/chilifest/makers.jpg",
-    alt: "A hot sauce maker at their stall at Berlin ChiliFest.",
+    alt: "A hot sauce maker at their stall at Berlin Chili Fest.",
   },
   evening: {
     src: "/chilifest/evening.jpg",
-    alt: "Live music at Berlin ChiliFest as the evening sets in.",
+    alt: "Live music at Berlin Chili Fest as the evening sets in.",
   },
   character: {
     src: "/chilifest/character.jpg",
-    alt: "A festival-goer in front of the Berliner Berg Brauerei banner at Berlin ChiliFest.",
+    alt: "A festival-goer in front of the Berliner Berg Brauerei banner at Berlin Chili Fest.",
   },
   crowd: {
     src: "/chilifest/crowd.jpg",
-    alt: "Crowds sampling sauces among the stalls at Berlin ChiliFest.",
+    alt: "Crowds sampling sauces among the stalls at Berlin Chili Fest.",
   },
 };
 

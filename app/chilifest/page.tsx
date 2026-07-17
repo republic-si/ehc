@@ -14,22 +14,23 @@ import {
   PRESS_EVENING,
 } from "@/lib/chilifest/media";
 
-// Single source of truth for the festival facts. Berlin ChiliFest is organised
-// by ChiliFest (chilifest.eu); the European Heat Council handles its press.
+// Single source of truth for the festival facts, per ~/BCF-press/BCF-MASTER.md.
+// Berlin Chili Fest is organised by Neil Numb (chilifest.eu); the European Heat
+// Council is press partner.
 const FEST = {
-  festival: "Berlin ChiliFest",
-  edition: "Harvest Edition",
+  festival: "Berlin Chili Fest",
+  edition: "Harvest Event",
   datesDisplay: "4–6 September 2026",
   startDate: "2026-09-04",
   endDate: "2026-09-06",
-  hours: "Fri 6pm – Sun 10pm",
+  hours: "Fri 6–10pm, Sat & Sun 12–10pm",
   venue: "Berliner Berg Brauerei",
   street: "Treptower Str. 39",
   postcode: "12059",
   city: "Berlin",
   country: "DE",
   district: "Neukölln",
-  tickets: "€7–€12",
+  tickets: "€7 day / €12 weekend",
   organiserUrl: "https://chilifest.eu",
   ticketsUrl: "https://chilifest.eu/events/category/berlin/",
 } as const;
@@ -37,15 +38,15 @@ const FEST = {
 const CANONICAL = `${SITE_URL}/chilifest`;
 const OG_IMAGE = `${SITE_URL}/chilifest/og.jpg`;
 const DESCRIPTION =
-  "Press hub for Berlin ChiliFest, 4-6 September 2026 at Berliner Berg Brauerei: what, when and where, plus releases, downloadable images, samples and press-evening access.";
+  "Press hub for Berlin Chili Fest, 4-6 September 2026 at Berliner Berg Brauerei: what, when and where, plus releases, downloadable images, samples and press-evening access.";
 
 export const metadata: Metadata = {
-  title: `Berlin ChiliFest — Press hub — ${SITE_NAME}`,
+  title: `Berlin Chili Fest — Press hub — ${SITE_NAME}`,
   description: DESCRIPTION,
   alternates: { canonical: CANONICAL },
   openGraph: {
     type: "website",
-    title: "Berlin ChiliFest press hub",
+    title: "Berlin Chili Fest press hub",
     description: DESCRIPTION,
     siteName: SITE_NAME,
     url: CANONICAL,
@@ -53,7 +54,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Berlin ChiliFest press hub",
+    title: "Berlin Chili Fest press hub",
     description: DESCRIPTION,
     images: [OG_IMAGE],
   },
@@ -154,9 +155,10 @@ export default function ChiliFestPage() {
             {FEST.datesDisplay} &middot; {FEST.venue}, {FEST.city}
           </p>
           <p className="mt-6 max-w-2xl text-white/85 leading-relaxed">
-            Three days of hot sauce and chilli culture: hundreds of independent
-            makers from across Europe, vegan street food, brewery beer, live
-            entertainment, and the final of the Amateur Hot Sauce Competition.
+            Three days of hot sauce and chilli culture: 50+ artisan producers
+            from across Europe, hundreds of sauces to taste, vegan street food,
+            brewery beer, live entertainment, and Berlin&rsquo;s Best Homemade
+            Hot Sauce Competition.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             {ACTIONS.map((a) => (
@@ -227,7 +229,7 @@ export default function ChiliFestPage() {
               <div>
                 <dt className="label text-muted">Organiser</dt>
                 <dd className="mt-1 text-foreground/90">
-                  ChiliFest
+                  Neil Numb
                   <br />
                   <span className="text-muted">
                     Press handled by the European Heat Council
@@ -263,9 +265,9 @@ export default function ChiliFestPage() {
           <section className="py-14">
             <LaneHeading kicker="01" title="Press releases" id="releases" />
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
-              Announcements from the European Heat Council on Berlin ChiliFest
-              and the Amateur Hot Sauce Competition, with datelines and
-              paste-ready quotes.
+              Announcements from the European Heat Council on Berlin Chili Fest
+              and Berlin&rsquo;s Best Homemade Hot Sauce Competition, with
+              datelines and paste-ready quotes.
             </p>
             <Link href="/releases" className="mt-6 inline-block more-link">
               Read all releases
@@ -276,7 +278,7 @@ export default function ChiliFestPage() {
           <section className="py-14">
             <LaneHeading kicker="02" title="Media files" id="media" />
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
-              High-resolution photography from Berlin ChiliFest, ready to
+              High-resolution photography from Berlin Chili Fest, ready to
               publish. {PHOTO_USAGE}
             </p>
             <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -371,18 +373,17 @@ export default function ChiliFestPage() {
 
           {/* Boilerplate + contact */}
           <section className="py-14">
-            <p className="label text-muted">About Berlin ChiliFest</p>
+            <p className="label text-muted">About Berlin Chili Fest</p>
             <div className="mt-4 border border-rule bg-paper-green/30 p-6 max-w-3xl">
               <p className="text-sm leading-relaxed text-foreground/90">
-                Berlin ChiliFest is Berlin&rsquo;s festival of hot sauce and
-                chilli culture, held at Berliner Berg Brauerei in Neukölln. Twice
-                a year, hundreds of independent makers from Europe and beyond
-                bring their sauces, fresh chillies and spicy street food to one
-                of the city&rsquo;s best-loved breweries, alongside local beer,
-                live entertainment and the final of the Amateur Hot Sauce
-                Competition. The festival is organised by ChiliFest
-                (chilifest.eu); press relations are handled by the European Heat
-                Council.
+                Established in 2020, Berlin Chili Fest has grown into one of
+                Europe&rsquo;s premier hot sauce celebrations. The festival
+                combines professional competitions with grassroots community
+                spirit, proving that you don&rsquo;t need corporate backing to
+                build something meaningful. It attracts thousands of attendees,
+                partners with industry leaders like Clifton Chili Club, and
+                maintains its commitment to supporting independent, artisan hot
+                sauce makers.
               </p>
             </div>
 
