@@ -129,7 +129,13 @@ function MakerCard({ maker: m }: { maker: Maker }) {
           ) : null}
           {m.awards ? (
             <p className="mt-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 border border-accent/50 text-accent px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em]">
+              {/* EHSA award pill — EHSA brand colours (#f4c518 / #1a1a1a), per the
+                  EHC icon set. Deliberately off the EHC green: it's a cross-brand
+                  award mark. */}
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.05em]"
+                style={{ background: "#f4c518", color: "#1a1a1a" }}
+              >
                 <span aria-hidden>★</span> EHSA · {m.awards}
               </span>
             </p>
