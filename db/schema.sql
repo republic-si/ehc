@@ -46,6 +46,17 @@ CREATE INDEX IF NOT EXISTS pickups_date_idx ON pickups (date_spotted DESC NULLS 
 CREATE INDEX IF NOT EXISTS pickups_maker_idx ON pickups (maker_slug);
 CREATE INDEX IF NOT EXISTS pickups_fp_idx ON pickups (is_false_positive);
 
+-- Scoring / brand columns, loaded from coverage.csv (Phase 1 of moving coverage
+-- fully into ehc). press_value_eur is the modelled EMV; the mention/link states
+-- drive brand-survival; position_of_mention feeds the value formula. In Phase 2
+-- these become editable in the admin and computed in-app.
+ALTER TABLE pickups ADD COLUMN IF NOT EXISTS press_value_eur      INTEGER;
+ALTER TABLE pickups ADD COLUMN IF NOT EXISTS mentions_roh         TEXT NOT NULL DEFAULT '';
+ALTER TABLE pickups ADD COLUMN IF NOT EXISTS mentions_ehsa        TEXT NOT NULL DEFAULT '';
+ALTER TABLE pickups ADD COLUMN IF NOT EXISTS follow_link_to_roh   TEXT NOT NULL DEFAULT '';
+ALTER TABLE pickups ADD COLUMN IF NOT EXISTS follow_link_to_maker TEXT NOT NULL DEFAULT '';
+ALTER TABLE pickups ADD COLUMN IF NOT EXISTS position_of_mention  TEXT NOT NULL DEFAULT '';
+
 CREATE TABLE IF NOT EXISTS events (
   event_id          TEXT PRIMARY KEY,
   event             TEXT NOT NULL,
