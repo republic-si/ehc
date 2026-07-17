@@ -35,9 +35,35 @@ export default async function AdminHome() {
 
   return (
     <>
-      <h1 style={{ fontSize: 28, marginBottom: 24, fontWeight: 600 }}>
+      <h1 style={{ fontSize: 28, marginBottom: 12, fontWeight: 600 }}>
         EHSA 2026 admin
       </h1>
+
+      <nav
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 16,
+          marginBottom: 24,
+          fontSize: 13,
+        }}
+      >
+        <Link href="/admin/events" style={{ color: "#111" }}>
+          Events
+        </Link>
+        <Link href="/admin/outlets" style={{ color: "#111" }}>
+          Outlets
+        </Link>
+        <Link href="/admin/sends" style={{ color: "#111" }}>
+          Sends
+        </Link>
+        <Link href="/admin/signoffs" style={{ color: "#111" }}>
+          Signoffs
+        </Link>
+        <Link href="/admin/bounces" style={{ color: "#111" }}>
+          Bounces
+        </Link>
+      </nav>
 
       <section
         style={{

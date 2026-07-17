@@ -28,6 +28,9 @@ export default function AdminEventsLayout({
             <Link href="/admin/events/table" className="hover:opacity-100">
               Table
             </Link>
+            <Link href="/admin" className="hover:opacity-100">
+              Press
+            </Link>
             <Link href="/" className="hover:opacity-100">
               Site
             </Link>
