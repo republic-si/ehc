@@ -13,7 +13,7 @@ import {
   PRESS_EVENING,
 } from "@/lib/chilifest/media";
 import { MAKERS } from "@/lib/chilifest/makers";
-import { getReleasesByCampaign } from "@/lib/releases";
+import { RELEASE } from "@/lib/chilifest/release";
 
 // Single source of truth for the festival facts, per ~/BCF-press/BCF-MASTER.md.
 // Berlin Chili Fest is organised by Neil Numb (chilifest.eu); the European Heat
@@ -123,7 +123,7 @@ function LaneHeading({
 }
 
 export default async function ChiliFestPage() {
-  const releases = await getReleasesByCampaign("berlin-chili-fest");
+  const release = RELEASE.en;
   return (
     <>
       <script
@@ -169,8 +169,8 @@ export default async function ChiliFestPage() {
                 href={a.href}
                 className={
                   a.solid
-                    ? "inline-flex items-center px-5 py-3 rounded-full bg-white text-ink text-sm font-medium tracking-wide hover:bg-white/90 transition-colors"
-                    : "inline-flex items-center px-5 py-3 rounded-full border border-white/50 text-white text-sm font-medium tracking-wide hover:border-white transition-colors"
+                    ? "inline-flex items-center px-5 py-3 rounded-full bg-accent text-white text-sm font-semibold tracking-wide hover:bg-accent/90 transition-colors"
+                    : "inline-flex items-center px-5 py-3 rounded-full border border-accent text-white text-sm font-semibold tracking-wide hover:bg-accent/25 transition-colors"
                 }
               >
                 {a.label}
@@ -263,70 +263,77 @@ export default async function ChiliFestPage() {
       {/* Action lanes */}
       <main className="bg-white">
         <div className="max-w-5xl mx-auto px-6 divide-y divide-rule">
-          {/* The makers */}
-          <section className="py-14">
-            <LaneHeading kicker="01" title="The makers" id="makers" />
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
-              Berlin Chili Fest brings together more than 50 independent makers.
-              These {MAKERS.length} have offered samples and interviews to press,
-              gathered here one maker a page.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-2">
-              {MAKERS.filter((m) => m.photo)
-                .slice(0, 8)
-                .map((m) => (
-                  <div
-                    key={m.id}
-                    className="relative h-16 w-16 overflow-hidden rounded-full bg-paper-green/50"
-                    title={m.name}
-                  >
-                    <Image
-                      src={m.photo as string}
-                      alt={m.name}
-                      fill
-                      sizes="64px"
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
+          {/* Meet the producers — standout */}
+          <section id="makers" className="scroll-mt-8 py-14">
+            <div className="border border-ink/25 bg-white">
+              <div className="bg-ink text-white px-6 sm:px-8 py-6">
+                <p className="label text-white/70">01</p>
+                <h2 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight">
+                  Meet the producers
+                </h2>
+              </div>
+              <div className="px-6 sm:px-8 py-8">
+                <p className="max-w-2xl text-base leading-relaxed text-foreground/90">
+                  Berlin Chili Fest brings together more than 50 independent
+                  makers. These {MAKERS.length} have offered samples and
+                  interviews to press, gathered here one maker a page.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-2">
+                  {MAKERS.filter((m) => m.photo)
+                    .slice(0, 8)
+                    .map((m) => (
+                      <div
+                        key={m.id}
+                        className="relative h-20 w-20 overflow-hidden bg-paper-green/50 border border-rule"
+                        title={m.name}
+                      >
+                        <Image
+                          src={m.photo as string}
+                          alt={m.name}
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                </div>
+                <Link
+                  href="/chilifest/makers"
+                  className="mt-8 inline-flex items-center px-6 py-3 rounded-full bg-ink text-white text-sm font-semibold tracking-wide hover:bg-ink-deep transition-colors"
+                >
+                  Meet the {MAKERS.length} featured producers
+                </Link>
+              </div>
             </div>
-            <Link
-              href="/chilifest/makers"
-              className="mt-8 inline-flex items-center px-6 py-3 rounded-full bg-ink text-white text-sm font-medium tracking-wide hover:bg-ink-deep transition-colors"
-            >
-              Meet the {MAKERS.length} featured makers
-            </Link>
           </section>
 
           {/* Releases */}
           <section className="py-14">
             <LaneHeading kicker="02" title="Press releases" id="releases" />
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
-              Announcements from the European Heat Council on Berlin Chili Fest
-              and Berlin&rsquo;s Best Homemade Hot Sauce Competition, with
-              datelines and paste-ready quotes.
-            </p>
-            {releases.length > 0 ? (
-              <ol className="mt-8 space-y-5 max-w-2xl">
-                {releases.map((r) => (
-                  <li key={r.slug} className="border-t border-rule pt-4">
-                    <Link href={`/releases/${r.slug}`} className="group block">
-                      <p className="label text-muted">
-                        {r.displayDate ?? (r.isDraft ? "Forthcoming" : "")}
-                      </p>
-                      <p className="mt-1 text-lg text-ink group-hover:text-accent">
-                        {r.headline}
-                      </p>
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            ) : (
-              <p className="mt-6 text-muted">
-                Releases for Berlin Chili Fest are on the way.
+            <article className="mt-8 max-w-2xl">
+              <p className="label text-muted">{release.dateline}</p>
+              <h3 className="mt-2 text-2xl font-semibold tracking-tight text-ink leading-snug">
+                {release.headline}
+              </h3>
+              <p className="mt-3 text-lg text-foreground/85 leading-relaxed">
+                {release.subhead}
               </p>
-            )}
-            <Link href="/releases" className="mt-6 inline-block more-link">
+              <div className="mt-6 space-y-4 text-base leading-relaxed text-foreground/90">
+                {release.body.map((p, i) =>
+                  /^["„“]/.test(p) ? (
+                    <blockquote
+                      key={i}
+                      className="border-l-2 border-accent pl-4 italic text-ink"
+                    >
+                      {p}
+                    </blockquote>
+                  ) : (
+                    <p key={i}>{p}</p>
+                  ),
+                )}
+              </div>
+            </article>
+            <Link href="/releases" className="mt-8 inline-block more-link">
               All Council releases
             </Link>
           </section>

@@ -19,6 +19,20 @@ const HEADER_LINKS = [
   { href: "/contact", label: "Contact" },
 ] as const;
 
+// Site-wide promo bar (habanero) linking to the Berlin Chili Fest press hub.
+// Mounted once in the root layout so it appears above every page.
+export function ChiliFestBanner() {
+  return (
+    <Link
+      href="/chilifest"
+      className="block bg-accent text-white text-center text-[13px] font-semibold tracking-wide px-4 py-2 hover:bg-accent/90 transition-colors"
+    >
+      Berlin Chili Fest press hub &middot; 4–6 September 2026 &middot; releases,
+      images &amp; samples →
+    </Link>
+  );
+}
+
 export function TopBar() {
   return (
     <div className="bg-ink text-white text-[12px]">
