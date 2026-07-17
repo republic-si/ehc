@@ -67,9 +67,8 @@ function toRelease(row: ReleaseRow): Release {
   };
 }
 
-// TODO(scope): releases are global — the `releases` table has no campaign
-// column, and tagging them is a write-side/pipeline decision (deferred with the
-// Python --campaign work). Revisit when releases need per-project scoping.
+// Releases are global — the `releases` table has no campaign column, and
+// they're shown the same across projects. Out of scope for project scoping.
 export async function getAllReleases(): Promise<Release[]> {
   const rows = (await sql`
     SELECT slug, headline, subhead, dateline_raw, city, country,

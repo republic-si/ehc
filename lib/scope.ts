@@ -12,9 +12,6 @@
 // the right predicate for the two different table shapes:
 //   - send/coverage tables carry a scalar `campaign_slug`  -> `= ANY($n)`
 //   - press_outlets carries a `campaigns TEXT[]`           -> `&& $n` (overlap)
-//
-// The Python pipeline write-side (--campaign send plumbing) is a deferred
-// follow-up; this file is read-side only.
 
 import { cache } from "react";
 import { cookies } from "next/headers";
