@@ -56,6 +56,7 @@ ALTER TABLE pickups ADD COLUMN IF NOT EXISTS mentions_ehsa        TEXT NOT NULL 
 ALTER TABLE pickups ADD COLUMN IF NOT EXISTS follow_link_to_roh   TEXT NOT NULL DEFAULT '';
 ALTER TABLE pickups ADD COLUMN IF NOT EXISTS follow_link_to_maker TEXT NOT NULL DEFAULT '';
 ALTER TABLE pickups ADD COLUMN IF NOT EXISTS position_of_mention  TEXT NOT NULL DEFAULT '';
+ALTER TABLE pickups ADD COLUMN IF NOT EXISTS link_ehsa_site       TEXT NOT NULL DEFAULT '';
 
 -- A pickup is an article×maker event: one article covering several makers is
 -- several pickups. Key on (article_url, maker_slug) so multi-maker articles
