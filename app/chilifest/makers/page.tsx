@@ -70,9 +70,12 @@ const itemListJsonLd = {
 };
 
 function heatLevel(h: string): number | null {
-  const nums = h.match(/\d+/g);
+  // Heat is written "N/10" or "N–M/10". The level is the numerator (upper of a
+  // range), NOT the "/10" denominator — otherwise every sauce reads 10/10.
+  const before = h.split("/")[0] ?? "";
+  const nums = before.match(/\d+/g);
   if (!nums) return null;
-  return Math.min(10, parseInt(nums[nums.length - 1], 10));
+  return Math.min(10, Math.max(...nums.map((x) => parseInt(x, 10))));
 }
 
 function Heat({ heat }: { heat: string }) {
