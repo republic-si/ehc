@@ -1,0 +1,219 @@
+import Link from "next/link";
+import Image from "next/image";
+import type { Metadata } from "next";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { TopBar, SiteHeader, SiteFooter } from "@/app/_components/SiteChrome";
+import { PHOTO_CREDIT } from "@/lib/chilifest/media";
+import { MAKERS, MAKER_TRACKS, type Maker } from "@/lib/chilifest/makers";
+
+const CANONICAL = `${SITE_URL}/chilifest/makers`;
+const OG_IMAGE = `${SITE_URL}/chilifest/og.jpg`;
+const INTRO =
+  "Nineteen independent makers bringing chilli to the Harvest edition of Berlin Chili Fest. One maker a page: the story behind the bottle, how it tastes, and what to put it on.";
+
+export const metadata: Metadata = {
+  title: `The Makers of the Harvest — Berlin Chili Fest — ${SITE_NAME}`,
+  description: INTRO,
+  alternates: { canonical: CANONICAL },
+  openGraph: {
+    type: "website",
+    title: "The Makers of the Harvest — Berlin Chili Fest",
+    description: INTRO,
+    siteName: SITE_NAME,
+    url: CANONICAL,
+    images: [OG_IMAGE],
+  },
+};
+
+const TRACK_BLURB: Record<string, string> = {
+  Flavour: "Makers who lead with taste: sauces, oils and salsas built to lift food, not punish it.",
+  "Seed to Sauce": "Single-origin and provenance-led: heirloom chillies, rescued produce, one product done properly.",
+  Hyperlocal: "One-person, small-run projects working out of their own corner of Europe.",
+};
+
+const itemListJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "The Makers of the Harvest — Berlin Chili Fest",
+  description: INTRO,
+  url: CANONICAL,
+  numberOfItems: MAKERS.length,
+  itemListElement: MAKERS.map((m, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: `${m.name}${m.maker ? ` — ${m.maker}` : ""}`,
+  })),
+};
+
+function heatLevel(h: string): number | null {
+  const nums = h.match(/\d+/g);
+  if (!nums) return null;
+  return Math.min(10, parseInt(nums[nums.length - 1], 10));
+}
+
+function Heat({ heat }: { heat: string }) {
+  const n = heatLevel(heat);
+  if (n === null) return null;
+  return (
+    <div className="flex items-center gap-2">
+      <div className="flex gap-[3px]" aria-hidden>
+        {Array.from({ length: 10 }).map((_, i) => (
+          <span
+            key={i}
+            className={`h-1.5 w-3 rounded-[1px] ${i < n ? "bg-accent" : "bg-rule"}`}
+          />
+        ))}
+      </div>
+      <span className="text-xs text-muted font-mono">{heat}</span>
+    </div>
+  );
+}
+
+function MakerCard({ maker: m }: { maker: Maker }) {
+  return (
+    <article className="border border-rule overflow-hidden grid grid-cols-1 sm:grid-cols-[38%_1fr] break-inside-avoid">
+      <div className="relative aspect-[4/3] sm:aspect-auto sm:min-h-full bg-paper-green/50">
+        {m.photo ? (
+          <Image
+            src={m.photo}
+            alt={`${m.name} at Berlin Chili Fest`}
+            fill
+            sizes="(min-width:640px) 38vw, 100vw"
+            className="object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+            <span className="label text-muted-soft">{m.track}</span>
+            <span className="mt-2 font-semibold text-ink/70 text-lg leading-tight">
+              {m.name}
+            </span>
+          </div>
+        )}
+      </div>
+
+      <div className="p-6 flex flex-col">
+        <p className="label text-muted">{m.location}</p>
+
+        <h3 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight text-ink leading-tight">
+          {m.name}
+        </h3>
+        {m.maker ? (
+          <p className="mt-1 text-sm text-muted">{m.maker}</p>
+        ) : null}
+        {m.awards ? (
+          <p className="mt-3">
+            <span className="inline-block label text-accent border border-accent/40 px-2 py-1">
+              EHSA {m.awards}
+            </span>
+          </p>
+        ) : null}
+
+        <p className="mt-4 text-sm leading-relaxed text-foreground/90">
+          {m.story}
+        </p>
+
+        <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+          {m.flagship ? (
+            <div>
+              <dt className="label text-muted">Flagship</dt>
+              <dd className="mt-1 text-foreground/90">{m.flagship}</dd>
+            </div>
+          ) : null}
+          {heatLevel(m.heat) !== null ? (
+            <div>
+              <dt className="label text-muted">Heat</dt>
+              <dd className="mt-1">
+                <Heat heat={m.heat} />
+              </dd>
+            </div>
+          ) : null}
+        </dl>
+
+        {m.angles.length > 0 ? (
+          <details className="mt-4 group">
+            <summary className="label text-muted cursor-pointer hover:text-accent list-none">
+              Story angles
+            </summary>
+            <ul className="mt-3 space-y-2">
+              {m.angles.map((a, i) => (
+                <li
+                  key={i}
+                  className="text-sm text-foreground/80 leading-relaxed pl-4 relative before:content-[''] before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-accent"
+                >
+                  {a}
+                </li>
+              ))}
+            </ul>
+          </details>
+        ) : null}
+      </div>
+    </article>
+  );
+}
+
+export default function MakersPage() {
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
+      <div className="print:hidden">
+        <TopBar />
+        <SiteHeader />
+      </div>
+
+      <header className="bg-ink-deep text-white border-b border-rule">
+        <div className="max-w-5xl mx-auto px-6 py-14 sm:py-20">
+          <Link
+            href="/chilifest"
+            className="label text-white/60 hover:text-white print:hidden"
+          >
+            ← Berlin Chili Fest press hub
+          </Link>
+          <h1 className="mt-8 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] tracking-tight">
+            The Makers of the Harvest
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85">
+            {INTRO}
+          </p>
+        </div>
+      </header>
+
+      <main className="bg-white">
+        <div className="max-w-5xl mx-auto px-6 py-14 sm:py-16 space-y-16">
+          {MAKER_TRACKS.map((track) => {
+            const inTrack = MAKERS.filter((m) => m.track === track);
+            if (inTrack.length === 0) return null;
+            return (
+              <section key={track}>
+                <div className="border-b border-rule pb-3 mb-8">
+                  <h2 className="label text-accent">{track}</h2>
+                  <p className="mt-2 text-base text-foreground/80 max-w-2xl">
+                    {TRACK_BLURB[track]}
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                  {inTrack.map((m) => (
+                    <MakerCard key={m.id} maker={m} />
+                  ))}
+                </div>
+              </section>
+            );
+          })}
+
+          <div className="pt-8 border-t border-rule flex flex-col sm:flex-row justify-between gap-4 text-sm print:hidden">
+            <Link href="/chilifest" className="more-link">
+              Back to the press hub
+            </Link>
+            <p className="text-xs text-muted-soft">Photos: {PHOTO_CREDIT}</p>
+          </div>
+        </div>
+      </main>
+
+      <div className="print:hidden">
+        <SiteFooter />
+      </div>
+    </>
+  );
+}

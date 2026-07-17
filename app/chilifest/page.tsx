@@ -12,6 +12,7 @@ import {
   PRESS_KIT_URL,
   PRESS_EVENING,
 } from "@/lib/chilifest/media";
+import { MAKERS } from "@/lib/chilifest/makers";
 
 // Single source of truth for the festival facts, per ~/BCF-press/BCF-MASTER.md.
 // Berlin Chili Fest is organised by Neil Numb (chilifest.eu); the European Heat
@@ -97,6 +98,7 @@ const eventJsonLd = {
 const ACTIONS = [
   { href: "#releases", label: "Read the releases" },
   { href: "#media", label: "Download media" },
+  { href: "/chilifest/makers", label: "Meet the makers", solid: true },
   { href: "#request", label: "Samples & press pass", solid: true },
 ];
 
@@ -259,9 +261,44 @@ export default function ChiliFestPage() {
       {/* Action lanes */}
       <main className="bg-white">
         <div className="max-w-5xl mx-auto px-6 divide-y divide-rule">
+          {/* The makers */}
+          <section className="py-14">
+            <LaneHeading kicker="01" title="The makers" id="makers" />
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
+              {MAKERS.length} independent makers bring their sauces, oils and
+              salsas to the Harvest edition. The story behind each bottle, how it
+              tastes, and what to put it on, one maker a page.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {MAKERS.filter((m) => m.photo)
+                .slice(0, 8)
+                .map((m) => (
+                  <div
+                    key={m.id}
+                    className="relative h-16 w-16 overflow-hidden rounded-full bg-paper-green/50"
+                    title={m.name}
+                  >
+                    <Image
+                      src={m.photo as string}
+                      alt={m.name}
+                      fill
+                      sizes="64px"
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
+            </div>
+            <Link
+              href="/chilifest/makers"
+              className="mt-8 inline-flex items-center px-6 py-3 rounded-full bg-ink text-white text-sm font-medium tracking-wide hover:bg-ink-deep transition-colors"
+            >
+              Meet all {MAKERS.length} makers
+            </Link>
+          </section>
+
           {/* Releases */}
           <section className="py-14">
-            <LaneHeading kicker="01" title="Press releases" id="releases" />
+            <LaneHeading kicker="02" title="Press releases" id="releases" />
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
               Announcements from the European Heat Council on Berlin Chili Fest
               and Berlin&rsquo;s Best Homemade Hot Sauce Competition, with
@@ -274,7 +311,7 @@ export default function ChiliFestPage() {
 
           {/* Media files */}
           <section className="py-14">
-            <LaneHeading kicker="02" title="Media files" id="media" />
+            <LaneHeading kicker="03" title="Media files" id="media" />
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
               High-resolution photography from Berlin Chili Fest, ready to
               publish. {PHOTO_USAGE}
@@ -322,7 +359,7 @@ export default function ChiliFestPage() {
           {/* Request: samples and/or press preview */}
           <section className="py-14">
             <LaneHeading
-              kicker="03"
+              kicker="04"
               title="Request samples or a press pass"
               id="request"
             />
@@ -385,8 +422,8 @@ export default function ChiliFestPage() {
                   Contact the Council
                 </Link>
               </div>
-              <Link href="/chilifest/catalogue" className="more-link self-start">
-                Sauce catalogue
+              <Link href="/chilifest/makers" className="more-link self-start">
+                The makers
               </Link>
             </div>
           </section>
