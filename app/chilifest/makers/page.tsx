@@ -25,12 +25,6 @@ export const metadata: Metadata = {
   },
 };
 
-const TRACK_BLURB: Record<string, string> = {
-  Flavour: "Makers who lead with taste: sauces, oils and salsas built to lift food, not punish it.",
-  "Seed to Sauce": "Single-origin and provenance-led: heirloom chillies, rescued produce, one product done properly.",
-  Hyperlocal: "One-person, small-run projects working out of their own corner of Europe.",
-};
-
 const itemListJsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
@@ -71,82 +65,84 @@ function Heat({ heat }: { heat: string }) {
 
 function MakerCard({ maker: m }: { maker: Maker }) {
   return (
-    <article className="border border-rule overflow-hidden grid grid-cols-1 sm:grid-cols-[38%_1fr] break-inside-avoid">
-      <div className="relative aspect-[4/3] sm:aspect-auto sm:min-h-full bg-paper-green/50">
-        {m.photo ? (
-          <Image
-            src={m.photo}
-            alt={`${m.name} at Berlin Chili Fest`}
-            fill
-            sizes="(min-width:640px) 38vw, 100vw"
-            className="object-cover"
-          />
-        ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-            <span className="label text-muted-soft">{m.track}</span>
-            <span className="mt-2 font-semibold text-ink/70 text-lg leading-tight">
-              {m.name}
-            </span>
-          </div>
-        )}
-      </div>
+    <article
+      id={m.id}
+      className="border border-rule overflow-hidden scroll-mt-24 break-inside-avoid"
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-[34%_1fr]">
+        <div className="relative aspect-square bg-paper-green/50">
+          {m.photo ? (
+            <Image
+              src={m.photo}
+              alt={`${m.name} at Berlin Chili Fest`}
+              fill
+              sizes="(min-width:640px) 34vw, 100vw"
+              className="object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+              <span className="label text-muted-soft">{m.track}</span>
+              <span className="mt-2 font-semibold text-ink/70 text-lg leading-tight">
+                {m.name}
+              </span>
+            </div>
+          )}
+        </div>
 
-      <div className="p-6 flex flex-col">
-        <p className="label text-muted">{m.location}</p>
+        <div className="p-6">
+          <p className="label text-muted">{m.location}</p>
+          <h3 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight text-ink leading-tight">
+            {m.name}
+          </h3>
+          {m.maker ? (
+            <p className="mt-1 text-sm text-muted">{m.maker}</p>
+          ) : null}
+          {m.awards ? (
+            <p className="mt-3">
+              <span className="inline-block label text-accent border border-accent/40 px-2 py-1">
+                EHSA {m.awards}
+              </span>
+            </p>
+          ) : null}
 
-        <h3 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight text-ink leading-tight">
-          {m.name}
-        </h3>
-        {m.maker ? (
-          <p className="mt-1 text-sm text-muted">{m.maker}</p>
-        ) : null}
-        {m.awards ? (
-          <p className="mt-3">
-            <span className="inline-block label text-accent border border-accent/40 px-2 py-1">
-              EHSA {m.awards}
-            </span>
+          <p className="mt-4 text-sm leading-relaxed text-foreground/90">
+            {m.story}
           </p>
-        ) : null}
 
-        <p className="mt-4 text-sm leading-relaxed text-foreground/90">
-          {m.story}
-        </p>
-
-        <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-3 text-sm">
-          {m.flagship ? (
-            <div>
-              <dt className="label text-muted">Flagship</dt>
-              <dd className="mt-1 text-foreground/90">{m.flagship}</dd>
-            </div>
-          ) : null}
-          {heatLevel(m.heat) !== null ? (
-            <div>
-              <dt className="label text-muted">Heat</dt>
-              <dd className="mt-1">
-                <Heat heat={m.heat} />
-              </dd>
-            </div>
-          ) : null}
-        </dl>
-
-        {m.angles.length > 0 ? (
-          <details className="mt-4 group">
-            <summary className="label text-muted cursor-pointer hover:text-accent list-none">
-              Story angles
-            </summary>
-            <ul className="mt-3 space-y-2">
-              {m.angles.map((a, i) => (
-                <li
-                  key={i}
-                  className="text-sm text-foreground/80 leading-relaxed pl-4 relative before:content-[''] before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-accent"
-                >
-                  {a}
-                </li>
-              ))}
-            </ul>
-          </details>
-        ) : null}
+          <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+            {m.flagship ? (
+              <div>
+                <dt className="label text-muted">Flagship</dt>
+                <dd className="mt-1 text-foreground/90">{m.flagship}</dd>
+              </div>
+            ) : null}
+            {heatLevel(m.heat) !== null ? (
+              <div>
+                <dt className="label text-muted">Heat</dt>
+                <dd className="mt-1">
+                  <Heat heat={m.heat} />
+                </dd>
+              </div>
+            ) : null}
+          </dl>
+        </div>
       </div>
+
+      {m.angles.length > 0 ? (
+        <div className="border-t border-rule p-6">
+          <p className="label text-muted">Story angles</p>
+          <ul className="mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-3">
+            {m.angles.map((a, i) => (
+              <li
+                key={i}
+                className="text-sm text-foreground/80 leading-relaxed pl-4 relative before:content-[''] before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-accent"
+              >
+                {a}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </article>
   );
 }
@@ -182,6 +178,36 @@ export default function MakersPage() {
 
       <main className="bg-white">
         <div className="max-w-5xl mx-auto px-6 py-14 sm:py-16 space-y-16">
+          <nav
+            aria-label="Makers index"
+            className="border border-rule p-6 print:hidden"
+          >
+            <p className="label text-muted mb-4">Index · {MAKERS.length} makers</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-6">
+              {MAKER_TRACKS.map((track) => {
+                const inTrack = MAKERS.filter((m) => m.track === track);
+                if (inTrack.length === 0) return null;
+                return (
+                  <div key={track}>
+                    <p className="label text-accent mb-2">{track}</p>
+                    <ul className="space-y-1.5">
+                      {inTrack.map((m) => (
+                        <li key={m.id}>
+                          <a
+                            href={`#${m.id}`}
+                            className="text-sm text-ink hover:text-accent"
+                          >
+                            {m.name}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </nav>
+
           {MAKER_TRACKS.map((track) => {
             const inTrack = MAKERS.filter((m) => m.track === track);
             if (inTrack.length === 0) return null;
@@ -189,11 +215,8 @@ export default function MakersPage() {
               <section key={track}>
                 <div className="border-b border-rule pb-3 mb-8">
                   <h2 className="label text-accent">{track}</h2>
-                  <p className="mt-2 text-base text-foreground/80 max-w-2xl">
-                    {TRACK_BLURB[track]}
-                  </p>
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div className="space-y-6">
                   {inTrack.map((m) => (
                     <MakerCard key={m.id} maker={m} />
                   ))}
