@@ -104,10 +104,21 @@ export async function createSampleRequest(
 export async function getSampleRequests(
   status?: SampleRequestStatus,
   limit = 500,
+  source?: string,
 ): Promise<SampleRequest[]> {
-  const where = status ? `WHERE status = $1` : "";
-  const params: unknown[] = status ? [status, limit] : [limit];
-  const limitPlaceholder = status ? "$2" : "$1";
+  const clauses: string[] = [];
+  const params: unknown[] = [];
+  let i = 1;
+  if (status) {
+    clauses.push(`status = $${i++}`);
+    params.push(status);
+  }
+  if (source) {
+    clauses.push(`source = $${i++}`);
+    params.push(source);
+  }
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  params.push(limit);
   const text = `
     SELECT id, created_at::text AS created_at, name, email, organisation,
            web_or_instagram, addr_street, addr_postcode, addr_city,
@@ -116,20 +127,26 @@ export async function getSampleRequests(
     FROM sample_requests
     ${where}
     ORDER BY created_at DESC
-    LIMIT ${limitPlaceholder}
+    LIMIT $${i}
   `;
   const rows = (await sql.query(text, params)) as SampleRequestRow[];
   return rows.map(toSampleRequest);
 }
 
-export async function getSampleRequestCounts(): Promise<
-  Record<SampleRequestStatus, number>
-> {
-  const rows = (await sql`
-    SELECT status, count(*)::int AS n
-    FROM sample_requests
-    GROUP BY status
-  `) as Array<{ status: string; n: number }>;
+export async function getSampleRequestCounts(
+  source?: string,
+): Promise<Record<SampleRequestStatus, number>> {
+  const rows = (
+    source
+      ? await sql`
+          SELECT status, count(*)::int AS n
+          FROM sample_requests WHERE source = ${source}
+          GROUP BY status`
+      : await sql`
+          SELECT status, count(*)::int AS n
+          FROM sample_requests
+          GROUP BY status`
+  ) as Array<{ status: string; n: number }>;
   const counts: Record<SampleRequestStatus, number> = {
     new: 0,
     approved: 0,

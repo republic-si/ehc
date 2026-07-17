@@ -49,8 +49,13 @@ function Pill({ status }: { status: SampleRequestStatus }) {
   );
 }
 
+const SOURCES = [
+  { key: "chilifest", label: "Samples" },
+  { key: "press-evening", label: "Press evening" },
+] as const;
+
 interface Props {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; source?: string }>;
 }
 
 export default async function SampleRequestsPage({ searchParams }: Props) {
@@ -60,18 +65,44 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
       ? sp.status
       : "new"
   ) as SampleRequestStatus;
+  const source = SOURCES.some((s) => s.key === sp.source)
+    ? (sp.source as string)
+    : "chilifest";
 
   const [requests, counts] = await Promise.all([
-    getSampleRequests(filter, 500),
-    getSampleRequestCounts(),
+    getSampleRequests(filter, 500, source),
+    getSampleRequestCounts(source),
   ]);
 
   return (
     <>
       <PageTitle
         title="Sample requests"
-        subtitle="Journalist sample requests from the ChiliFest press hub. Review before shipping."
+        subtitle="Journalist requests from the ChiliFest press hub. Review before shipping or granting access."
       />
+
+      <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+        {SOURCES.map((s) => {
+          const active = s.key === source;
+          return (
+            <Link
+              key={s.key}
+              href={`/admin/sample-requests?source=${s.key}&status=${filter}`}
+              style={{
+                fontSize: 12,
+                fontWeight: 700,
+                padding: "6px 14px",
+                background: active ? "#c8612e" : "#fff",
+                color: active ? "#fff" : "#111",
+                border: "1px solid #c8612e",
+                textDecoration: "none",
+              }}
+            >
+              {s.label}
+            </Link>
+          );
+        })}
+      </div>
 
       <div style={{ display: "flex", gap: 6, marginBottom: 18 }}>
         {SAMPLE_REQUEST_STATUSES.map((s) => {
@@ -79,7 +110,7 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
           return (
             <Link
               key={s}
-              href={`/admin/sample-requests?status=${s}`}
+              href={`/admin/sample-requests?status=${s}&source=${source}`}
               style={{
                 fontSize: 11,
                 letterSpacing: "0.08em",

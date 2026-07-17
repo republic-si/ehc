@@ -91,3 +91,75 @@ export async function submitSampleRequest(
 
   return { ok: true };
 }
+
+// Press-evening accreditation request. Same table, source = 'press-evening',
+// no shipping address (it is an attendance request, not a shipment).
+export async function submitPressEveningRequest(
+  formData: FormData,
+): Promise<SampleRequestResult> {
+  const trap = String(formData.get("company_website") ?? "").trim();
+  if (trap) return { ok: true };
+
+  const get = (k: string) => String(formData.get(k) ?? "").trim();
+  const name = get("name");
+  const email = get("email");
+  const organisation = get("organisation");
+  const webOrInstagram = get("web_or_instagram");
+  const note = get("note");
+
+  const missing: string[] = [];
+  if (!name) missing.push("your name");
+  if (!EMAIL_RE.test(email)) missing.push("a valid email");
+  if (!organisation) missing.push("your organisation or outlet");
+  if (!webOrInstagram) missing.push("a website or Instagram handle");
+  if (missing.length > 0) {
+    return { ok: false, error: `Please add ${missing.join(", ")}.` };
+  }
+
+  let request;
+  try {
+    request = await createSampleRequest({
+      name,
+      email,
+      organisation,
+      webOrInstagram,
+      addrStreet: "",
+      addrPostcode: "",
+      addrCity: "",
+      addrCountry: "",
+      note,
+      source: "press-evening",
+    });
+  } catch (err) {
+    console.error("[press-evening] insert failed", err);
+    return {
+      ok: false,
+      error: "Something went wrong saving your request. Please try again.",
+    };
+  }
+
+  try {
+    await sendMail({
+      to: "simon@republicofheat.com",
+      replyTo: email,
+      subject: `[ChiliFest] Press-evening access request from ${name} (${organisation})`,
+      text: [
+        "New press-evening accreditation request via the ChiliFest press hub.",
+        "",
+        `Name:         ${name}`,
+        `Email:        ${email}`,
+        `Organisation: ${organisation}`,
+        `Web/Instagram: ${webOrInstagram}`,
+        note ? `Assignment:   ${note}` : "",
+        "",
+        `Review: ${SITE_URL}/admin/sample-requests?source=press-evening`,
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    });
+  } catch (err) {
+    console.error("[press-evening] notify failed", err, "id=", request.id);
+  }
+
+  return { ok: true };
+}
