@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coverage report — EHSA 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --yellow: #F5C518;
+  --yellow-deep: #E0A800;
+  --ink: #111111;
+  --wood-dark: #2a1c14;
+  --cream: #f3ead8;
+  --paper: #faf6ec;
+  --green: #2e8b3d;
+  --red: #c0392b;
+  --grey: #888888;
+  --orange: #f39c12;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--paper); color: var(--ink); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+a { color: inherit; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.display { font-family: 'Archivo Black', sans-serif; text-transform: uppercase; line-height: 0.95; letter-spacing: -0.02em; }
+.wrap { max-width: 1480px; margin: 0 auto; padding: 0 24px; }
+code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--cream); padding: 2px 6px; border: 1px solid #d8cca8; }
+
+/* EHSA nav strip */
+.ehsa-nav { background: #111; border-bottom: 2px solid #F5C518; font-family: 'Inter', sans-serif; }
+.ehsa-nav-wrap { max-width: 1480px; margin: 0 auto; padding: 8px 24px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.ehsa-nav a { color: #F5C518; opacity: 0.65; font-family: 'Archivo Black', 'Inter', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 12px; text-decoration: none; border: 0; }
+.ehsa-nav a:hover { opacity: 1; background: rgba(245,197,24,0.12); text-decoration: none; }
+.ehsa-nav a.active { opacity: 1; background: #F5C518; color: #111; }
+.ehsa-nav-label { color: #888; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; padding-right: 8px; }
+
+/* TOP BAR */
+.topbar { background: var(--yellow); border-bottom: 4px solid var(--ink); }
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-mark { width: 44px; height: 44px; background: var(--ink); border-radius: 50%; display: grid; place-items: center; color: var(--yellow); font-family: 'Archivo Black'; font-size: 20px; }
+.brand-name { font-family: 'Archivo Black'; text-transform: uppercase; font-size: 18px; line-height: 1; }
+.brand-name small { display: block; font-family: 'Inter'; font-weight: 600; font-size: 11px; letter-spacing: 0.12em; margin-top: 4px; color: #333; }
+.gen-time { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #333; font-weight: 600; }
+
+/* HERO */
+.hero { background: var(--wood-dark); color: #fff; padding: 56px 0 44px; }
+.hero h1 { font-size: clamp(36px, 5vw, 60px); }
+.hero h1 .pop { color: var(--yellow); }
+.hero p { color: #ccc; font-size: 15px; margin-top: 14px; max-width: 760px; }
+.hero p a { color: var(--yellow); border-bottom: 1px dotted var(--yellow); }
+.hero p code { background: #333; color: var(--yellow); border: 0; }
+.hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 32px; max-width: 1100px; }
+.hero-stat { background: var(--ink); border-left: 4px solid var(--yellow); padding: 18px 22px; }
+.hero-stat.total { border-left-color: var(--yellow); }
+.hero-stat.pickups { border-left-color: var(--green); }
+.hero-stat.makers { border-left-color: #fff; }
+.hero-stat.span { border-left-color: var(--grey); }
+.hero-stat-num { font-family: 'Archivo Black'; font-size: 36px; line-height: 1.1; color: var(--yellow); }
+.hero-stat.total .hero-stat-num { color: var(--yellow); font-size: 42px; }
+.hero-stat.pickups .hero-stat-num { color: var(--green); }
+.hero-stat.makers .hero-stat-num { color: #fff; }
+.hero-stat.span .hero-stat-num { color: var(--grey); font-size: 18px; line-height: 1.3; }
+.hero-stat-num .tiny { font-size: 13px; color: #888; }
+.hero-stat-lbl { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #ccc; margin-top: 10px; }
+
+/* BANDS */
+section.band { padding: 44px 0; }
+section.band-grey { background: var(--cream); }
+.band-head { margin-bottom: 24px; }
+.band-head h2 { font-family: 'Archivo Black'; text-transform: uppercase; font-size: 26px; line-height: 1; }
+.band-head h2 .pop { background: var(--yellow); padding: 0 8px; }
+.band-head p { color: #555; margin-top: 8px; font-size: 14px; max-width: 760px; }
+
+.two-up { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.stacked-cards { display: flex; flex-direction: column; gap: 20px; }
+.report-card { background: #fff; border: 2px solid var(--ink); overflow: hidden; }
+.medium-pill { display: inline-block; padding: 2px 8px; border-radius: 2px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; background: var(--cream); color: var(--ink); border: 1px solid var(--ink); }
+.medium-pill.medium-tv { background: var(--ink); color: var(--yellow); border-color: var(--ink); }
+.medium-pill.medium-radio { background: #fff; color: var(--ink); }
+.medium-pill.medium-print { background: var(--yellow); color: var(--ink); }
+.card-h3 { background: var(--ink); color: var(--yellow); font-family: 'Archivo Black'; text-transform: uppercase; font-size: 12px; letter-spacing: 0.08em; padding: 12px 14px; }
+
+.report-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.report-table thead th { background: var(--ink); color: var(--yellow); font-family: 'Archivo Black'; text-transform: uppercase; font-size: 11px; letter-spacing: 0.08em; padding: 12px 14px; text-align: left; cursor: pointer; user-select: none; }
+.sortable thead th:hover { background: #333; }
+.report-table thead th.center { text-align: center; }
+.report-table thead th.eur { text-align: right; }
+.report-table tbody tr { border-top: 1px solid #eee; }
+.report-table tbody tr:hover { background: var(--cream); }
+.report-table td { padding: 10px 14px; vertical-align: middle; line-height: 1.4; }
+.report-table td.center { text-align: center; }
+.report-table td.eur { text-align: right; font-family: 'Archivo Black'; font-size: 14px; }
+.report-table td.maker-cell { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #444; }
+.report-table td.outlet-cell { font-weight: 600; }
+.report-table td.outlet-cell a { color: var(--ink); border-bottom: 1px dotted #aaa; }
+.report-table td.outlet-cell a:hover { color: var(--yellow-deep); border-bottom-color: var(--yellow-deep); text-decoration: none; }
+
+/* Brand / link pills */
+.pills-cell { white-space: nowrap; padding: 8px 10px !important; }
+.pills-th { font-family: 'Archivo Black'; text-transform: uppercase; font-size: 11px; letter-spacing: 0.08em; padding: 12px 14px; text-align: left; cursor: help; user-select: none; }
+.bm-pill, .link-pill { display: inline-block; width: 22px; height: 22px; line-height: 18px; text-align: center; font-family: 'Archivo Black'; font-size: 11px; margin-right: 3px; border: 2px solid; box-sizing: border-box; vertical-align: middle; cursor: help; }
+.bm-full { background: var(--yellow); border-color: var(--yellow); color: var(--ink); }
+.bm-partial { background: transparent; border-color: var(--yellow); color: var(--yellow-deep); }
+.bm-no { background: transparent; border-color: #ddd; color: #ccc; }
+.link-yes { background: var(--green); border-color: var(--green); color: #fff; }
+.link-partial { background: transparent; border-color: var(--green); color: var(--green); }
+.link-no { background: transparent; border-color: #ddd; color: #ccc; }
+
+/* Survival grid */
+.survival-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.survival-card { background: #fff; border: 2px solid var(--ink); padding: 0; overflow: hidden; }
+.survival-head { background: var(--ink); color: var(--yellow); font-family: 'Archivo Black'; text-transform: uppercase; font-size: 13px; letter-spacing: 0.08em; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
+.survival-letter { background: var(--yellow); color: var(--ink); width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+.survival-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-top: 1px solid #eee; font-size: 13px; color: #333; }
+.survival-row:first-of-type { border-top: 0; }
+.survival-num { margin-left: auto; font-family: 'Archivo Black'; font-size: 14px; color: var(--ink); }
+.survival-num em { font-family: 'Inter'; font-style: normal; font-weight: 600; font-size: 11px; color: #888; letter-spacing: 0.04em; }
+
+.scope-pill { display: inline-block; padding: 3px 9px; font-family: 'Archivo Black'; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+.scope-hyperlocal { background: #ffe6cc; color: #8a4a00; }
+.scope-local { background: #ffe6cc; color: #8a4a00; }
+.scope-regional { background: var(--yellow); color: var(--ink); }
+.scope-national { background: var(--ink); color: var(--yellow); }
+.scope-trade { background: #2e2e2e; color: #fff; }
+.scope-pan-eu { background: #006699; color: #fff; }
+.scope-unknown { background: #ddd; color: #555; }
+
+.reason-pill { display: inline-block; padding: 3px 9px; font-family: 'Archivo Black'; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+.reason-self-press { background: #fde8e8; color: var(--red); border: 1px solid var(--red); }
+.reason-duplicate { background: #f0f0f0; color: #555; }
+.reason-uncredited { background: #fff7e0; color: #8a6d00; border: 1px solid var(--orange); }
+
+.controls-inline { margin-bottom: 16px; }
+.controls-inline input { background: #fff; border: 2px solid var(--ink); padding: 9px 13px; font-family: inherit; font-size: 14px; font-weight: 500; width: 100%; max-width: 400px; }
+
+/* STRIP */
+.band-strip { background: var(--ink); color: #aaa; padding: 16px 0; font-size: 13px; }
+.band-strip .wrap { text-align: center; }
+.strip-num { font-family: 'Archivo Black'; color: var(--yellow); font-size: 18px; }
+.strip-lbl { color: #aaa; }
+
+/* FOOTER */
+footer { background: var(--ink); color: #888; padding: 28px 0; font-size: 12px; }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+footer code { background: #333; color: var(--yellow); border: 0; }
+
+@media (max-width: 960px) {
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  .two-up { grid-template-columns: 1fr; }
+  .survival-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="ehsa-nav"><div class="ehsa-nav-wrap">
+<span class="ehsa-nav-label">EHSA</span>
+<a href="index.html">Home</a>
+<a href="STATUS.html">Status</a>
+<a href="press_db.html">Press DB</a>
+<a href="empty_press.html">Empty Kits</a>
+<a href="coverage_report.html" class="active">Coverage</a>
+<a href="coverage/outlet-chase.html">Chase</a>
+</div></nav>
+
+<header class="topbar"><div class="wrap">
+  <div class="brand">
+    <div class="brand-mark">E</div>
+    <div class="brand-name">Coverage report<small>EHSA 2026 &middot; press value cycle</small></div>
+  </div>
+  <div class="gen-time">Generated 2026-07-14 11:16</div>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <h1 class="display">Press <span class="pop">value</span>.</h1>
+  <p>Modelled press value across all logged pickups this cycle. Computed per <a href="coverage/press-value-methodology.md"><code>coverage/press-value-methodology.md</code></a> using EMV-style hybrid (AMEC 4.0-aligned). AVE is not the headline number. Self-driven coverage scored at EUR0 (we never credit hits we did not generate).</p>
+  <div class="hero-stats">
+    <div class="hero-stat total"><div class="hero-stat-num">€40,069</div><div class="hero-stat-lbl">Cycle total</div></div>
+    <div class="hero-stat pickups"><div class="hero-stat-num">47</div><div class="hero-stat-lbl">Valued pickups</div></div>
+    <div class="hero-stat makers"><div class="hero-stat-num">26</div><div class="hero-stat-lbl">Makers reached</div></div>
+    <div class="hero-stat span"><div class="hero-stat-num">2026-05-19<br><span class='tiny'>→ 2026-06-28</span></div><div class="hero-stat-lbl">Cycle span</div></div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="band-head">
+    <h2>By <span class="pop">maker</span>.</h2>
+    <p>Total press value per maker, valued pickups only (self-press and duplicates excluded).</p>
+  </div>
+  <div class="two-up">
+    <div class="report-card">
+      <table class="report-table">
+        <thead><tr><th>Maker</th><th class="center">Pickups</th><th class="eur">Value</th></tr></thead>
+        <tbody><tr><td class='maker-cell'>de-vergulde-tong</td><td class='center'>8</td><td class='eur'>€10,811</td></tr>
+<tr><td class='maker-cell'>pohorc</td><td class='center'>1</td><td class='eur'>€3,600</td></tr>
+<tr><td class='maker-cell'>kanda-zanda</td><td class='center'>1</td><td class='eur'>€3,300</td></tr>
+<tr><td class='maker-cell'>cili-napoj</td><td class='center'>2</td><td class='eur'>€2,990</td></tr>
+<tr><td class='maker-cell'>cili-roza</td><td class='center'>2</td><td class='eur'>€2,602</td></tr>
+<tr><td class='maker-cell'>opg-ljutistra</td><td class='center'>4</td><td class='eur'>€2,550</td></tr>
+<tr><td class='maker-cell'>chardys</td><td class='center'>1</td><td class='eur'>€2,512</td></tr>
+<tr><td class='maker-cell'>ribasti</td><td class='center'>1</td><td class='eur'>€2,250</td></tr>
+<tr><td class='maker-cell'>opg-hey-chilli</td><td class='center'>3</td><td class='eur'>€1,500</td></tr>
+<tr><td class='maker-cell'>piri-piri-co</td><td class='center'>3</td><td class='eur'>€1,441</td></tr>
+<tr><td class='maker-cell'>czilli</td><td class='center'>1</td><td class='eur'>€1,262</td></tr>
+<tr><td class='maker-cell'>achilipu</td><td class='center'>2</td><td class='eur'>€1,111</td></tr>
+<tr><td class='maker-cell'>chilma</td><td class='center'>3</td><td class='eur'>€750</td></tr>
+<tr><td class='maker-cell'>b-orto-peppers</td><td class='center'>1</td><td class='eur'>€496</td></tr>
+<tr><td class='maker-cell'>svilis</td><td class='center'>1</td><td class='eur'>€495</td></tr>
+<tr><td class='maker-cell'>ornitodrinko</td><td class='center'>1</td><td class='eur'>€450</td></tr>
+<tr><td class='maker-cell'>nachtgarten</td><td class='center'>1</td><td class='eur'>€450</td></tr>
+<tr><td class='maker-cell'>evoatis</td><td class='center'>1</td><td class='eur'>€303</td></tr>
+<tr><td class='maker-cell'>jungle-jams</td><td class='center'>1</td><td class='eur'>€300</td></tr>
+<tr><td class='maker-cell'>la-chipotlera</td><td class='center'>2</td><td class='eur'>€191</td></tr>
+<tr><td class='maker-cell'>callaloo-corner</td><td class='center'>1</td><td class='eur'>€180</td></tr>
+<tr><td class='maker-cell'>spicepunk</td><td class='center'>1</td><td class='eur'>€150</td></tr>
+<tr><td class='maker-cell'>rancho-fever</td><td class='center'>2</td><td class='eur'>€150</td></tr>
+<tr><td class='maker-cell'>chilibolaget</td><td class='center'>1</td><td class='eur'>€75</td></tr>
+<tr><td class='maker-cell'>qudo-tjes</td><td class='center'>1</td><td class='eur'>€75</td></tr>
+<tr><td class='maker-cell'>big-ginger-sauce-co</td><td class='center'>1</td><td class='eur'>€75</td></tr></tbody>
+      </table>
+    </div>
+    <div class="stacked-cards">
+      <div class="report-card">
+        <h3 class="card-h3">By scope</h3>
+        <table class="report-table">
+          <thead><tr><th>Scope</th><th class="center">Pickups</th><th class="eur">Value</th></tr></thead>
+          <tbody><tr><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>15</td><td class='eur'>€1,757</td></tr>
+<tr><td><span class='scope-pill scope-local'>local</span></td><td class='center'>1</td><td class='eur'>€75</td></tr>
+<tr><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>26</td><td class='eur'>€26,237</td></tr>
+<tr><td><span class='scope-pill scope-national'>national</span></td><td class='center'>5</td><td class='eur'>€12,000</td></tr></tbody>
+        </table>
+      </div>
+      <div class="report-card">
+        <h3 class="card-h3">By medium</h3>
+        <table class="report-table">
+          <thead><tr><th>Medium</th><th class="center">Pickups</th><th class="eur">Value</th></tr></thead>
+          <tbody><tr><td><span class='medium-pill medium-web'>web</span></td><td class='center'>44</td><td class='eur'>€31,857</td></tr>
+<tr><td><span class='medium-pill medium-tv'>tv</span></td><td class='center'>3</td><td class='eur'>€8,212</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="band-head">
+    <h2>Brand <span class="pop">survival</span>.</h2>
+    <p>What our brand-coupling rules actually delivered. Counted across 47 valued pickups: text mentions left, do-follow link survival right. Legend: solid = full survival, outlined = partial (acronym only / nofollow), faded = stripped.</p>
+  </div>
+  <div class="survival-grid">
+    <div class="survival-card">
+      <div class="survival-head">Republic of Heat <span class="survival-letter">R</span></div>
+      <div class="survival-row"><span class="bm-pill bm-full">R</span> Full text mention<span class="survival-num">18 <em>(38%)</em></span></div>
+      <div class="survival-row"><span class="bm-pill bm-partial">R</span> Acronym only<span class="survival-num">1 <em>(2%)</em></span></div>
+      <div class="survival-row"><span class="link-pill link-yes">R</span> Do-follow link<span class="survival-num">4 <em>(9%)</em></span></div>
+      <div class="survival-row"><span class="link-pill link-partial">R</span> Nofollow link<span class="survival-num">0 <em>(0%)</em></span></div>
+    </div>
+    <div class="survival-card">
+      <div class="survival-head">EHSA <span class="survival-letter">E</span></div>
+      <div class="survival-row"><span class="bm-pill bm-full">E</span> Full text mention<span class="survival-num">45 <em>(96%)</em></span></div>
+      <div class="survival-row"><span class="bm-pill bm-partial">E</span> Acronym only<span class="survival-num">0 <em>(0%)</em></span></div>
+      <div class="survival-row"><span class="link-pill link-yes">E</span> Do-follow link<span class="survival-num">5 <em>(11%)</em></span></div>
+      <div class="survival-row"><span class="link-pill link-partial">E</span> Nofollow link<span class="survival-num">1 <em>(2%)</em></span></div>
+    </div>
+    <div class="survival-card">
+      <div class="survival-head">Other <span class="survival-letter">+</span></div>
+      <div class="survival-row"><span class="bm-pill bm-full">B</span> Berlin Chili Fest<span class="survival-num">12 <em>(26%)</em></span></div>
+      <div class="survival-row"><span class="link-pill link-yes">Y</span> YouTube do-follow<span class="survival-num">15 <em>(32%)</em></span></div>
+      <div class="survival-row"><span class="link-pill link-partial">Y</span> YouTube nofollow<span class="survival-num">1 <em>(2%)</em></span></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="band band-grey"><div class="wrap">
+  <div class="band-head">
+    <h2>All <span class="pop">pickups</span>.</h2>
+    <p>Every valued pickup in this cycle. Click outlet name to open the article. Click column headers to sort. Brand and Links columns: R = Republic of Heat, E = EHSA, B = Berlin Chili Fest, Y = YouTube.</p>
+  </div>
+  <div class="controls-inline">
+    <input id="filter" type="text" placeholder="Filter by maker, outlet, scope...">
+  </div>
+  <div class="report-card">
+    <table class="report-table sortable">
+      <thead><tr>
+        <th data-col="0">Date</th>
+        <th data-col="1">Outlet</th>
+        <th data-col="2">Maker</th>
+        <th data-col="3">Scope</th>
+        <th data-col="4" class="center">Position</th>
+        <th class="pills-th" title="R = Republic of Heat text mention, E = EHSA text mention, B = Berlin Chili Fest mention">Brand</th>
+        <th class="pills-th" title="R = link to republicofheat.com, E = link to heatawards.eu, Y = link to YouTube">Links</th>
+        <th data-col="7" class="eur">Value</th>
+      </tr></thead>
+      <tbody><tr data-search='ornitodrinko gazzetta dell&#x27;adda regional'><td>2026-05-19</td><td class='outlet-cell'><a href='https://gazzettadelladda.it/attualita/la-salsa-piccante-di-brembate-conquista-l-europa/' target='_blank'>Gazzetta dell&#x27;Adda</a></td><td class='maker-cell'>ornitodrinko</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='450'>€450</td></tr>
+<tr data-search='spicepunk trechter hyperlocal'><td>2026-05-20</td><td class='outlet-cell'><a href='https://trechter.ch/preisgekroente_hot_sauce_aus_sursee/' target='_blank'>Trechter</a></td><td class='maker-cell'>spicepunk</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='150'>€150</td></tr>
+<tr data-search='rancho-fever belize hyperlocal'><td>2026-05-20</td><td class='outlet-cell'><a href='https://www.facebook.com/hotoffthepressbz/posts/rancho-fever-pepper-sauce-earns-gold-at-2026-european-hot-sauce-awardsbelize-riv/1456769523132162/' target='_blank'>Belize</a></td><td class='maker-cell'>rancho-fever</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='rancho-fever best of cayo hyperlocal'><td>2026-05-21</td><td class='outlet-cell'><a href='https://www.facebook.com/bestofcayo/posts/congratulations-ranchofeverpeppersauce-they-won-gold-at-the-european-hot-sauce-a/1409334501224145/' target='_blank'>Best of Cayo</a></td><td class='maker-cell'>rancho-fever</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='kanda-zanda 15min.lt national'><td>2026-05-27</td><td class='outlet-cell'><a href='https://www.15min.lt/gyvenimas/naujiena/maistas/kauniecio-kurtas-padazas-tarp-geriausiu-europoje-nuskyne-laurus-tarptautiniame-konkurse-1632-2692556' target='_blank'>15min.lt</a></td><td class='maker-cell'>kanda-zanda</td><td><span class='scope-pill scope-national'>national</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='3300'>€3,300</td></tr>
+<tr data-search='czilli 5 minuten regional'><td>2026-05-27</td><td class='outlet-cell'><a href='https://www.5min.at/graz/5202605271437/grazer-manufaktur-raeumt-bei-europaeischen-chili-awards-ab/' target='_blank'>5 Minuten</a></td><td class='maker-cell'>czilli</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-partial" title="EHSA-site link: partial">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='1262'>€1,262</td></tr>
+<tr data-search='opg-ljutistra glas istre hr regional'><td>2026-05-27</td><td class='outlet-cell'><a href='https://www.glasistre.hr/pula/2026/05/27/pulski-opg-osvojio-tri-zlatne-medalje-na-vodecem-europskom-natjecanju-1071640' target='_blank'>Glas Istre HR</a></td><td class='maker-cell'>opg-ljutistra</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-yes" title="ROH link: yes">R</span><span class="link-pill link-yes" title="EHSA-site link: yes">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='1050'>€1,050</td></tr>
+<tr data-search='piri-piri-co postal algarve regional'><td>2026-05-27</td><td class='outlet-cell'><a href='https://postal.pt/algarve/molhos-produzidos-pela-piri-piri-co-em-albufeira-conquistaram-ouro-na-europa/' target='_blank'>Postal Algarve</a></td><td class='maker-cell'>piri-piri-co</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='825'>€825</td></tr>
+<tr data-search='achilipu lavozdelsur.es regional'><td>2026-05-27</td><td class='outlet-cell'><a href='https://www.lavozdelsur.es/ediciones/provincia-cadiz/janda/achilipu-las-salsas-picantes-de-conil-que-han-conquistado-europa-con-pedro-ximenez-chile-caribeno-y-tecnica-andaluza.html' target='_blank'>lavozdelsur.es</a></td><td class='maker-cell'>achilipu</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='772'>€772</td></tr>
+<tr data-search='b-orto-peppers friuli oggi regional'><td>2026-05-27</td><td class='outlet-cell'><a href='https://www.friulioggi.it/gemona-del-friuli/b-orto-gemona-premio-europeo-salse-piccanti-peperoncino-27-maggio-2026/' target='_blank'>Friuli Oggi</a></td><td class='maker-cell'>b-orto-peppers</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='496'>€496</td></tr>
+<tr data-search='chilibolaget ålandstidningen regional'><td>2026-05-27</td><td class='outlet-cell'><a href='https://www.alandstidningen.ax/notis/chilisaser-plockade-hem-medaljer/1267956' target='_blank'>Ålandstidningen</a></td><td class='maker-cell'>chilibolaget</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>body</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-no" title="EHSA text: no">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='de-vergulde-tong groot-waterland.nl hyperlocal'><td>2026-05-27</td><td class='outlet-cell'><a href='https://groot-waterland.nl/2026/05/27/albert-veerman-wint-met-de-vergulde-tong-european-hot-sauce-awards-2026/' target='_blank'>groot-waterland.nl</a></td><td class='maker-cell'>de-vergulde-tong</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='la-chipotlera escuellar hyperlocal'><td>2026-05-27</td><td class='outlet-cell'><a href='https://escuellar.es/la-salsa-macha-picona-de-la-chiplotera-se-lleva-un-oro-en-los-european-hot-sauce-awards-2026/' target='_blank'>esCuellar</a></td><td class='maker-cell'>la-chipotlera</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='de-vergulde-tong noordhollandsdagblad.nl regional'><td>2026-05-28</td><td class='outlet-cell'><a href='https://www.noordhollandsdagblad.nl/regio/zaanstreek-waterland/waterland/hete-saus-van-hobbyist-albert-veerman-uit-volendam-verkozen-tot-beste-van-europa-ik-probeer-laagjes-aan-te-brengen-in-een-sambal/153581514.html' target='_blank'>noordhollandsdagblad.nl</a></td><td class='maker-cell'>de-vergulde-tong</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-no" title="EHSA text: no">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='143'>€143</td></tr>
+<tr data-search='la-chipotlera noticias y actualidad de segovia | segoviaudaz hyperlocal'><td>2026-05-28</td><td class='outlet-cell'><a href='https://segoviaudaz.es/un-pueblo-de-segovia-pone-el-picante-de-moda-en-europa-con-una-salsa-made-in-segovia/' target='_blank'>Noticias y actualidad de Segovia | Segoviaudaz</a></td><td class='maker-cell'>la-chipotlera</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='116'>€116</td></tr>
+<tr data-search='qudo-tjes valkenswaard24 hyperlocal'><td>2026-05-28</td><td class='outlet-cell'><a href='https://valkenswaard24.nl/home/artikel/119883/Gertjan-uit-Valkenswaard-wint-twee-keer-zilver-bij-internationale-wedstrijd-voor-hete-sauzen' target='_blank'>Valkenswaard24</a></td><td class='maker-cell'>qudo-tjes</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='chilma stadt murrhardt hyperlocal'><td>2026-05-28</td><td class='outlet-cell'><a href='https://www.murrhardt.de/aktuelles/Artikel?view=publish&amp;item=article&amp;id=7760' target='_blank'>Stadt Murrhardt</a></td><td class='maker-cell'>chilma</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-yes" title="ROH link: yes">R</span><span class="link-pill link-yes" title="EHSA-site link: yes">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='big-ginger-sauce-co woking news and mail hyperlocal'><td>2026-05-28</td><td class='outlet-cell'><a href='https://www.wokingnewsandmail.co.uk/news/wokings-hottest-firm-claims-hat-trick-in-saucy-euro-competition-911824' target='_blank'>Woking News and Mail</a></td><td class='maker-cell'>big-ginger-sauce-co</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='opg-hey-chilli eurostar umag hyperlocal'><td>2026-05-30</td><td class='outlet-cell'><a href='https://www.eurostarumag.hr/novosti/detaljno/obiteljski-opg-iz-umaga-osvojio-broncu-u-kategoriji-sambal-na-european-hot-sauce-awards-2026' target='_blank'>EuroStar Umag</a></td><td class='maker-cell'>opg-hey-chilli</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='de-vergulde-tong nieuw-volendam hyperlocal'><td>2026-06-02</td><td class='outlet-cell'><a href='https://www.nieuw-volendam.nl/albert-veerman-pakt-goud-op-europese-hotsaucewedstrijd/' target='_blank'>Nieuw-Volendam</a></td><td class='maker-cell'>de-vergulde-tong</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='pohorc delo - odprta kuhinja national'><td>2026-06-03</td><td class='outlet-cell'><a href='https://odprtakuhinja.delo.si/brbotanje/evropa-izbrala-najboljse-pekoce-omake-med-nagrajenci-tudi-trije-slovenci' target='_blank'>Delo - Odprta Kuhinja</a></td><td class='maker-cell'>pohorc</td><td><span class='scope-pill scope-national'>national</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='3600'>€3,600</td></tr>
+<tr data-search='cili-napoj delo - odprta kuhinja national'><td>2026-06-03</td><td class='outlet-cell'><a href='https://odprtakuhinja.delo.si/brbotanje/evropa-izbrala-najboljse-pekoce-omake-med-nagrajenci-tudi-trije-slovenci' target='_blank'>Delo - Odprta Kuhinja</a></td><td class='maker-cell'>cili-napoj</td><td><span class='scope-pill scope-national'>national</span></td><td class='center'>body</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='2400'>€2,400</td></tr>
+<tr data-search='cili-roza delo - odprta kuhinja national'><td>2026-06-03</td><td class='outlet-cell'><a href='https://odprtakuhinja.delo.si/brbotanje/evropa-izbrala-najboljse-pekoce-omake-med-nagrajenci-tudi-trije-slovenci' target='_blank'>Delo - Odprta Kuhinja</a></td><td class='maker-cell'>cili-roza</td><td><span class='scope-pill scope-national'>national</span></td><td class='center'>body</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='2400'>€2,400</td></tr>
+<tr data-search='svilis cēsu novada vēstis regional'><td>2026-06-03</td><td class='outlet-cell'><a href='https://www.cesis.lv/images/userfiles/CNV_280.pdf' target='_blank'>Cēsu Novada Vēstis</a></td><td class='maker-cell'>svilis</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-partial" title="ROH text: partial">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='495'>€495</td></tr>
+<tr data-search='achilipu la voz digital (gurme cádiz) regional'><td>2026-06-03</td><td class='outlet-cell'><a href='https://www.lavozdigital.es/gurme/cadiz/teresa-emilio-achilipu-ganas-introducir-picante-sello-20260603104935-ntv.html' target='_blank'>La Voz Digital (Gurme Cádiz)</a></td><td class='maker-cell'>achilipu</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='339'>€339</td></tr>
+<tr data-search='piri-piri-co algarve daily news regional'><td>2026-06-03</td><td class='outlet-cell'><a href='https://algarvedailynews.com/food-wine/27055-algarve-piri-piri-farm-takes-two-golds-at-the-european-hot-sauce-awards-2026' target='_blank'>Algarve Daily News</a></td><td class='maker-cell'>piri-piri-co</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-yes" title="ROH link: yes">R</span><span class="link-pill link-yes" title="EHSA-site link: yes">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='338'>€338</td></tr>
+<tr data-search='piri-piri-co algarve daily news hyperlocal'><td>2026-06-03</td><td class='outlet-cell'><a href='https://algarvedailynews.com/food-wine/27055-algarve-piri-piri-farm-takes-two-golds-at-the-european-hot-sauce-awards-2026' target='_blank'>Algarve Daily News</a></td><td class='maker-cell'>piri-piri-co</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-yes" title="ROH link: yes">R</span><span class="link-pill link-yes" title="EHSA-site link: yes">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='278'>€278</td></tr>
+<tr data-search='opg-ljutistra glas istre hr regional'><td>2026-06-04</td><td class='outlet-cell'><a href='https://www.glasistre.hr/istra/2026/06/04/istarski-umaci-osvojili-europu-dva-opg-a-uzela-cetiri-medalje-na-velikom-natjecanju-1073271' target='_blank'>Glas Istre HR</a></td><td class='maker-cell'>opg-ljutistra</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='975'>€975</td></tr>
+<tr data-search='opg-hey-chilli glas istre hr regional'><td>2026-06-04</td><td class='outlet-cell'><a href='https://www.glasistre.hr/istra/2026/06/04/istarski-umaci-osvojili-europu-dva-opg-a-uzela-cetiri-medalje-na-velikom-natjecanju-1073271' target='_blank'>Glas Istre HR</a></td><td class='maker-cell'>opg-hey-chilli</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='975'>€975</td></tr>
+<tr data-search='opg-ljutistra poduzetnistvo.org hyperlocal'><td>2026-06-04</td><td class='outlet-cell'><a href='https://www.poduzetnistvo.org/news/pulski-opg-osvojio-tri-zlatne-medalje-na-vodecem-europskom-natjecanju' target='_blank'>poduzetnistvo.org</a></td><td class='maker-cell'>opg-ljutistra</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='opg-ljutistra istra24 regional'><td>2026-06-05</td><td class='outlet-cell'><a href='https://www.istra24.hr/krasna-zemlja/istarska-opg-ovska-kuhinja-s-ljutim-umacima-osvojila-cetiri-medalje-na-european-hot-sauce-awards-2026' target='_blank'>Istra24</a></td><td class='maker-cell'>opg-ljutistra</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='450'>€450</td></tr>
+<tr data-search='opg-hey-chilli istra24 regional'><td>2026-06-05</td><td class='outlet-cell'><a href='https://www.istra24.hr/krasna-zemlja/istarska-opg-ovska-kuhinja-s-ljutim-umacima-osvojila-cetiri-medalje-na-european-hot-sauce-awards-2026' target='_blank'>Istra24</a></td><td class='maker-cell'>opg-hey-chilli</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='450'>€450</td></tr>
+<tr data-search='de-vergulde-tong nh nieuws (tv broadcast) regional'><td>2026-06-06</td><td class='outlet-cell'><a href='https://www.nhnieuws.nl/nieuws/360433/de-lekkerste-sambal-van-europa-komt-uit-volendam#tv-segment-2026-06-06' target='_blank'>NH Nieuws (TV broadcast)</a></td><td class='maker-cell'>de-vergulde-tong</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='5625'>€5,625</td></tr>
+<tr data-search='de-vergulde-tong nh nieuws regional'><td>2026-06-06</td><td class='outlet-cell'><a href='https://www.nhnieuws.nl/nieuws/360433/de-lekkerste-sambal-van-europa-komt-uit-volendam' target='_blank'>NH Nieuws</a></td><td class='maker-cell'>de-vergulde-tong</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='4500'>€4,500</td></tr>
+<tr data-search='nachtgarten meinbezirk.at regional'><td>2026-06-06</td><td class='outlet-cell'><a href='https://www.meinbezirk.at/neusiedl-am-see/c-wirtschaft/chili-manufaktur-holt-mit-schaerfe-zwei-medaillen-nach-moenchhof_a8678499' target='_blank'>MeinBezirk.at</a></td><td class='maker-cell'>nachtgarten</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='450'>€450</td></tr>
+<tr data-search='evoatis hodpress.hu hyperlocal'><td>2026-06-06</td><td class='outlet-cell'><a href='https://www.hodpress.hu/a-nagymagocsi-evoatis-oromkert-aranyermet-szerzett-europa-szakmai-csipos-szosz-versenyen/' target='_blank'>hodpress.hu</a></td><td class='maker-cell'>evoatis</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='303'>€303</td></tr>
+<tr data-search='callaloo-corner hampshire chronicle regional'><td>2026-06-06</td><td class='outlet-cell'><a href='https://www.hampshirechronicle.co.uk/news/26138427.sauce-maker-celebrates-success-european-hot-sauce-awards/' target='_blank'>Hampshire Chronicle</a></td><td class='maker-cell'>callaloo-corner</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='180'>€180</td></tr>
+<tr data-search='de-vergulde-tong headliner.nl (noord-holland) regional'><td>2026-06-06</td><td class='outlet-cell'><a href='https://noord-holland.headliner.nl/item/zoete-sambal-van-albert-uit-volendam-lekkerste-van-europa-nhnieuws-17885' target='_blank'>Headliner.nl (Noord-Holland)</a></td><td class='maker-cell'>de-vergulde-tong</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='158'>€158</td></tr>
+<tr data-search='cili-roza koroške novice regional'><td>2026-06-08</td><td class='outlet-cell'><a href='https://www.koroskenovice.si/novice/meziska-cili-kuhinja-osvojila-bronasto-medaljo-na-european-hot-sauce-awards-2026/' target='_blank'>Koroške Novice</a></td><td class='maker-cell'>cili-roza</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='202'>€202</td></tr>
+<tr data-search='de-vergulde-tong rtv love (volendam-edam) hyperlocal'><td>2026-06-08</td><td class='outlet-cell'><a href='https://www.rtvlove.nl/lokaal-nieuws/de-lekkerste-sambal-van-europa-komt-uit-volendam/' target='_blank'>RTV LOVE (Volendam-Edam)</a></td><td class='maker-cell'>de-vergulde-tong</td><td><span class='scope-pill scope-hyperlocal'>hyperlocal</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='160'>€160</td></tr>
+<tr data-search='de-vergulde-tong rtv love (tv broadcast) local'><td>2026-06-08</td><td class='outlet-cell'><a href='https://www.rtvlove.nl/lokaal-nieuws/de-lekkerste-sambal-van-europa-komt-uit-volendam/#tv-segment-2026-06-08' target='_blank'>RTV LOVE (TV broadcast)</a></td><td class='maker-cell'>de-vergulde-tong</td><td><span class='scope-pill scope-local'>local</span></td><td class='center'>body</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='75'>€75</td></tr>
+<tr data-search='cili-napoj maribor24.si regional'><td>2026-06-09</td><td class='outlet-cell'><a href='https://maribor24.si/lokalno/mariborski-cili-napoji-odnesli-dve-medalji-z-evropskega-tekmovanja-pekocih-omak/' target='_blank'>maribor24.si</a></td><td class='maker-cell'>cili-napoj</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-full" title="Berlin Chili Fest: full">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-yes" title="EHSA-site link: yes">E</span><span class="link-pill link-partial" title="YouTube link: partial">Y</span></td><td class='eur' data-sort='590'>€590</td></tr>
+<tr data-search='chardys omroep flevoland regional'><td>2026-06-10</td><td class='outlet-cell'><a href='https://www.omroepflevoland.nl/gemist/radio/473733/almeerse-hete-jams-in-de-prijzen?id=473733' target='_blank'>Omroep Flevoland</a></td><td class='maker-cell'>chardys</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-yes" title="YouTube link: yes">Y</span></td><td class='eur' data-sort='2512'>€2,512</td></tr>
+<tr data-search='chilma südwest presse regional'><td>2026-06-11</td><td class='outlet-cell'><a href='https://www.swp.de/lokales/gaildorf/murrhardter-mag-scharfe-sachen-der-chilipapst-von-siegelsberg-79164196.html' target='_blank'>Südwest Presse</a></td><td class='maker-cell'>chilma</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='450'>€450</td></tr>
+<tr data-search='jungle-jams indulge magazine national'><td>2026-06-11</td><td class='outlet-cell'><a href='https://www.indulge.com.mt/zebbug-kitchen-wins-at-the-european-hot-sauce-awards-2026/' target='_blank'>Indulge Magazine</a></td><td class='maker-cell'>jungle-jams</td><td><span class='scope-pill scope-national'>national</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-full" title="ROH text: full">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='300'>€300</td></tr>
+<tr data-search='chilma backnanger kreiszeitung regional'><td>2026-06-13</td><td class='outlet-cell'><a href='https://www.bkz.de/nachrichten/der-chilipapst-von-siegelsberg-342623.html' target='_blank'>Backnanger Kreiszeitung</a></td><td class='maker-cell'>chilma</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='225'>€225</td></tr>
+<tr data-search='ribasti ideal regional'><td>2026-06-28</td><td class='outlet-cell'><a href='https://www.ideal.es/economia/factoria-de-empresas/llamarada-baza-cima-picante-europeo-20260629233904-nt.html' target='_blank'>Ideal</a></td><td class='maker-cell'>ribasti</td><td><span class='scope-pill scope-regional'>regional</span></td><td class='center'>lede</td><td class='pills-cell'><span class="bm-pill bm-no" title="ROH text: no">R</span><span class="bm-pill bm-full" title="EHSA text: full">E</span><span class="bm-pill bm-no" title="Berlin Chili Fest: no">B</span></td><td class='pills-cell'><span class="link-pill link-no" title="ROH link: no">R</span><span class="link-pill link-no" title="EHSA-site link: no">E</span><span class="link-pill link-no" title="YouTube link: no">Y</span></td><td class='eur' data-sort='2250'>€2,250</td></tr></tbody>
+    </table>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="band-head">
+    <h2>EUR0 <span class="pop">rows</span>.</h2>
+    <p>Pickups that landed but are uncredited: self-driven by the maker, duplicates of another pickup, or out-of-scope. Tracked for transparency; never counted in the cycle total.</p>
+  </div>
+  <div class="report-card">
+    <table class="report-table">
+      <thead><tr><th>Date</th><th>Outlet</th><th>Maker</th><th>Reason</th></tr></thead>
+      <tbody><tr><td>2026-05-21</td><td><a href='https://agrobiznis.finance.si/agro-podjetnik/prisla-je-ljubezen-in-z-njo-pekoce-omake-znamke-pohorc-bio-cili/a/9047442' target='_blank'>Agrobiznis</a></td><td class='maker-cell'>pohorc</td><td><span class='reason-pill reason-self-press'>self-press</span></td></tr>
+<tr><td>2026-05-21</td><td><a href='https://www.finance.si/prisla-je-ljubezen-in-z-njo-pekoce-omake-pohorc-bio-cili/a/9047442' target='_blank'>Agrobiznis</a></td><td class='maker-cell'>pohorc</td><td><span class='reason-pill reason-self-press'>self-press</span></td></tr>
+<tr><td>2026-05-27</td><td><a href='https://cadiz.cosasdecome.es/las-salsas-conilenas-achilipo-premiadas-en-europa/' target='_blank'>CosasDeCome Cádiz</a></td><td class='maker-cell'>achilipu</td><td><span class='reason-pill reason-self-press'>self-press</span></td></tr>
+<tr><td>2026-05-27</td><td><a href='https://www.patriotmagazin.cz/dalsi-uspech-pro-gaston-chilli-palive-omacky-z-ostravy-uspely-i-v-nemecku' target='_blank'>Magazín Patriot</a></td><td class='maker-cell'>gaston-chilli</td><td><span class='reason-pill reason-uncredited'>uncredited</span></td></tr></tbody>
+    </table>
+  </div>
+</div></section>
+
+<section class="band-strip">
+  <div class="wrap">
+    <span class="strip-num">46</span> <span class="strip-lbl">false-positive rows filtered (Google Alert mis-fires, own-channel matches, name collisions)</span>
+    &middot; <span class="strip-num">16</span> <span class="strip-lbl">rows awaiting scoring</span>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <div>EHSA 2026 &middot; coverage report &middot; <code>~/ehc-press/coverage_report.html</code></div>
+  <div>regen <code>tools/build_coverage_report.py</code> &middot; method <code>coverage/press-value-methodology.md</code></div>
+</div></footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Filter
+  var input = document.getElementById('filter');
+  if (input) {
+    input.addEventListener('input', function() {
+      var q = input.value.toLowerCase().trim();
+      var rows = document.querySelectorAll('.sortable tbody tr');
+      rows.forEach(function(r) {
+        var hay = r.getAttribute('data-search') || '';
+        r.style.display = (!q || hay.indexOf(q) !== -1) ? '' : 'none';
+      });
+    });
+  }
+  // Sort
+  document.querySelectorAll('.sortable thead th[data-col]').forEach(function(th) {
+    th.addEventListener('click', function() {
+      var col = parseInt(th.getAttribute('data-col'), 10);
+      var tbody = th.closest('table').querySelector('tbody');
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      var asc = th.getAttribute('data-asc') !== 'true';
+      rows.sort(function(a, b) {
+        var av = a.children[col].getAttribute('data-sort') || a.children[col].textContent;
+        var bv = b.children[col].getAttribute('data-sort') || b.children[col].textContent;
+        var an = parseFloat(av), bn = parseFloat(bv);
+        if (!isNaN(an) && !isNaN(bn)) return asc ? an - bn : bn - an;
+        return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+      th.setAttribute('data-asc', asc);
+    });
+  });
+});
+</script>
+</body></html>

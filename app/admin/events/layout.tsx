@@ -31,6 +31,9 @@ export default function AdminEventsLayout({
             <Link href="/admin" className="hover:opacity-100">
               Press
             </Link>
+            <Link href="/admin/coverage/ehsa-2026" className="hover:opacity-100">
+              Coverage
+            </Link>
             <Link href="/" className="hover:opacity-100">
               Site
             </Link>
