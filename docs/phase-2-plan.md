@@ -2,11 +2,21 @@
 
 Reference: `~/.claude/plans/lazy-puzzling-simon.md`
 
-Status: **drafts written, not yet flipped live**.
+Status: **LIVE as of 2026-07-17.** Flip committed (`2f56511`), `middleware.ts`
+deleted, `ADMIN_PASS`/`DASH_*` retired from code. The flip initially 500'd
+every `/admin/*` route on Next 16 (async `auth` export + default `proxy`
+export); fixed in `6210dde`. Verified in prod: `/admin/login` renders the
+email form (200), `/admin/events` redirects unauthenticated users to
+`/admin/login?next=...` (307). Vercel env vars (`AUTH_SECRET`,
+`EMAIL_SERVER_*`, `EMAIL_FROM`, `DATABASE_URL`) are set — the login page
+resolves `auth()` without erroring. **Outstanding:** the magic-link email
+round-trip (send -> click -> land in `/admin`) still needs one manual
+end-to-end test from Simon's inbox; and Phases 3-5 (multi-tenant UI,
+producer portal, remove the Vercel env vars) remain as follow-ups below.
 
 ---
 
-## What's on disk right now (safe, no existing behaviour changed)
+## What's on disk right now (historical draft notes; the flip has since shipped)
 
 New files under ehc-site:
 
