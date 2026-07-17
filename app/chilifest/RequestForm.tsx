@@ -2,9 +2,101 @@
 
 import { useState } from "react";
 import { submitPressRequest } from "./actions";
+import type { Lang } from "@/lib/chilifest/copy";
 
 const INPUT =
   "w-full border border-rule px-3 py-2 text-sm bg-white text-ink focus:outline-none focus:border-ink";
+
+const F: Record<
+  Lang,
+  {
+    name: string;
+    email: string;
+    org: string;
+    web: string;
+    like: string;
+    samplesTitle: string;
+    samplesHint: string;
+    pressTitle: string;
+    pressHint: string;
+    addr: string;
+    street: string;
+    postcode: string;
+    city: string;
+    country: string;
+    working: string;
+    send: string;
+    sending: string;
+    privacy: string;
+    needOne: string;
+    genErr: string;
+    received: string;
+    thanks: (w: string) => string;
+    samplePack: string;
+    pressPlace: string;
+    and: string;
+  }
+> = {
+  en: {
+    name: "Your name",
+    email: "Email",
+    org: "Organisation or outlet",
+    web: "Website or Instagram handle",
+    like: "What would you like? (pick one or both)",
+    samplesTitle: "Send me samples",
+    samplesHint: "A curated Chili Fest sample pack, posted within the EU.",
+    pressTitle: "Attend the press preview",
+    pressHint: "A place at the press evening before the public days.",
+    addr: "Where should we post the samples? (EU)",
+    street: "Street and number",
+    postcode: "Postcode",
+    city: "City",
+    country: "Country",
+    working: "What are you working on? (optional)",
+    send: "Send request",
+    sending: "Sending…",
+    privacy:
+      "Your details go to the European Heat Council for review. We use them only to assess and fulfil your request.",
+    needOne: "Tick at least one: samples, or the press preview.",
+    genErr: "Something went wrong. Please try again.",
+    received: "Request received",
+    thanks: (w) =>
+      `Thank you. You asked for ${w}. The Council reviews requests individually and will be in touch by email. Places and packs are limited, so allow a few days.`,
+    samplePack: "a sample pack",
+    pressPlace: "a press-preview place",
+    and: " and ",
+  },
+  de: {
+    name: "Ihr Name",
+    email: "E-Mail",
+    org: "Organisation oder Redaktion",
+    web: "Website oder Instagram-Handle",
+    like: "Was möchten Sie? (eines oder beides)",
+    samplesTitle: "Muster zusenden",
+    samplesHint:
+      "Ein kuratiertes Chili-Fest-Musterpaket, Versand innerhalb der EU.",
+    pressTitle: "Am Presse-Vorabend teilnehmen",
+    pressHint: "Ein Platz am Presseabend vor den Publikumstagen.",
+    addr: "Wohin sollen wir die Muster senden? (EU)",
+    street: "Straße und Hausnummer",
+    postcode: "PLZ",
+    city: "Stadt",
+    country: "Land",
+    working: "Woran arbeiten Sie? (optional)",
+    send: "Anfrage senden",
+    sending: "Wird gesendet…",
+    privacy:
+      "Ihre Angaben gehen zur Prüfung an den European Heat Council. Wir nutzen sie ausschließlich, um Ihre Anfrage zu bewerten und zu erfüllen.",
+    needOne: "Bitte mindestens eines ankreuzen: Muster oder Presse-Vorabend.",
+    genErr: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    received: "Anfrage erhalten",
+    thanks: (w) =>
+      `Vielen Dank. Sie haben ${w} angefragt. Der Council prüft Anfragen individuell und meldet sich per E-Mail. Plätze und Pakete sind begrenzt, bitte rechnen Sie mit einigen Tagen.`,
+    samplePack: "ein Musterpaket",
+    pressPlace: "einen Platz beim Presse-Vorabend",
+    and: " und ",
+  },
+};
 
 function Toggle({
   checked,
@@ -44,7 +136,8 @@ function Toggle({
   );
 }
 
-export function RequestForm() {
+export function RequestForm({ lang = "en" }: { lang?: Lang }) {
+  const f = F[lang];
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [organisation, setOrganisation] = useState("");
@@ -68,7 +161,7 @@ export function RequestForm() {
     event.preventDefault();
     setError(null);
     if (!wantsSamples && !wantsPressEvening) {
-      setError("Tick at least one: samples, or the press preview.");
+      setError(f.needOne);
       return;
     }
     setStatus("submitting");
@@ -94,11 +187,11 @@ export function RequestForm() {
       if (result.ok) {
         setDoneWants(
           [
-            wantsSamples ? "a sample pack" : null,
-            wantsPressEvening ? "a press-preview place" : null,
+            wantsSamples ? f.samplePack : null,
+            wantsPressEvening ? f.pressPlace : null,
           ]
             .filter(Boolean)
-            .join(" and "),
+            .join(f.and),
         );
         setStatus("done");
       } else {
@@ -106,7 +199,7 @@ export function RequestForm() {
         setStatus("idle");
       }
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError(f.genErr);
       setStatus("idle");
     }
   }
@@ -114,11 +207,9 @@ export function RequestForm() {
   if (status === "done") {
     return (
       <div className="mt-8 border border-rule bg-paper-green/40 p-6 max-w-2xl">
-        <p className="label text-ink">Request received</p>
+        <p className="label text-ink">{f.received}</p>
         <p className="mt-2 text-foreground/90 leading-relaxed">
-          Thank you. You asked for {doneWants}. The Council reviews requests
-          individually and will be in touch by email. Places and packs are
-          limited, so allow a few days.
+          {f.thanks(doneWants)}
         </p>
       </div>
     );
@@ -128,7 +219,7 @@ export function RequestForm() {
     <form onSubmit={handleSubmit} className="mt-8 space-y-6 max-w-2xl">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <label className="block">
-          <span className="label text-muted block mb-2">Your name</span>
+          <span className="label text-muted block mb-2">{f.name}</span>
           <input
             type="text"
             required
@@ -139,7 +230,7 @@ export function RequestForm() {
           />
         </label>
         <label className="block">
-          <span className="label text-muted block mb-2">Email</span>
+          <span className="label text-muted block mb-2">{f.email}</span>
           <input
             type="email"
             required
@@ -153,9 +244,7 @@ export function RequestForm() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <label className="block">
-          <span className="label text-muted block mb-2">
-            Organisation or outlet
-          </span>
+          <span className="label text-muted block mb-2">{f.org}</span>
           <input
             type="text"
             required
@@ -166,9 +255,7 @@ export function RequestForm() {
           />
         </label>
         <label className="block">
-          <span className="label text-muted block mb-2">
-            Website or Instagram handle
-          </span>
+          <span className="label text-muted block mb-2">{f.web}</span>
           <input
             type="text"
             required
@@ -180,35 +267,29 @@ export function RequestForm() {
       </div>
 
       <fieldset>
-        <legend className="label text-muted mb-3">
-          What would you like? (pick one or both)
-        </legend>
+        <legend className="label text-muted mb-3">{f.like}</legend>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Toggle
             checked={wantsSamples}
             onChange={setWantsSamples}
-            title="Send me samples"
-            hint="A curated Chili Fest sample pack, posted within the EU."
+            title={f.samplesTitle}
+            hint={f.samplesHint}
           />
           <Toggle
             checked={wantsPressEvening}
             onChange={setWantsPressEvening}
-            title="Attend the press preview"
-            hint="A place at the press evening before the public days."
+            title={f.pressTitle}
+            hint={f.pressHint}
           />
         </div>
       </fieldset>
 
       {wantsSamples ? (
         <fieldset className="border-t border-rule pt-6">
-          <legend className="label text-muted mb-4">
-            Where should we post the samples? (EU)
-          </legend>
+          <legend className="label text-muted mb-4">{f.addr}</legend>
           <div className="space-y-6">
             <label className="block">
-              <span className="label text-muted block mb-2">
-                Street and number
-              </span>
+              <span className="label text-muted block mb-2">{f.street}</span>
               <input
                 type="text"
                 value={street}
@@ -219,7 +300,9 @@ export function RequestForm() {
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <label className="block">
-                <span className="label text-muted block mb-2">Postcode</span>
+                <span className="label text-muted block mb-2">
+                  {f.postcode}
+                </span>
                 <input
                   type="text"
                   value={postcode}
@@ -229,7 +312,7 @@ export function RequestForm() {
                 />
               </label>
               <label className="block">
-                <span className="label text-muted block mb-2">City</span>
+                <span className="label text-muted block mb-2">{f.city}</span>
                 <input
                   type="text"
                   value={city}
@@ -239,7 +322,7 @@ export function RequestForm() {
                 />
               </label>
               <label className="block">
-                <span className="label text-muted block mb-2">Country</span>
+                <span className="label text-muted block mb-2">{f.country}</span>
                 <input
                   type="text"
                   value={country}
@@ -254,9 +337,7 @@ export function RequestForm() {
       ) : null}
 
       <label className="block">
-        <span className="label text-muted block mb-2">
-          What are you working on? (optional)
-        </span>
+        <span className="label text-muted block mb-2">{f.working}</span>
         <textarea
           rows={4}
           value={note}
@@ -290,11 +371,10 @@ export function RequestForm() {
           disabled={status === "submitting"}
           className="inline-flex items-center px-6 py-3 rounded-full bg-ink text-white text-sm font-medium tracking-wide hover:bg-ink-deep transition-colors disabled:opacity-60"
         >
-          {status === "submitting" ? "Sending…" : "Send request"}
+          {status === "submitting" ? f.sending : f.send}
         </button>
         <p className="mt-4 text-xs text-muted-soft leading-relaxed">
-          Your details go to the European Heat Council for review. We use them
-          only to assess and fulfil your request.
+          {f.privacy}
         </p>
       </div>
     </form>

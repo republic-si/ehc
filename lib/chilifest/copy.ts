@@ -1,0 +1,187 @@
+// EN/DE UI strings for the /chilifest microsite (+ /chilifest/makers).
+// EN is default; ?lang=de switches. Maker stories live in makers.de.ts; the
+// release lives in release.ts. Scope: chilifest pages only.
+
+export type Lang = "en" | "de";
+export function asLang(v: unknown): Lang {
+  return v === "de" ? "de" : "en";
+}
+
+interface Copy {
+  langName: string;
+  // hero
+  heroEyebrow: string;
+  heroHeadline: string;
+  heroLede: string;
+  btnReleases: string;
+  btnMedia: string;
+  btnMeet: string;
+  btnRequest: string;
+  photoCredit: string;
+  // fact panel
+  festivalLabel: string;
+  festivalPara: string;
+  lblWhen: string;
+  lblWhere: string;
+  lblTickets: string;
+  lblOrganiser: string;
+  hoursValue: string;
+  ticketsValue: string;
+  ticketsVia: string;
+  organiserSub: string;
+  // producers
+  producersHeading: string;
+  producersIntro: string;
+  producersCta: string;
+  // releases
+  releasesHeading: string;
+  allReleases: string;
+  // media
+  mediaHeading: string;
+  mediaIntro: string;
+  mediaCtaHave: string;
+  mediaCtaRequest: string;
+  creditLabel: string;
+  // request
+  requestHeading: string;
+  requestIntro: string;
+  lblPressPreview: string;
+  lblPlaces: string;
+  // about + contact
+  aboutHeading: string;
+  aboutText: string;
+  pressContact: string;
+  pressOffice: string;
+  contactCta: string;
+  // makers page
+  makersEyebrow: string;
+  makersTitle: string;
+  makersIntro: string;
+  indexLabel: (n: number) => string;
+  segHotSauces: string;
+  segOilsCrisps: string;
+  segSalsas: string;
+  flagship: string;
+  storyAngles: string;
+  backToHub: string;
+  photos: string;
+}
+
+export const COPY: Record<Lang, Copy> = {
+  en: {
+    langName: "English",
+    heroEyebrow: "European Heat Council · Press hub",
+    heroHeadline: "Berlin Chili Fest returns to Berlin.",
+    heroLede:
+      "Three days of hot sauce and chilli culture: 50+ artisan producers from across Europe, hundreds of sauces to taste, vegan street food, brewery beer, live entertainment, and Berlin's Best Homemade Hot Sauce Competition.",
+    btnReleases: "Read the releases",
+    btnMedia: "Download media",
+    btnMeet: "Meet the makers",
+    btnRequest: "Samples & press pass",
+    photoCredit: "Photo: Berlin Chili Fest",
+    festivalLabel: "The festival",
+    festivalPara:
+      "Berlin Chili Fest is Berlin's festival of hot sauce and chilli culture, held at Berliner Berg Brauerei in Neukölln. It runs twice a year, each spring and autumn, gathering independent makers, growers and the public across a weekend of tasting, trade and competition.",
+    lblWhen: "When",
+    lblWhere: "Where",
+    lblTickets: "Tickets",
+    lblOrganiser: "Organiser",
+    hoursValue: "Fri 6–10pm, Sat & Sun 12–10pm",
+    ticketsValue: "€7 day / €12 weekend",
+    ticketsVia: "via chilifest.eu",
+    organiserSub: "Press handled by the European Heat Council",
+    producersHeading: "Meet the producers",
+    producersIntro:
+      "Berlin Chili Fest brings together more than 50 independent makers. These {n} have offered samples and interviews to press, gathered here one maker a page.",
+    producersCta: "Meet the {n} featured producers",
+    releasesHeading: "Press releases",
+    allReleases: "All Council releases",
+    mediaHeading: "Media files",
+    mediaIntro:
+      "High-resolution photography from Berlin Chili Fest, ready to publish. Free for editorial use with credit to Berlin Chili Fest.",
+    mediaCtaHave: "Download all images",
+    mediaCtaRequest: "Request the full image pack",
+    creditLabel: "Credit: Berlin Chili Fest",
+    requestHeading: "Request samples or a press pass",
+    requestIntro:
+      "Two things you can ask for, tick either or both. Samples: a curated Chili Fest sample pack, posted within the EU. Press preview:",
+    lblPressPreview: "Press preview",
+    lblPlaces: "Places",
+    aboutHeading: "About Berlin Chili Fest",
+    aboutText:
+      "Established in 2020, Berlin Chili Fest has grown into one of Europe's premier hot sauce celebrations. The festival combines professional competitions with grassroots community spirit, proving that you don't need corporate backing to build something meaningful. It attracts thousands of attendees, partners with industry leaders like Clifton Chili Club and Republic of Heat, and maintains its commitment to supporting independent, artisan hot sauce makers.",
+    pressContact: "Press contact",
+    pressOffice: "European Heat Council press office",
+    contactCta: "Contact the Council",
+    makersEyebrow: "Press selection · sample-ready makers",
+    makersTitle: "The Makers of the Harvest",
+    makersIntro:
+      "Berlin Chili Fest brings together more than 50 independent makers. The nineteen featured here have offered samples and interviews to press ahead of the show, gathered one maker a page: who they are, how the sauce tastes, and what to put it on.",
+    indexLabel: (n) => `Index · ${n} featured makers`,
+    segHotSauces: "Hot sauces",
+    segOilsCrisps: "Chilli oils & crisps",
+    segSalsas: "Salsas, pastes & condiments",
+    flagship: "Flagship",
+    storyAngles: "Story angles",
+    backToHub: "Back to the press hub",
+    photos: "Photos",
+  },
+  de: {
+    langName: "Deutsch",
+    heroEyebrow: "European Heat Council · Presse-Hub",
+    heroHeadline: "Berlin Chili Fest kehrt nach Berlin zurück.",
+    heroLede:
+      "Drei Tage Hot Sauce und Chili-Kultur: über 50 handwerkliche Produzenten aus ganz Europa, Hunderte Saucen zum Probieren, veganes Streetfood, Bier aus der Brauerei, Live-Programm und die Berlin's Best Homemade Hot Sauce Competition.",
+    btnReleases: "Mitteilungen lesen",
+    btnMedia: "Bildmaterial",
+    btnMeet: "Die Macher",
+    btnRequest: "Muster & Presseakkreditierung",
+    photoCredit: "Foto: Berlin Chili Fest",
+    festivalLabel: "Das Festival",
+    festivalPara:
+      "Das Berlin Chili Fest ist Berlins Festival der Hot Sauce und Chili-Kultur, ausgerichtet in der Berliner Berg Brauerei in Neukölln. Es findet zweimal im Jahr statt, im Frühjahr und im Herbst, und bringt unabhängige Macher, Erzeuger und Publikum an einem Wochenende aus Verkostung, Handel und Wettbewerb zusammen.",
+    lblWhen: "Wann",
+    lblWhere: "Wo",
+    lblTickets: "Tickets",
+    lblOrganiser: "Veranstalter",
+    hoursValue: "Fr 18–22 Uhr, Sa & So 12–22 Uhr",
+    ticketsValue: "7 € Tag / 12 € Wochenende",
+    ticketsVia: "über chilifest.eu",
+    organiserSub: "Presse über den European Heat Council",
+    producersHeading: "Die Produzenten",
+    producersIntro:
+      "Das Berlin Chili Fest bringt mehr als 50 unabhängige Macher zusammen. Diese {n} haben der Presse Muster und Interviews angeboten, hier versammelt, ein Macher pro Seite.",
+    producersCta: "Alle {n} Produzenten ansehen",
+    releasesHeading: "Pressemitteilungen",
+    allReleases: "Alle Mitteilungen des Councils",
+    mediaHeading: "Bildmaterial",
+    mediaIntro:
+      "Hochauflösende Fotografie vom Berlin Chili Fest, druckfertig. Zur redaktionellen Nutzung mit Quellenangabe „Berlin Chili Fest“ frei.",
+    mediaCtaHave: "Alle Bilder herunterladen",
+    mediaCtaRequest: "Das vollständige Bildpaket anfragen",
+    creditLabel: "Bildnachweis: Berlin Chili Fest",
+    requestHeading: "Muster oder Presseakkreditierung anfragen",
+    requestIntro:
+      "Zwei Dinge, die Sie anfragen können, kreuzen Sie eines oder beide an. Muster: ein kuratiertes Chili-Fest-Musterpaket, Versand innerhalb der EU. Presse-Vorabend:",
+    lblPressPreview: "Presse-Vorabend",
+    lblPlaces: "Plätze",
+    aboutHeading: "Über Berlin Chili Fest",
+    aboutText:
+      "Das 2020 gegründete Berlin Chili Fest hat sich zu einer der bedeutendsten Hot-Sauce-Feiern Europas entwickelt. Das Festival verbindet professionelle Wettbewerbe mit basisnahem Gemeinschaftsgeist und zeigt, dass es keine Konzernförderung braucht, um etwas Bedeutsames aufzubauen. Es zieht Tausende Besucher an, arbeitet mit Branchengrößen wie dem Clifton Chili Club und Republic of Heat zusammen und bleibt seinem Engagement für unabhängige, handwerkliche Hot-Sauce-Macher verpflichtet.",
+    pressContact: "Pressekontakt",
+    pressOffice: "European Heat Council, Pressebüro",
+    contactCta: "Den Council kontaktieren",
+    makersEyebrow: "Presseauswahl · musterbereite Macher",
+    makersTitle: "Die Macher der Harvest",
+    makersIntro:
+      "Das Berlin Chili Fest bringt mehr als 50 unabhängige Macher zusammen. Die neunzehn hier vorgestellten haben der Presse vor dem Festival Muster und Interviews angeboten, ein Macher pro Seite: wer sie sind, wie die Sauce schmeckt und wozu sie passt.",
+    indexLabel: (n) => `Index · ${n} ausgewählte Macher`,
+    segHotSauces: "Hot Sauces",
+    segOilsCrisps: "Chiliöle & Crisps",
+    segSalsas: "Salsas, Pasten & Condiments",
+    flagship: "Aushängeschild",
+    storyAngles: "Story-Ansätze",
+    backToHub: "Zurück zum Presse-Hub",
+    photos: "Fotos",
+  },
+};
