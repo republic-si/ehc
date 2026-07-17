@@ -1,6 +1,6 @@
 # ehc-site — status
 
-> Last updated: 2026-07-17
+> Last updated: 2026-07-18
 
 Next.js 16 / React 19 app on Vercel (`republic-si/ehc`), Neon Postgres shared
 with `~/ehc-press`. Public site (europeanheatcouncil.eu) + the internal `/admin`.
@@ -16,15 +16,22 @@ with `~/ehc-press`. Public site (europeanheatcouncil.eu) + the internal `/admin`
   cookie) scopes the Press area by Org > Campaign, gated to the user's orgs.
   "All projects" = cross-campaign. Applied to read queries via `pushScope()`.
   Events is orthogonal (no campaign column) — switcher hidden there.
-- **Coverage:** `/admin/coverage` follows the switcher; reports are pre-generated
-  HTML committed under `content/coverage/` and shown in an iframe (short-term).
+- **Coverage:** `/admin/coverage` is a native, project-scoped page and **the DB
+  is the source of truth**. Manage pickups in the admin ("Add pickup" form +
+  per-row edit/delete/mark-FP); press value is computed in-app
+  (`lib/coverage-value.ts`, ported EMV formula) and domain authority fetched via
+  OpenPageRank (`lib/authority.ts`) on save. `pickups` keyed by
+  `(article_url, maker_slug)`. `OPR_API_KEY` is set in Vercel prod. The CSV +
+  coverage Python (`fetch_authority`, `build_coverage_report`, `scan_articles`,
+  `import_scan`, `add_sighting`, ingest seed) are retired/archival.
 
 ## Open threads
 
-- Coverage report: rebuild as a native, project-styled page rendered from data
-  (not an embedded HTML blob). Needs a plan.
+- Pickup **bookmarklet** (was `import_scan.py` → CSV) needs re-pointing to POST
+  into the DB, or captures get re-keyed via the Add-pickup form.
 - Remove dead `ADMIN_PASS`/`DASH_*` env vars from Vercel.
 - Producer `/portal/` (read-only) — not started.
+- Re-home RSS auto-discovery (`~/ehc-press/tools/poll_alerts.py`) if still wanted.
 
 ## Notes
 
