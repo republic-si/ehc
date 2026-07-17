@@ -114,23 +114,31 @@ function Toggle({
       type="button"
       onClick={() => onChange(!checked)}
       aria-pressed={checked}
-      className={`flex items-start gap-3 text-left border p-4 transition-colors ${
+      className={`flex items-start gap-3 text-left border-2 p-5 transition-colors ${
         checked
-          ? "border-ink bg-paper-green/50"
-          : "border-rule bg-white hover:border-ink/40"
+          ? "border-accent bg-accent text-white shadow-sm"
+          : "border-accent/50 bg-accent/5 hover:border-accent hover:bg-accent/10"
       }`}
     >
       <span
-        className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border ${
-          checked ? "border-ink bg-ink text-white" : "border-rule bg-white"
+        className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border-2 text-sm font-bold ${
+          checked ? "border-white bg-white text-accent" : "border-accent bg-white text-accent"
         }`}
         aria-hidden
       >
         {checked ? "✓" : ""}
       </span>
       <span>
-        <span className="block text-sm font-medium text-ink">{title}</span>
-        <span className="block text-xs text-muted mt-0.5">{hint}</span>
+        <span
+          className={`block text-base font-semibold ${checked ? "text-white" : "text-ink"}`}
+        >
+          {title}
+        </span>
+        <span
+          className={`block text-xs mt-0.5 ${checked ? "text-white/85" : "text-muted"}`}
+        >
+          {hint}
+        </span>
       </span>
     </button>
   );
