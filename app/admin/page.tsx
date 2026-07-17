@@ -38,7 +38,8 @@ export default async function AdminHome() {
   return (
     <>
       <h1 style={{ fontSize: 28, marginBottom: 24, fontWeight: 600 }}>
-        EHSA 2026 admin
+        Press
+        <span style={{ color: "#888", fontWeight: 400 }}> · {scope.label}</span>
       </h1>
 
       <section

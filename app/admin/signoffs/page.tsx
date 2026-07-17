@@ -1,4 +1,5 @@
 import { getPendingSignoffs } from "@/lib/admin";
+import { resolveScope } from "@/lib/scope";
 import {
   PageTitle,
   codeStyle,
@@ -8,7 +9,8 @@ import {
 } from "../_layout/Table";
 
 export default async function SignoffsPage() {
-  const rows = await getPendingSignoffs();
+  const { scope } = await resolveScope();
+  const rows = await getPendingSignoffs(scope);
 
   const buckets = new Map<string, typeof rows>();
   for (const r of rows) {

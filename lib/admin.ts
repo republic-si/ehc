@@ -125,10 +125,13 @@ export async function getAdminSummary(scope: Scope): Promise<AdminSummary> {
     SELECT count(*)::int AS n FROM unsubscribe_log
      WHERE received_at >= now() - interval '30 days'
   `) as { n: number }[];
-  const [signoffs] = (await sql`
-    SELECT count(*)::int AS n FROM signoff_sends
-     WHERE ack_status IN ('sent', 'needs_followup', 'ack_with_edits')
-  `) as { n: number }[];
+  const sgWhere = ["ack_status IN ('sent', 'needs_followup', 'ack_with_edits')"];
+  const sgParams: unknown[] = [];
+  pushScope(scope, sgWhere, sgParams, "send");
+  const [signoffs] = (await sql.query(
+    `SELECT count(*)::int AS n FROM signoff_sends WHERE ${sgWhere.join(" AND ")}`,
+    sgParams,
+  )) as { n: number }[];
   return {
     outlets,
     bounces7d: bounces?.n ?? 0,
@@ -240,17 +243,23 @@ export async function getRecentSends(
   }));
 }
 
-export async function getPendingSignoffs(): Promise<SignoffSendRow[]> {
-  const rows = (await sql`
-    SELECT DISTINCT ON (s.producer_slug)
-           s.producer_slug, p.brand, p.email,
-           s.sent_at::text AS sent_at, s.ack_status,
-           s.due_at::text AS due_at, s.subject
-      FROM signoff_sends s
-      JOIN producers p ON p.slug = s.producer_slug
-     WHERE s.ack_status IN ('sent', 'needs_followup', 'ack_with_edits')
-     ORDER BY s.producer_slug, s.sent_at DESC
-  `) as Record<string, unknown>[];
+export async function getPendingSignoffs(
+  scope: Scope,
+): Promise<SignoffSendRow[]> {
+  const where = ["s.ack_status IN ('sent', 'needs_followup', 'ack_with_edits')"];
+  const params: unknown[] = [];
+  pushScope(scope, where, params, "send", "s.campaign_slug");
+  const rows = (await sql.query(
+    `SELECT DISTINCT ON (s.producer_slug)
+            s.producer_slug, p.brand, p.email,
+            s.sent_at::text AS sent_at, s.ack_status,
+            s.due_at::text AS due_at, s.subject
+       FROM signoff_sends s
+       JOIN producers p ON p.slug = s.producer_slug
+      WHERE ${where.join(" AND ")}
+      ORDER BY s.producer_slug, s.sent_at DESC`,
+    params,
+  )) as Record<string, unknown>[];
   return rows.map((r) => ({
     producerSlug: (r.producer_slug as string) ?? "",
     brand: (r.brand as string) ?? "",
