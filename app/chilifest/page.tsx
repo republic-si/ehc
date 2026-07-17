@@ -382,27 +382,25 @@ export default async function ChiliFestPage({
           <section className="py-14">
             <LaneHeading kicker="04" title={t.requestHeading} id="request" />
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
-              {t.requestIntro} {PRESS_EVENING.blurb}
+              {t.requestIntro} {PRESS_EVENING.blurb[lang]}
             </p>
             <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-3 text-sm">
               <div>
                 <dt className="label text-muted">{t.lblPressPreview}</dt>
                 <dd className="mt-1 text-foreground/90">
-                  {PRESS_EVENING.confirmed
-                    ? `${PRESS_EVENING.dateDisplay}${PRESS_EVENING.time ? `, ${PRESS_EVENING.time}` : ""}`
-                    : PRESS_EVENING.dateDisplay}
+                  {PRESS_EVENING.dateDisplay[lang]}, {PRESS_EVENING.time[lang]}
                 </dd>
               </div>
               <div>
                 <dt className="label text-muted">{t.lblWhere}</dt>
                 <dd className="mt-1 text-foreground/90">
-                  {PRESS_EVENING.location}
+                  {PRESS_EVENING.location[lang]}
                 </dd>
               </div>
               <div>
                 <dt className="label text-muted">{t.lblPlaces}</dt>
                 <dd className="mt-1 text-foreground/90">
-                  {PRESS_EVENING.capacityNote}
+                  {PRESS_EVENING.capacityNote[lang]}
                 </dd>
               </div>
             </dl>

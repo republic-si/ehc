@@ -51,14 +51,28 @@ export const GALLERY: FestImage[] = [
   IMAGES.crowd,
 ];
 
-// Press evening (accreditation-gated). Fill these in and set confirmed = true
-// to replace the "to be confirmed" copy on the page.
+// Press preview (accreditation-gated), EN/DE. Confirmed: Fri 4 Sept, 16:30,
+// before the public doors (public opens Fri 6pm).
 export const PRESS_EVENING = {
-  confirmed: false,
-  dateDisplay: "Date to be confirmed",
-  time: "",
-  location: "Berliner Berg Brauerei, Berlin",
-  blurb:
-    "A dedicated preview for accredited press: taste the competition line-up, meet the makers, and speak to the judges before the public days.",
-  capacityNote: "Places are limited and allocated on review.",
+  confirmed: true,
+  dateDisplay: {
+    en: "Friday 4 September 2026",
+    de: "Freitag, 4. September 2026",
+  },
+  time: {
+    en: "16:30, before the public doors",
+    de: "16:30 Uhr, vor dem Publikumseinlass",
+  },
+  location: {
+    en: "Berliner Berg Brauerei, Berlin",
+    de: "Berliner Berg Brauerei, Berlin",
+  },
+  blurb: {
+    en: "A dedicated preview for accredited press: taste the sauces and meet the makers before the public doors open.",
+    de: "Ein exklusiver Vorabend für akkreditierte Presse: die Saucen verkosten und die Macher treffen, bevor die Publikumstage beginnen.",
+  },
+  capacityNote: {
+    en: "Places are limited and allocated on review.",
+    de: "Plätze sind begrenzt und werden nach Prüfung vergeben.",
+  },
 };
