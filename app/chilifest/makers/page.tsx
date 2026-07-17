@@ -114,7 +114,7 @@ function MakerCard({ maker: m }: { maker: Maker }) {
               <span className="font-semibold text-ink/70 text-lg leading-tight">
                 {m.name}
               </span>
-              <span className="label text-muted-soft mt-2">Photo on request</span>
+              <span className="label text-muted-soft mt-2">Image coming soon</span>
             </div>
           )}
         </div>
