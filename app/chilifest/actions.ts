@@ -47,7 +47,6 @@ export async function submitPressRequest(
   if (!name) missing.push("your name");
   if (!EMAIL_RE.test(email)) missing.push("a valid email");
   if (!organisation) missing.push("your organisation or outlet");
-  if (!webOrInstagram) missing.push("a website or Instagram handle");
   // Address is only required when samples are requested.
   if (wantsSamples) {
     if (!addrStreet) missing.push("a street address");

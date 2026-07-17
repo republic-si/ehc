@@ -41,7 +41,7 @@ const F: Record<
     name: "Your name",
     email: "Email",
     org: "Organisation or outlet",
-    web: "Website or Instagram handle",
+    web: "Website or Instagram handle (optional)",
     like: "What would you like? (pick one or both)",
     samplesTitle: "Send me samples",
     samplesHint: "A curated Chili Fest sample pack, posted within the EU.",
@@ -70,7 +70,7 @@ const F: Record<
     name: "Ihr Name",
     email: "E-Mail",
     org: "Organisation oder Redaktion",
-    web: "Website oder Instagram-Handle",
+    web: "Website oder Instagram-Handle (optional)",
     like: "Was möchten Sie? (eines oder beides)",
     samplesTitle: "Muster zusenden",
     samplesHint:
@@ -266,7 +266,6 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
           <span className="label text-muted block mb-2">{f.web}</span>
           <input
             type="text"
-            required
             value={webOrInstagram}
             onChange={(e) => setWebOrInstagram(e.target.value)}
             className={INPUT}
