@@ -219,6 +219,7 @@ export interface CoverageRow {
   date: string;
   outletName: string;
   articleUrl: string;
+  makerSlug: string;
   makerLabel: string;
   scope: string;
   position: string;
@@ -245,6 +246,7 @@ export async function getCoverageRows(scope: Scope): Promise<CoverageRow[]> {
     date: ((r.date as string) || "").slice(0, 10),
     outletName: (r.outlet_name as string) || "",
     articleUrl: (r.article_url as string) || "",
+    makerSlug: (r.maker_slug as string) || "",
     makerLabel: (r.brand as string) || (r.maker_slug as string) || "",
     scope: (r.scope as string) || "",
     position: (r.position_of_mention as string) || "",

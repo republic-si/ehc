@@ -9,6 +9,18 @@ import {
   getCoverageRows,
 } from "@/lib/coverage";
 import { PageTitle, tableStyle, thStyle, tdStyle } from "../../_layout/Table";
+import { deletePickupAction, toggleFpAction } from "../actions";
+
+const actionBtn: React.CSSProperties = {
+  background: "none",
+  border: "none",
+  padding: 0,
+  margin: 0,
+  color: "#a33",
+  cursor: "pointer",
+  fontSize: 12,
+  textDecoration: "underline",
+};
 
 export const metadata = {
   title: "Coverage — EHC Admin",
@@ -285,7 +297,28 @@ export default async function CoveragePage({
       </div>
 
       {/* All pickups */}
-      <div style={sectionTitle}>All pickups</div>
+      <div
+        style={{
+          ...sectionTitle,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <span>All pickups</span>
+        <Link
+          href={`/admin/coverage/${campaign}/pickup`}
+          style={{
+            fontSize: 12,
+            fontWeight: 700,
+            color: "#1d3a2a",
+            textTransform: "none",
+            letterSpacing: 0,
+          }}
+        >
+          + Add pickup
+        </Link>
+      </div>
       <div style={{ overflowX: "auto" }}>
         <table style={tableStyle}>
           <thead>
@@ -299,6 +332,7 @@ export default async function CoveragePage({
               <th style={thStyle}>EHSA</th>
               <th style={thStyle}>Link</th>
               <th style={{ ...thStyle, textAlign: "right" }}>Value</th>
+              <th style={thStyle}></th>
             </tr>
           </thead>
           <tbody>
@@ -340,6 +374,34 @@ export default async function CoveragePage({
                   }}
                 >
                   {eur(r.eur)}
+                </td>
+                <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
+                  <Link
+                    href={`/admin/coverage/${campaign}/pickup?url=${encodeURIComponent(r.articleUrl)}&maker=${encodeURIComponent(r.makerSlug)}`}
+                    style={{ color: "#1d3a2a", marginRight: 10 }}
+                  >
+                    edit
+                  </Link>
+                  <form action={toggleFpAction} style={{ display: "inline" }}>
+                    <input type="hidden" name="campaign_slug" value={campaignSlug} />
+                    <input type="hidden" name="article_url" value={r.articleUrl} />
+                    <input type="hidden" name="maker_slug" value={r.makerSlug} />
+                    <input type="hidden" name="is_false_positive" value="true" />
+                    <button
+                      type="submit"
+                      style={{ ...actionBtn, color: "#b06000", marginRight: 10 }}
+                    >
+                      fp
+                    </button>
+                  </form>
+                  <form action={deletePickupAction} style={{ display: "inline" }}>
+                    <input type="hidden" name="campaign_slug" value={campaignSlug} />
+                    <input type="hidden" name="article_url" value={r.articleUrl} />
+                    <input type="hidden" name="maker_slug" value={r.makerSlug} />
+                    <button type="submit" style={actionBtn}>
+                      del
+                    </button>
+                  </form>
                 </td>
               </tr>
             ))}
