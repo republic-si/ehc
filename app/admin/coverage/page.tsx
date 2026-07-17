@@ -1,23 +1,33 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { resolveScope, campaignToReportKey } from "@/lib/scope";
-import { REPORTS } from "./reports";
+import { resolveScope, campaignToReportKey, pushScope } from "@/lib/scope";
+import { sql } from "@/db/client";
 
 export const metadata = {
   title: "Coverage — EHC Admin",
   robots: { index: false, follow: false },
 };
 
-// Coverage index — follows the project switcher. Redirects to the single
-// in-scope report, lists them if several, or shows an empty state.
+// Coverage index — follows the project switcher. "Has coverage" = the campaign
+// has priced pickups in the DB. Redirects to the single in-scope campaign,
+// lists them if several, or shows an empty state.
 export default async function CoverageIndex() {
   const { scope } = await resolveScope();
-  const keys = [
-    ...new Set(scope.campaignSlugs.map(campaignToReportKey)),
-  ].filter((k) => k in REPORTS);
 
-  if (keys.length === 1) {
-    redirect(`/admin/coverage/${keys[0]}`);
+  const where = ["is_false_positive = false AND press_value_eur > 0"];
+  const params: unknown[] = [];
+  pushScope(scope, where, params, "send", "p.campaign_slug");
+  const rows = (await sql.query(
+    `SELECT p.campaign_slug AS slug, c.name AS name, count(*)::int AS n
+       FROM pickups p JOIN campaigns c ON c.slug = p.campaign_slug
+      WHERE ${where.join(" AND ")}
+      GROUP BY p.campaign_slug, c.name
+      ORDER BY c.name`,
+    params,
+  )) as { slug: string; name: string; n: number }[];
+
+  if (rows.length === 1) {
+    redirect(`/admin/coverage/${campaignToReportKey(rows[0].slug)}`);
   }
 
   return (
@@ -26,18 +36,17 @@ export default async function CoverageIndex() {
         Coverage
         <span style={{ color: "#888", fontWeight: 400 }}> · {scope.label}</span>
       </h1>
-      {keys.length === 0 ? (
+      {rows.length === 0 ? (
         <p style={{ color: "#666", fontSize: 14, maxWidth: "60ch" }}>
-          No coverage report has been published for this project yet. Reports are
-          generated in <code>~/ehc-press</code> and published with{" "}
-          <code>python3 tools/publish_coverage_to_ehc.py</code>.
+          No priced coverage for this project yet. Add pickups to the ledger and
+          refresh (<code>pnpm ingest:coverage</code>).
         </p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 10 }}>
-          {keys.map((k) => (
-            <li key={k}>
+          {rows.map((r) => (
+            <li key={r.slug}>
               <Link
-                href={`/admin/coverage/${k}`}
+                href={`/admin/coverage/${campaignToReportKey(r.slug)}`}
                 style={{
                   display: "block",
                   padding: "14px 18px",
@@ -49,7 +58,11 @@ export default async function CoverageIndex() {
                   fontWeight: 600,
                 }}
               >
-                {REPORTS[k].label}
+                {r.name}
+                <span style={{ color: "#888", fontWeight: 400 }}>
+                  {" "}
+                  · {r.n} pickups
+                </span>
               </Link>
             </li>
           ))}
