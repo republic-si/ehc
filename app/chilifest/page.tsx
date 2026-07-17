@@ -267,9 +267,9 @@ export default async function ChiliFestPage() {
           <section className="py-14">
             <LaneHeading kicker="01" title="The makers" id="makers" />
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
-              {MAKERS.length} independent makers bring their sauces, oils and
-              salsas to the Harvest edition. The story behind each bottle, how it
-              tastes, and what to put it on, one maker a page.
+              Berlin Chili Fest brings together more than 50 independent makers.
+              These {MAKERS.length} have offered samples and interviews to press,
+              gathered here one maker a page.
             </p>
             <div className="mt-8 flex flex-wrap gap-2">
               {MAKERS.filter((m) => m.photo)
@@ -294,7 +294,7 @@ export default async function ChiliFestPage() {
               href="/chilifest/makers"
               className="mt-8 inline-flex items-center px-6 py-3 rounded-full bg-ink text-white text-sm font-medium tracking-wide hover:bg-ink-deep transition-colors"
             >
-              Meet all {MAKERS.length} makers
+              Meet the {MAKERS.length} featured makers
             </Link>
           </section>
 

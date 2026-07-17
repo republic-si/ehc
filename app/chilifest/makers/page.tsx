@@ -4,12 +4,42 @@ import type { Metadata } from "next";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 import { TopBar, SiteHeader, SiteFooter } from "@/app/_components/SiteChrome";
 import { PHOTO_CREDIT } from "@/lib/chilifest/media";
-import { MAKERS, MAKER_TRACKS, type Maker } from "@/lib/chilifest/makers";
+import { MAKERS, type Maker } from "@/lib/chilifest/makers";
+
+const SEGMENTS = [
+  "Hot sauces",
+  "Chilli oils & crisps",
+  "Salsas, pastes & condiments",
+] as const;
+
+// Product-type segmentation (from each maker's flagship + description), replacing
+// the deprecated Flavour / Seed-to-Sauce / Hyperlocal tracks.
+const SEGMENT_OF: Record<string, (typeof SEGMENTS)[number]> = {
+  "queima-beicas": "Hot sauces",
+  chillipeterson: "Hot sauces",
+  "marie-sharp-s": "Hot sauces",
+  "not-that-spicy": "Hot sauces",
+  "roots-radicals": "Hot sauces",
+  "dr-john-s-hot-sauce": "Hot sauces",
+  "salsa-boy": "Hot sauces",
+  "instant-taste": "Chilli oils & crisps",
+  "don-cabron": "Chilli oils & crisps",
+  moja: "Chilli oils & crisps",
+  "qudo-tjes": "Chilli oils & crisps",
+  "momo-haus": "Chilli oils & crisps",
+  "teig-fullung": "Chilli oils & crisps",
+  "luchadoras-del-sabor": "Salsas, pastes & condiments",
+  "harissa-co": "Salsas, pastes & condiments",
+  "yak-thai": "Salsas, pastes & condiments",
+  "neck-dart": "Salsas, pastes & condiments",
+  chiliwerk: "Salsas, pastes & condiments",
+  "ti-dodo-epice": "Salsas, pastes & condiments",
+};
 
 const CANONICAL = `${SITE_URL}/chilifest/makers`;
 const OG_IMAGE = `${SITE_URL}/chilifest/og.jpg`;
 const INTRO =
-  "Nineteen independent makers bringing chilli to the Harvest edition of Berlin Chili Fest. One maker a page: the story behind the bottle, how it tastes, and what to put it on.";
+  "Berlin Chili Fest brings together more than 50 independent makers. The nineteen featured here have offered samples and interviews to press ahead of the show, gathered one maker a page: who they are, how the sauce tastes, and what to put it on.";
 
 export const metadata: Metadata = {
   title: `The Makers of the Harvest — Berlin Chili Fest — ${SITE_NAME}`,
@@ -81,10 +111,10 @@ function MakerCard({ maker: m }: { maker: Maker }) {
             />
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-              <span className="label text-muted-soft">{m.track}</span>
-              <span className="mt-2 font-semibold text-ink/70 text-lg leading-tight">
+              <span className="font-semibold text-ink/70 text-lg leading-tight">
                 {m.name}
               </span>
+              <span className="label text-muted-soft mt-2">Photo on request</span>
             </div>
           )}
         </div>
@@ -99,8 +129,8 @@ function MakerCard({ maker: m }: { maker: Maker }) {
           ) : null}
           {m.awards ? (
             <p className="mt-3">
-              <span className="inline-block label text-accent border border-accent/40 px-2 py-1">
-                EHSA {m.awards}
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 border border-accent/50 text-accent px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em]">
+                <span aria-hidden>★</span> EHSA · {m.awards}
               </span>
             </p>
           ) : null}
@@ -131,7 +161,7 @@ function MakerCard({ maker: m }: { maker: Maker }) {
       {m.angles.length > 0 ? (
         <div className="border-t border-rule p-6">
           <p className="label text-muted">Story angles</p>
-          <ul className="mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-3">
+          <ul className="mt-3 space-y-2">
             {m.angles.map((a, i) => (
               <li
                 key={i}
@@ -167,7 +197,10 @@ export default function MakersPage() {
           >
             ← Berlin Chili Fest press hub
           </Link>
-          <h1 className="mt-8 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] tracking-tight">
+          <p className="label text-white/70 mt-8">
+            Press selection · sample-ready makers
+          </p>
+          <h1 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.05] tracking-tight">
             The Makers of the Harvest
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85">
@@ -182,16 +215,18 @@ export default function MakersPage() {
             aria-label="Makers index"
             className="border border-rule p-6 print:hidden"
           >
-            <p className="label text-muted mb-4">Index · {MAKERS.length} makers</p>
+            <p className="label text-muted mb-4">
+              Index · {MAKERS.length} featured makers
+            </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-6">
-              {MAKER_TRACKS.map((track) => {
-                const inTrack = MAKERS.filter((m) => m.track === track);
-                if (inTrack.length === 0) return null;
+              {SEGMENTS.map((segment) => {
+                const inSeg = MAKERS.filter((m) => SEGMENT_OF[m.id] === segment);
+                if (inSeg.length === 0) return null;
                 return (
-                  <div key={track}>
-                    <p className="label text-accent mb-2">{track}</p>
+                  <div key={segment}>
+                    <p className="label text-accent mb-2">{segment}</p>
                     <ul className="space-y-1.5">
-                      {inTrack.map((m) => (
+                      {inSeg.map((m) => (
                         <li key={m.id}>
                           <a
                             href={`#${m.id}`}
@@ -208,16 +243,19 @@ export default function MakersPage() {
             </div>
           </nav>
 
-          {MAKER_TRACKS.map((track) => {
-            const inTrack = MAKERS.filter((m) => m.track === track);
-            if (inTrack.length === 0) return null;
+          {SEGMENTS.map((segment) => {
+            const inSeg = MAKERS.filter((m) => SEGMENT_OF[m.id] === segment);
+            if (inSeg.length === 0) return null;
             return (
-              <section key={track}>
+              <section key={segment}>
                 <div className="border-b border-rule pb-3 mb-8">
-                  <h2 className="label text-accent">{track}</h2>
+                  <h2 className="label text-accent">
+                    {segment}{" "}
+                    <span className="text-muted-soft">· {inSeg.length}</span>
+                  </h2>
                 </div>
-                <div className="space-y-6">
-                  {inTrack.map((m) => (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+                  {inSeg.map((m) => (
                     <MakerCard key={m.id} maker={m} />
                   ))}
                 </div>
