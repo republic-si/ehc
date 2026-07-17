@@ -131,3 +131,27 @@ ALTER TABLE events ADD COLUMN IF NOT EXISTS simon_available  TEXT NULL
   CHECK (simon_available  IS NULL OR simon_available  IN ('yes','no'));
 ALTER TABLE events ADD COLUMN IF NOT EXISTS nathan_available TEXT NULL
   CHECK (nathan_available IS NULL OR nathan_available IN ('yes','no'));
+
+-- Journalist sample requests (Berlin ChiliFest press hub). Gated form on
+-- /chilifest writes here; reviewed manually in /admin/sample-requests before
+-- anything ships. No PII beyond what a journalist volunteers to receive post.
+CREATE TABLE IF NOT EXISTS sample_requests (
+  id               BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  created_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
+  name             TEXT NOT NULL,
+  email            TEXT NOT NULL,
+  organisation     TEXT NOT NULL DEFAULT '',
+  web_or_instagram TEXT NOT NULL DEFAULT '',
+  addr_street      TEXT NOT NULL DEFAULT '',
+  addr_postcode    TEXT NOT NULL DEFAULT '',
+  addr_city        TEXT NOT NULL DEFAULT '',
+  addr_country     TEXT NOT NULL DEFAULT '',
+  note             TEXT NOT NULL DEFAULT '',
+  source           TEXT NOT NULL DEFAULT 'chilifest',
+  status           TEXT NOT NULL DEFAULT 'new'
+                     CHECK (status IN ('new','approved','shipped','declined')),
+  reviewed_at      TIMESTAMPTZ
+);
+
+CREATE INDEX IF NOT EXISTS sample_requests_status_idx  ON sample_requests (status);
+CREATE INDEX IF NOT EXISTS sample_requests_created_idx ON sample_requests (created_at DESC);

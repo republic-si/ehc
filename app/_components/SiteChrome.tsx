@@ -82,7 +82,10 @@ export function SiteFooter() {
             Home
           </Link>
         </p>
-        <p>
+        <p className="flex gap-4">
+          <Link href="/chilifest" className="hover:text-accent">
+            ChiliFest press
+          </Link>
           <Link href="/contact" className="hover:text-accent">
             Contact
           </Link>

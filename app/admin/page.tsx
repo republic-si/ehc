@@ -63,6 +63,9 @@ export default async function AdminHome() {
         <Link href="/admin/bounces" style={{ color: "#111" }}>
           Bounces
         </Link>
+        <Link href="/admin/sample-requests" style={{ color: "#111" }}>
+          Sample requests
+        </Link>
       </nav>
 
       <section
