@@ -155,3 +155,15 @@ CREATE TABLE IF NOT EXISTS sample_requests (
 
 CREATE INDEX IF NOT EXISTS sample_requests_status_idx  ON sample_requests (status);
 CREATE INDEX IF NOT EXISTS sample_requests_created_idx ON sample_requests (created_at DESC);
+
+-- Unified request form: one submission can want samples and/or the press
+-- evening. Split intent into two flags (was single-valued `source`).
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS wants_samples       BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS wants_press_evening BOOLEAN NOT NULL DEFAULT false;
+
+-- Backfill existing rows from the old single-valued source. Idempotent: guards
+-- on the false default so re-runs are no-ops.
+UPDATE sample_requests SET wants_press_evening = true
+  WHERE source = 'press-evening' AND wants_press_evening = false;
+UPDATE sample_requests SET wants_samples = true
+  WHERE source <> 'press-evening' AND wants_samples = false AND wants_press_evening = false;

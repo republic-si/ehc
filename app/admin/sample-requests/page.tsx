@@ -49,9 +49,13 @@ function Pill({ status }: { status: SampleRequestStatus }) {
   );
 }
 
-const SOURCES = [
-  { key: "chilifest", label: "Samples" },
-  { key: "press-evening", label: "Press evening" },
+const VIEWS = [
+  { key: "samples", label: "Samples", filter: { wantsSamples: true } },
+  {
+    key: "press-evening",
+    label: "Press evening",
+    filter: { wantsPressEvening: true },
+  },
 ] as const;
 
 interface Props {
@@ -65,25 +69,26 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
       ? sp.status
       : "new"
   ) as SampleRequestStatus;
-  const source = SOURCES.some((s) => s.key === sp.source)
-    ? (sp.source as string)
-    : "chilifest";
+  // Default to Samples; legacy ?source=chilifest also lands here.
+  const view =
+    VIEWS.find((v) => v.key === sp.source) ??
+    VIEWS.find((v) => v.key === "samples")!;
 
   const [requests, counts] = await Promise.all([
-    getSampleRequests(filter, 500, source),
-    getSampleRequestCounts(source),
+    getSampleRequests(filter, 500, view.filter),
+    getSampleRequestCounts(view.filter),
   ]);
 
   return (
     <>
       <PageTitle
         title="Sample requests"
-        subtitle="Journalist requests from the ChiliFest press hub. Review before shipping or granting access."
+        subtitle="Journalist requests from the Chili Fest press hub. Review before shipping or granting access."
       />
 
       <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
-        {SOURCES.map((s) => {
-          const active = s.key === source;
+        {VIEWS.map((s) => {
+          const active = s.key === view.key;
           return (
             <Link
               key={s.key}
@@ -110,7 +115,7 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
           return (
             <Link
               key={s}
-              href={`/admin/sample-requests?status=${s}&source=${source}`}
+              href={`/admin/sample-requests?status=${s}&source=${view.key}`}
               style={{
                 fontSize: 11,
                 letterSpacing: "0.08em",
@@ -140,6 +145,7 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
               <th style={thStyle}>Received</th>
               <th style={thStyle}>Journalist</th>
               <th style={thStyle}>Outlet / handle</th>
+              <th style={thStyle}>Wants</th>
               <th style={thStyle}>Ship to</th>
               <th style={thStyle}>Note</th>
               <th style={thStyle}>Status</th>
@@ -164,6 +170,23 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                   <div>{r.organisation || "—"}</div>
                   <div style={{ fontSize: 11, color: "#666" }}>
                     {r.webOrInstagram || "—"}
+                  </div>
+                </td>
+                <td style={{ ...tdStyle, fontSize: 11 }}>
+                  <div
+                    style={{ display: "flex", flexDirection: "column", gap: 3 }}
+                  >
+                    {r.wantsSamples && (
+                      <span style={{ color: "#137333", fontWeight: 700 }}>
+                        ✓ Samples
+                      </span>
+                    )}
+                    {r.wantsPressEvening && (
+                      <span style={{ color: "#1a56c4", fontWeight: 700 }}>
+                        ✓ Press
+                      </span>
+                    )}
+                    {!r.wantsSamples && !r.wantsPressEvening && "—"}
                   </div>
                 </td>
                 <td style={{ ...tdStyle, fontSize: 12 }}>

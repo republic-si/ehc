@@ -29,6 +29,8 @@ export interface SampleRequestRow {
   addr_country: string;
   note: string;
   source: string;
+  wants_samples: boolean;
+  wants_press_evening: boolean;
   status: string;
   reviewed_at: string | null;
 }
@@ -46,6 +48,8 @@ export interface SampleRequest {
   addrCountry: string;
   note: string;
   source: string;
+  wantsSamples: boolean;
+  wantsPressEvening: boolean;
   status: SampleRequestStatus;
   reviewedAt: string | null;
 }
@@ -64,6 +68,8 @@ function toSampleRequest(row: SampleRequestRow): SampleRequest {
     addrCountry: row.addr_country,
     note: row.note,
     source: row.source,
+    wantsSamples: row.wants_samples,
+    wantsPressEvening: row.wants_press_evening,
     status: (row.status as SampleRequestStatus) ?? "new",
     reviewedAt: row.reviewed_at,
   };
@@ -80,6 +86,8 @@ export interface NewSampleRequest {
   addrCountry: string;
   note?: string;
   source?: string;
+  wantsSamples?: boolean;
+  wantsPressEvening?: boolean;
 }
 
 export async function createSampleRequest(
@@ -88,23 +96,30 @@ export async function createSampleRequest(
   const rows = (await sql`
     INSERT INTO sample_requests
       (name, email, organisation, web_or_instagram,
-       addr_street, addr_postcode, addr_city, addr_country, note, source)
+       addr_street, addr_postcode, addr_city, addr_country, note, source,
+       wants_samples, wants_press_evening)
     VALUES
       (${input.name}, ${input.email}, ${input.organisation}, ${input.webOrInstagram},
        ${input.addrStreet}, ${input.addrPostcode}, ${input.addrCity},
-       ${input.addrCountry}, ${input.note ?? ""}, ${input.source ?? "chilifest"})
+       ${input.addrCountry}, ${input.note ?? ""}, ${input.source ?? "chilifest"},
+       ${input.wantsSamples ?? false}, ${input.wantsPressEvening ?? false})
     RETURNING id, created_at::text AS created_at, name, email, organisation,
               web_or_instagram, addr_street, addr_postcode, addr_city,
-              addr_country, note, source, status,
-              reviewed_at::text AS reviewed_at
+              addr_country, note, source, wants_samples, wants_press_evening,
+              status, reviewed_at::text AS reviewed_at
   `) as SampleRequestRow[];
   return toSampleRequest(rows[0]);
+}
+
+export interface RequestFilter {
+  wantsSamples?: boolean;
+  wantsPressEvening?: boolean;
 }
 
 export async function getSampleRequests(
   status?: SampleRequestStatus,
   limit = 500,
-  source?: string,
+  filter: RequestFilter = {},
 ): Promise<SampleRequest[]> {
   const clauses: string[] = [];
   const params: unknown[] = [];
@@ -113,17 +128,21 @@ export async function getSampleRequests(
     clauses.push(`status = $${i++}`);
     params.push(status);
   }
-  if (source) {
-    clauses.push(`source = $${i++}`);
-    params.push(source);
+  if (filter.wantsSamples) {
+    clauses.push(`wants_samples = $${i++}`);
+    params.push(true);
+  }
+  if (filter.wantsPressEvening) {
+    clauses.push(`wants_press_evening = $${i++}`);
+    params.push(true);
   }
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
   params.push(limit);
   const text = `
     SELECT id, created_at::text AS created_at, name, email, organisation,
            web_or_instagram, addr_street, addr_postcode, addr_city,
-           addr_country, note, source, status,
-           reviewed_at::text AS reviewed_at
+           addr_country, note, source, wants_samples, wants_press_evening,
+           status, reviewed_at::text AS reviewed_at
     FROM sample_requests
     ${where}
     ORDER BY created_at DESC
@@ -134,19 +153,24 @@ export async function getSampleRequests(
 }
 
 export async function getSampleRequestCounts(
-  source?: string,
+  filter: RequestFilter = {},
 ): Promise<Record<SampleRequestStatus, number>> {
-  const rows = (
-    source
-      ? await sql`
-          SELECT status, count(*)::int AS n
-          FROM sample_requests WHERE source = ${source}
-          GROUP BY status`
-      : await sql`
-          SELECT status, count(*)::int AS n
-          FROM sample_requests
-          GROUP BY status`
-  ) as Array<{ status: string; n: number }>;
+  const clauses: string[] = [];
+  const params: unknown[] = [];
+  let i = 1;
+  if (filter.wantsSamples) {
+    clauses.push(`wants_samples = $${i++}`);
+    params.push(true);
+  }
+  if (filter.wantsPressEvening) {
+    clauses.push(`wants_press_evening = $${i++}`);
+    params.push(true);
+  }
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  const rows = (await sql.query(
+    `SELECT status, count(*)::int AS n FROM sample_requests ${where} GROUP BY status`,
+    params,
+  )) as Array<{ status: string; n: number }>;
   const counts: Record<SampleRequestStatus, number> = {
     new: 0,
     approved: 0,

@@ -3,8 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 import { TopBar, SiteHeader, SiteFooter } from "@/app/_components/SiteChrome";
-import { RequestSamplesForm } from "./RequestSamplesForm";
-import { PressEveningForm } from "./PressEveningForm";
+import { RequestForm } from "./RequestForm";
 import {
   IMAGES,
   GALLERY,
@@ -98,8 +97,7 @@ const eventJsonLd = {
 const ACTIONS = [
   { href: "#releases", label: "Read the releases" },
   { href: "#media", label: "Download media" },
-  { href: "#samples", label: "Request samples", solid: true },
-  { href: "#press-evening", label: "Press-evening access", solid: true },
+  { href: "#request", label: "Samples & press pass", solid: true },
 ];
 
 function LaneHeading({
@@ -321,32 +319,21 @@ export default function ChiliFestPage() {
             </div>
           </section>
 
-          {/* Samples */}
-          <section className="py-14">
-            <LaneHeading kicker="03" title="Request samples" id="samples" />
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
-              Working on a piece and want to taste before you write? Tell us who
-              you are and where to send a curated sample pack. Requests are
-              reviewed by the Council. We ship within the EU.
-            </p>
-            <div className="max-w-2xl">
-              <RequestSamplesForm />
-            </div>
-          </section>
-
-          {/* Press evening */}
+          {/* Request: samples and/or press preview */}
           <section className="py-14">
             <LaneHeading
-              kicker="04"
-              title="Press evening"
-              id="press-evening"
+              kicker="03"
+              title="Request samples or a press pass"
+              id="request"
             />
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
+              Two things you can ask for, tick either or both. Samples: a curated
+              Chili Fest sample pack, posted within the EU. Press preview:{" "}
               {PRESS_EVENING.blurb}
             </p>
             <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-3 text-sm">
               <div>
-                <dt className="label text-muted">When</dt>
+                <dt className="label text-muted">Press preview</dt>
                 <dd className="mt-1 text-foreground/90">
                   {PRESS_EVENING.confirmed
                     ? `${PRESS_EVENING.dateDisplay}${PRESS_EVENING.time ? `, ${PRESS_EVENING.time}` : ""}`
@@ -366,9 +353,7 @@ export default function ChiliFestPage() {
                 </dd>
               </div>
             </dl>
-            <div className="max-w-2xl">
-              <PressEveningForm />
-            </div>
+            <RequestForm />
           </section>
 
           {/* Boilerplate + contact */}
