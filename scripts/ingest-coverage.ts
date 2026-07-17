@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { homedir } from "node:os";
 import { sql } from "../db/client.ts";
 
-const CSV_PATH = join(homedir(), "EHSA-press", "coverage", "coverage.csv");
+const CSV_PATH = join(homedir(), "ehc-press", "coverage", "coverage.csv");
 
 function parseCsvRow(line: string): string[] {
   const fields: string[] = [];
@@ -91,6 +91,12 @@ async function main() {
     monthlyVisits: col("monthly_visits_est"),
     domainAuthority: col("domain_authority"),
     notes: col("notes"),
+    pressValueEur: col("press_value_eur"),
+    mentionsRoh: col("mentions_roh"),
+    mentionsEhsa: col("mentions_ehsa"),
+    followLinkRoh: col("follow_link_to_roh"),
+    followLinkMaker: col("follow_link_to_maker"),
+    positionOfMention: col("position_of_mention"),
   };
 
   let upserted = 0;
@@ -115,7 +121,9 @@ async function main() {
         article_url, date_spotted, outlet_name, outlet_url, maker_slug,
         language, country, scope, medium, source,
         est_reach, monthly_visits_est, domain_authority, notes,
-        is_false_positive, updated_at
+        press_value_eur, mentions_roh, mentions_ehsa,
+        follow_link_to_roh, follow_link_to_maker, position_of_mention,
+        campaign_slug, is_false_positive, updated_at
       ) VALUES (
         ${articleUrl},
         ${toDateOrNull(r[idx.date])}::date,
@@ -131,10 +139,17 @@ async function main() {
         ${toIntOrNull(r[idx.monthlyVisits])},
         ${r[idx.domainAuthority] || ""},
         ${notes},
+        ${toIntOrNull(r[idx.pressValueEur])},
+        ${r[idx.mentionsRoh] || ""},
+        ${r[idx.mentionsEhsa] || ""},
+        ${r[idx.followLinkRoh] || ""},
+        ${r[idx.followLinkMaker] || ""},
+        ${r[idx.positionOfMention] || ""},
+        'ehsa_2026',
         ${isFp},
         now()
       )
-      ON CONFLICT (article_url) DO UPDATE SET
+      ON CONFLICT (article_url, maker_slug) DO UPDATE SET
         date_spotted = EXCLUDED.date_spotted,
         outlet_name = EXCLUDED.outlet_name,
         outlet_url = EXCLUDED.outlet_url,
@@ -148,6 +163,13 @@ async function main() {
         monthly_visits_est = EXCLUDED.monthly_visits_est,
         domain_authority = EXCLUDED.domain_authority,
         notes = EXCLUDED.notes,
+        press_value_eur = EXCLUDED.press_value_eur,
+        mentions_roh = EXCLUDED.mentions_roh,
+        mentions_ehsa = EXCLUDED.mentions_ehsa,
+        follow_link_to_roh = EXCLUDED.follow_link_to_roh,
+        follow_link_to_maker = EXCLUDED.follow_link_to_maker,
+        position_of_mention = EXCLUDED.position_of_mention,
+        campaign_slug = EXCLUDED.campaign_slug,
         is_false_positive = EXCLUDED.is_false_positive,
         updated_at = now()
     `;

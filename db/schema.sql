@@ -57,6 +57,12 @@ ALTER TABLE pickups ADD COLUMN IF NOT EXISTS follow_link_to_roh   TEXT NOT NULL 
 ALTER TABLE pickups ADD COLUMN IF NOT EXISTS follow_link_to_maker TEXT NOT NULL DEFAULT '';
 ALTER TABLE pickups ADD COLUMN IF NOT EXISTS position_of_mention  TEXT NOT NULL DEFAULT '';
 
+-- A pickup is an article×maker event: one article covering several makers is
+-- several pickups. Key on (article_url, maker_slug) so multi-maker articles
+-- aren't collapsed into one. DROP+ADD so it's re-runnable (events pattern).
+ALTER TABLE pickups DROP CONSTRAINT IF EXISTS pickups_pkey;
+ALTER TABLE pickups ADD CONSTRAINT pickups_pkey PRIMARY KEY (article_url, maker_slug);
+
 CREATE TABLE IF NOT EXISTS events (
   event_id          TEXT PRIMARY KEY,
   event             TEXT NOT NULL,
