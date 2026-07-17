@@ -1,5 +1,6 @@
 import { sql } from "@/db/client";
 import { pushScope, type Scope } from "@/lib/scope";
+import { computePressValueEur } from "@/lib/coverage-value";
 
 export interface Pickup {
   date: string;
@@ -253,3 +254,148 @@ export async function getCoverageRows(scope: Scope): Promise<CoverageRow[]> {
     eur: (r.press_value_eur as number) ?? 0,
   }));
 }
+
+// ---------------------------------------------------------------------------
+// Pickup CRUD (Phase 2 — the DB is the ledger). press_value_eur is recomputed
+// from the inputs on every write via computePressValueEur; domain_authority is
+// looked up by the server action (lib/authority) and passed in.
+// ---------------------------------------------------------------------------
+
+export interface PickupInput {
+  articleUrl: string;
+  makerSlug: string;
+  outletName: string;
+  outletUrl: string;
+  dateSpotted: string | null;
+  language: string;
+  country: string;
+  medium: string;
+  scope: string;
+  position: string;
+  monthlyVisits: number | null;
+  mentionsEhsa: string;
+  mentionsRoh: string;
+  linkEhsaSite: string;
+  followLinkRoh: string;
+  domainAuthority: string;
+  notes: string;
+  isFalsePositive: boolean;
+  campaignSlug: string;
+}
+
+function valueOf(p: PickupInput): number | null {
+  return computePressValueEur({
+    monthlyVisits: p.monthlyVisits,
+    medium: p.medium,
+    scope: p.scope,
+    position: p.position,
+    mentionsEhsa: p.mentionsEhsa,
+    linkEhsaSite: p.linkEhsaSite,
+    followLinkRoh: p.followLinkRoh,
+    domainAuthority: p.domainAuthority,
+  });
+}
+
+export async function upsertPickup(p: PickupInput): Promise<void> {
+  const value = valueOf(p);
+  await sql`
+    INSERT INTO pickups (
+      article_url, maker_slug, outlet_name, outlet_url, date_spotted,
+      language, country, medium, scope, position_of_mention, monthly_visits_est,
+      mentions_ehsa, mentions_roh, link_ehsa_site, follow_link_to_roh,
+      domain_authority, notes, is_false_positive, press_value_eur,
+      campaign_slug, updated_at
+    ) VALUES (
+      ${p.articleUrl}, ${p.makerSlug}, ${p.outletName}, ${p.outletUrl}, ${p.dateSpotted}::date,
+      ${p.language}, ${p.country}, ${p.medium}, ${p.scope}, ${p.position}, ${p.monthlyVisits},
+      ${p.mentionsEhsa}, ${p.mentionsRoh}, ${p.linkEhsaSite}, ${p.followLinkRoh},
+      ${p.domainAuthority}, ${p.notes}, ${p.isFalsePositive}, ${value},
+      ${p.campaignSlug}, now()
+    )
+    ON CONFLICT (article_url, maker_slug) DO UPDATE SET
+      outlet_name = EXCLUDED.outlet_name, outlet_url = EXCLUDED.outlet_url,
+      date_spotted = EXCLUDED.date_spotted, language = EXCLUDED.language,
+      country = EXCLUDED.country, medium = EXCLUDED.medium, scope = EXCLUDED.scope,
+      position_of_mention = EXCLUDED.position_of_mention,
+      monthly_visits_est = EXCLUDED.monthly_visits_est,
+      mentions_ehsa = EXCLUDED.mentions_ehsa, mentions_roh = EXCLUDED.mentions_roh,
+      link_ehsa_site = EXCLUDED.link_ehsa_site, follow_link_to_roh = EXCLUDED.follow_link_to_roh,
+      domain_authority = EXCLUDED.domain_authority, notes = EXCLUDED.notes,
+      is_false_positive = EXCLUDED.is_false_positive, press_value_eur = EXCLUDED.press_value_eur,
+      campaign_slug = EXCLUDED.campaign_slug, updated_at = now()
+  `;
+}
+
+export async function updatePickup(
+  oldUrl: string,
+  oldMaker: string,
+  p: PickupInput,
+): Promise<void> {
+  const value = valueOf(p);
+  await sql`
+    UPDATE pickups SET
+      article_url = ${p.articleUrl}, maker_slug = ${p.makerSlug},
+      outlet_name = ${p.outletName}, outlet_url = ${p.outletUrl},
+      date_spotted = ${p.dateSpotted}::date, language = ${p.language}, country = ${p.country},
+      medium = ${p.medium}, scope = ${p.scope}, position_of_mention = ${p.position},
+      monthly_visits_est = ${p.monthlyVisits}, mentions_ehsa = ${p.mentionsEhsa},
+      mentions_roh = ${p.mentionsRoh}, link_ehsa_site = ${p.linkEhsaSite},
+      follow_link_to_roh = ${p.followLinkRoh}, domain_authority = ${p.domainAuthority},
+      notes = ${p.notes}, is_false_positive = ${p.isFalsePositive},
+      press_value_eur = ${value}, campaign_slug = ${p.campaignSlug}, updated_at = now()
+    WHERE article_url = ${oldUrl} AND maker_slug = ${oldMaker}
+  `;
+}
+
+export async function deletePickup(url: string, maker: string): Promise<void> {
+  await sql`DELETE FROM pickups WHERE article_url = ${url} AND maker_slug = ${maker}`;
+}
+
+export async function setPickupFp(
+  url: string,
+  maker: string,
+  isFp: boolean,
+): Promise<void> {
+  await sql`
+    UPDATE pickups SET is_false_positive = ${isFp}, updated_at = now()
+     WHERE article_url = ${url} AND maker_slug = ${maker}
+  `;
+}
+
+export async function getPickup(
+  url: string,
+  maker: string,
+): Promise<PickupInput | null> {
+  const rows = (await sql`
+    SELECT article_url, maker_slug, outlet_name, outlet_url,
+           date_spotted::text AS date_spotted, language, country, medium, scope,
+           position_of_mention, monthly_visits_est, mentions_ehsa, mentions_roh,
+           link_ehsa_site, follow_link_to_roh, domain_authority, notes,
+           is_false_positive, campaign_slug
+      FROM pickups WHERE article_url = ${url} AND maker_slug = ${maker} LIMIT 1
+  `) as Record<string, unknown>[];
+  const r = rows[0];
+  if (!r) return null;
+  return {
+    articleUrl: (r.article_url as string) ?? "",
+    makerSlug: (r.maker_slug as string) ?? "",
+    outletName: (r.outlet_name as string) ?? "",
+    outletUrl: (r.outlet_url as string) ?? "",
+    dateSpotted: (r.date_spotted as string) ?? null,
+    language: (r.language as string) ?? "",
+    country: (r.country as string) ?? "",
+    medium: (r.medium as string) ?? "",
+    scope: (r.scope as string) ?? "",
+    position: (r.position_of_mention as string) ?? "",
+    monthlyVisits: (r.monthly_visits_est as number) ?? null,
+    mentionsEhsa: (r.mentions_ehsa as string) ?? "",
+    mentionsRoh: (r.mentions_roh as string) ?? "",
+    linkEhsaSite: (r.link_ehsa_site as string) ?? "",
+    followLinkRoh: (r.follow_link_to_roh as string) ?? "",
+    domainAuthority: (r.domain_authority as string) ?? "",
+    notes: (r.notes as string) ?? "",
+    isFalsePositive: Boolean(r.is_false_positive),
+    campaignSlug: (r.campaign_slug as string) ?? "",
+  };
+}
+
