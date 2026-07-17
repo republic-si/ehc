@@ -1,30 +1,33 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { resolveScope } from "@/lib/scope";
+import { AdminShell } from "./_shell/AdminShell";
 
 export const metadata: Metadata = {
-  title: "Admin — EHSA 2026",
+  title: "Admin — EHC",
   robots: { index: false, follow: false },
 };
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // proxy.ts forwards the request path as x-pathname on every /admin/* request.
+  const pathname = (await headers()).get("x-pathname") ?? "";
+
+  // Login pages live under /admin/* but must render without the session gate or
+  // the shell, mirroring the proxy.ts allow-list, to avoid a redirect loop.
+  if (pathname.startsWith("/admin/login")) {
+    return <>{children}</>;
+  }
+
+  // resolveScope() enforces requireSession() and returns the gated scope.
+  const { scope, projects } = await resolveScope();
+
   return (
-    <div style={{ background: "#fafafa", minHeight: "100vh", color: "#111" }}>
-      <main
-        style={{
-          maxWidth: 1480,
-          margin: "0 auto",
-          padding: "24px",
-          fontFamily:
-            "-apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
-          fontSize: 14,
-          lineHeight: 1.55,
-        }}
-      >
-        {children}
-      </main>
-    </div>
+    <AdminShell pathname={pathname} scope={scope} projects={projects}>
+      {children}
+    </AdminShell>
   );
 }

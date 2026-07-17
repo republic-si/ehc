@@ -1,5 +1,6 @@
-import Link from "next/link";
-import { logoutAction } from "../login/actions";
+// The Events area's own navbar has been retired into the shared AdminShell
+// (app/admin/_shell/AdminShell.tsx), driven by lib/admin-nav.ts. This layout is
+// now just a metadata boundary; the shell provides all chrome.
 
 export const metadata = {
   title: "Events Pipeline — EHC Admin",
@@ -11,49 +12,5 @@ export default function AdminEventsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <div className="bg-ink text-white text-[12px]">
-        <div className="max-w-6xl mx-auto px-6 h-9 flex items-center justify-between">
-          <span className="tracking-[0.18em] uppercase text-[10.5px] opacity-80 font-medium">
-            European Heat Council · Admin
-          </span>
-          <div className="hidden sm:flex gap-5 opacity-80">
-            <Link href="/admin/events" className="hover:opacity-100">
-              Pipeline
-            </Link>
-            <Link href="/admin/events/deadlines" className="hover:opacity-100">
-              Deadlines
-            </Link>
-            <Link href="/admin/events/table" className="hover:opacity-100">
-              Table
-            </Link>
-            <Link href="/admin" className="hover:opacity-100">
-              Press
-            </Link>
-            <Link href="/admin/coverage/ehsa-2026" className="hover:opacity-100">
-              Coverage
-            </Link>
-            <Link href="/" className="hover:opacity-100">
-              Site
-            </Link>
-            <form action={logoutAction}>
-              <button
-                type="submit"
-                className="hover:opacity-100 text-white/80 hover:text-white"
-              >
-                Sign out
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-      <main className="bg-white min-h-[80vh]">{children}</main>
-      <footer className="bg-ink-deep text-white/60 text-[11px]">
-        <div className="max-w-6xl mx-auto px-6 py-5 tracking-[0.12em] uppercase">
-          European Heat Council · Internal · Not crawled
-        </div>
-      </footer>
-    </>
-  );
+  return <>{children}</>;
 }
