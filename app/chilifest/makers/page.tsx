@@ -99,15 +99,27 @@ function MakerCard({
       className="border border-rule overflow-hidden scroll-mt-24 break-inside-avoid"
     >
       <div className="grid grid-cols-1 sm:grid-cols-[34%_1fr]">
-        <div className="relative aspect-square bg-paper-green/50">
+        <div className="relative aspect-square bg-paper-green/50 group">
           {m.photo ? (
-            <Image
-              src={m.photo}
-              alt={`${m.name} at Berlin Chili Fest`}
-              fill
-              sizes="(min-width:640px) 34vw, 100vw"
-              className="object-cover"
-            />
+            <>
+              <Image
+                src={m.photo}
+                alt={`${m.name} at Berlin Chili Fest`}
+                fill
+                sizes="(min-width:640px) 34vw, 100vw"
+                className="object-cover"
+              />
+              <a
+                href={m.photo}
+                download={`${m.id}-berlin-chili-fest.jpg`}
+                aria-label={`${t.downloadImage}: ${m.name}`}
+                className="absolute inset-0 flex items-end justify-end p-2"
+              >
+                <span className="inline-flex items-center gap-1 rounded bg-ink/85 text-white text-[10px] font-semibold px-2 py-1 opacity-90 group-hover:bg-accent transition-colors">
+                  ↓ {t.downloadImage}
+                </span>
+              </a>
+            </>
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
               <span className="font-semibold text-ink/70 text-lg leading-tight">

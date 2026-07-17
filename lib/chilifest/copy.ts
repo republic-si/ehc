@@ -65,6 +65,7 @@ interface Copy {
   storyAngles: string;
   backToHub: string;
   photos: string;
+  downloadImage: string;
 }
 
 export const COPY: Record<Lang, Copy> = {
@@ -125,6 +126,7 @@ export const COPY: Record<Lang, Copy> = {
     storyAngles: "Story angles",
     backToHub: "Back to the press hub",
     photos: "Photos",
+    downloadImage: "Download image",
   },
   de: {
     langName: "Deutsch",
@@ -183,5 +185,6 @@ export const COPY: Record<Lang, Copy> = {
     storyAngles: "Story-Ansätze",
     backToHub: "Zurück zum Presse-Hub",
     photos: "Fotos",
+    downloadImage: "Bild herunterladen",
   },
 };
