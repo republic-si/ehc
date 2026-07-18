@@ -18,6 +18,11 @@ interface Copy {
   btnMeet: string;
   btnRequest: string;
   photoCredit: string;
+  // mini nav
+  navReleases: string;
+  navMakers: string;
+  navMedia: string;
+  navRequest: string;
   // fact panel
   festivalLabel: string;
   festivalPara: string;
@@ -85,6 +90,10 @@ export const COPY: Record<Lang, Copy> = {
     btnMeet: "Meet the makers",
     btnRequest: "Samples & press pass",
     photoCredit: "Photo: Berlin Chili Fest",
+    navReleases: "Releases",
+    navMakers: "Makers",
+    navMedia: "Media Files",
+    navRequest: "Sample Request",
     festivalLabel: "The festival",
     festivalPara:
       "Berlin Chili Fest is Berlin's festival of hot sauce and chilli culture, held at Berliner Berg Brauerei in Neukölln. It runs twice a year, each spring and autumn, gathering independent makers, growers and the public across a weekend of tasting, trade and competition.",
@@ -149,6 +158,10 @@ export const COPY: Record<Lang, Copy> = {
     btnMeet: "Die Macher",
     btnRequest: "Muster & Presseakkreditierung",
     photoCredit: "Foto: Berlin Chili Fest",
+    navReleases: "Mitteilungen",
+    navMakers: "Die Macher",
+    navMedia: "Bildmaterial",
+    navRequest: "Muster anfragen",
     festivalLabel: "Das Festival",
     festivalPara:
       "Das Berlin Chili Fest ist Berlins Festival der Hot Sauce und Chili-Kultur, ausgerichtet in der Berliner Berg Brauerei in Neukölln. Es findet zweimal im Jahr statt, im Frühjahr und im Herbst, und bringt unabhängige Macher, Erzeuger und Publikum an einem Wochenende aus Verkostung, Handel und Wettbewerb zusammen.",

@@ -5,6 +5,7 @@ import { SITE_URL, SITE_NAME } from "@/lib/site";
 import { TopBar, SiteHeader, SiteFooter } from "@/app/_components/SiteChrome";
 import { RequestForm } from "./RequestForm";
 import { LangToggle } from "./LangToggle";
+import { ChiliFestNav } from "./ChiliFestNav";
 import {
   IMAGES,
   GALLERY,
@@ -120,7 +121,7 @@ function LaneHeading({
   id: string;
 }) {
   return (
-    <div id={id} className="scroll-mt-8">
+    <div id={id} className="scroll-mt-24">
       <p className="label text-accent">{kicker}</p>
       <h2 className="mt-2 text-2xl sm:text-3xl font-semibold tracking-tight text-ink">
         {title}
@@ -154,6 +155,7 @@ export default async function ChiliFestPage({
       />
       <TopBar />
       <SiteHeader />
+      <ChiliFestNav lang={lang} current="home" />
 
       {/* Hero */}
       <section className="relative isolate">
@@ -275,7 +277,7 @@ export default async function ChiliFestPage({
       </section>
 
       {/* Meet the producers — full-bleed forest-green standout with habanero-orange highlights */}
-      <section id="makers" className="scroll-mt-8 bg-ink text-white">
+      <section id="makers" className="scroll-mt-24 bg-ink text-white">
         <div className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
           <p className="label text-accent">01</p>
           <h2 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">

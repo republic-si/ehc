@@ -8,6 +8,7 @@ import { MAKERS, type Maker } from "@/lib/chilifest/makers";
 import { MAKERS_DE } from "@/lib/chilifest/makers.de";
 import { COPY, asLang, type Lang } from "@/lib/chilifest/copy";
 import { LangToggle } from "../LangToggle";
+import { ChiliFestNav } from "../ChiliFestNav";
 
 const SEGMENTS = [
   "Hot sauces",
@@ -211,6 +212,7 @@ export default async function MakersPage({
       <div className="print:hidden">
         <TopBar />
         <SiteHeader />
+        <ChiliFestNav lang={lang} current="makers" />
       </div>
 
       <header className="bg-ink-deep text-white border-b border-rule">
