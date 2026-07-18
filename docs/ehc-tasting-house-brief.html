@@ -1,0 +1,1246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sauce Werk Wildau — Briefing Document</title>
+<style>
+  :root {
+    --forest: #1d3a2a;
+    --habanero: #c8612e;
+    --cream: #f5ecd9;
+    --cream-deep: #ecdfc4;
+    --charcoal: #1a1a1a;
+    --stone: #6b6b6b;
+    --rule: #c9c0a8;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #888;
+    font-family: Georgia, "Source Serif Pro", "Times New Roman", serif;
+    color: var(--charcoal);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    background: var(--cream);
+    margin: 12mm auto;
+    padding: 16mm 15mm;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+
+  @media print {
+    body { background: white; }
+    .page { margin: 0; box-shadow: none; }
+  }
+
+  /* Typography */
+  h1, h2, h3, h4 {
+    font-family: Georgia, "Source Serif Pro", serif;
+    color: var(--forest);
+    font-weight: normal;
+    margin: 0 0 4mm 0;
+    letter-spacing: 0.01em;
+  }
+
+  h1 {
+    font-size: 32pt;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  h2 {
+    font-size: 22pt;
+    line-height: 1.15;
+    margin-bottom: 3mm;
+  }
+
+  h3 {
+    font-size: 12pt;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--habanero);
+    margin: 4mm 0 2mm 0;
+  }
+
+  h4 {
+    font-size: 10.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--forest);
+    margin: 0 0 1.5mm 0;
+  }
+
+  p, li, td, th {
+    font-size: 10pt;
+    line-height: 1.5;
+    color: var(--charcoal);
+  }
+
+  p { margin: 0 0 3mm 0; }
+
+  strong { color: var(--forest); }
+
+  .small-caps {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 9pt;
+    color: var(--stone);
+  }
+
+  .rule {
+    border: 0;
+    border-top: 0.6pt solid var(--rule);
+    margin: 5mm 0;
+  }
+
+  .rule-double {
+    border: 0;
+    border-top: 0.6pt solid var(--forest);
+    border-bottom: 0.6pt solid var(--forest);
+    height: 1.5mm;
+    margin: 6mm 0;
+  }
+
+  /* Cover */
+  .cover {
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .cover .cover-mark {
+    background: var(--cream);
+    padding: 22mm 18mm 14mm 18mm;
+    text-align: center;
+    border-bottom: 2pt solid var(--forest);
+  }
+
+  .cover .cover-mark img {
+    width: 130mm;
+    height: auto;
+    display: block;
+    margin: 0 auto 8mm auto;
+  }
+
+  .cover .cover-mark .doc-type {
+    font-size: 9pt;
+    color: var(--forest);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+
+  .cover .cover-body {
+    flex: 1;
+    background: var(--forest);
+    color: var(--cream);
+    padding: 18mm 18mm 12mm 18mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cover h1 {
+    color: var(--cream);
+    font-size: 54pt;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 6mm;
+  }
+
+  .cover .subtitle {
+    font-size: 15pt;
+    color: var(--cream-deep);
+    font-style: italic;
+    margin-bottom: 0;
+    max-width: 150mm;
+    line-height: 1.3;
+  }
+
+  .cover .meta {
+    font-size: 9pt;
+    color: var(--cream-deep);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border-top: 0.6pt solid rgba(245, 236, 217, 0.4);
+    padding-top: 4mm;
+    margin-top: 6mm;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .cover .cover-motto {
+    background: var(--habanero);
+    color: var(--cream);
+    padding: 7mm 18mm;
+    text-align: center;
+    font-style: italic;
+    font-size: 13pt;
+    letter-spacing: 0.08em;
+  }
+
+  /* Small logo mark in footers */
+  .footer-mark {
+    height: 4mm;
+    width: auto;
+    opacity: 0.6;
+    margin-right: 4mm;
+    vertical-align: middle;
+  }
+
+  /* Stat cards */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5mm;
+    margin: 6mm 0;
+  }
+
+  .stat-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .stat-grid.four { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .stat {
+    border: 0.6pt solid var(--forest);
+    padding: 5mm 5mm;
+    background: var(--cream);
+    position: relative;
+  }
+
+  .stat .num {
+    font-size: 26pt;
+    line-height: 1;
+    color: var(--habanero);
+    font-weight: normal;
+    margin-bottom: 2mm;
+    letter-spacing: -0.02em;
+  }
+
+  .stat .lbl {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 8.5pt;
+    color: var(--forest);
+    line-height: 1.4;
+  }
+
+  .stat.dark {
+    background: var(--forest);
+    border-color: var(--forest);
+  }
+  .stat.dark .num { color: var(--habanero); }
+  .stat.dark .lbl { color: var(--cream-deep); }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 3mm 0;
+    font-size: 9.5pt;
+  }
+
+  th {
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 8pt;
+    color: var(--forest);
+    padding: 1.5mm 3mm;
+    border-bottom: 1pt solid var(--forest);
+    font-weight: normal;
+  }
+
+  td {
+    padding: 1.3mm 3mm;
+    border-bottom: 0.4pt solid var(--rule);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: 0; }
+
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  tr.total td {
+    border-top: 0.6pt solid var(--forest);
+    border-bottom: 1.4pt double var(--forest);
+    font-weight: bold;
+    color: var(--forest);
+    padding-top: 3mm;
+    padding-bottom: 3mm;
+  }
+
+  /* Two-column body */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8mm;
+  }
+
+  /* Pull quote */
+  .pull {
+    border-left: 1.5mm solid var(--habanero);
+    padding: 2mm 0 2mm 5mm;
+    margin: 4mm 0;
+    font-style: italic;
+    font-size: 11pt;
+    color: var(--forest);
+    line-height: 1.35;
+  }
+
+  /* Section header band */
+  .section-band {
+    background: var(--forest);
+    color: var(--cream);
+    margin: -16mm -15mm 6mm -15mm;
+    padding: 5mm 15mm 4mm 15mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .section-band .sec-num {
+    font-size: 28pt;
+    color: var(--habanero);
+    font-weight: normal;
+    line-height: 1;
+  }
+
+  .section-band .sec-title {
+    font-size: 18pt;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+  }
+
+  .section-band .sec-tag {
+    font-size: 8pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream-deep);
+  }
+
+  /* Footer band */
+  .footer {
+    position: absolute;
+    bottom: 6mm;
+    left: 15mm;
+    right: 15mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 7.5pt;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--stone);
+    border-top: 0.4pt solid var(--rule);
+    padding-top: 2mm;
+  }
+
+  .footer .left { font-style: italic; letter-spacing: 0; text-transform: none; font-size: 8.5pt; }
+
+  /* Timeline */
+  .timeline {
+    display: grid;
+    grid-template-columns: 30mm 1fr;
+    gap: 0;
+    margin: 3mm 0;
+  }
+
+  .timeline .when {
+    color: var(--habanero);
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 2.2mm 4mm 2.2mm 0;
+    border-right: 0.6pt solid var(--rule);
+    text-align: right;
+  }
+
+  .timeline .what {
+    padding: 2.2mm 0 2.2mm 4mm;
+    border-bottom: 0.4pt dotted var(--rule);
+    font-size: 9.5pt;
+  }
+
+  .timeline > div:nth-last-child(-n+2) { border-bottom: 0; }
+  .timeline > .when { border-bottom: 0.4pt dotted var(--rule); }
+
+  /* Inline boxed callouts */
+  .callout {
+    background: var(--cream-deep);
+    border-left: 1.5mm solid var(--forest);
+    padding: 3mm 4mm;
+    margin: 3mm 0;
+  }
+
+  .callout p { margin-bottom: 1.5mm; font-size: 9.5pt; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* Bullet list */
+  ul.tight {
+    margin: 1.5mm 0 3mm 5mm;
+    padding: 0;
+  }
+  ul.tight li { margin-bottom: 1mm; font-size: 9.5pt; }
+
+  /* Emblem placeholder using SVG */
+  .emblem {
+    display: block;
+    width: 24mm;
+    height: 24mm;
+    margin: 0 auto;
+  }
+
+  /* Risk grid */
+  .risk-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm;
+  }
+  .risk-item {
+    border: 0.4pt solid var(--rule);
+    padding: 3mm;
+    background: var(--cream-deep);
+  }
+  .risk-item h4 { margin-bottom: 1mm; font-size: 10pt; }
+  .risk-item p { font-size: 9pt; margin: 0; line-height: 1.4; }
+
+  /* Highlight number inline */
+  .hilite {
+    color: var(--habanero);
+    font-weight: bold;
+  }
+
+  /* Map mockup */
+  .map-block {
+    background: var(--forest);
+    color: var(--cream);
+    padding: 6mm;
+    margin: 4mm 0;
+    display: grid;
+    grid-template-columns: 30mm 1fr;
+    gap: 5mm;
+    align-items: center;
+  }
+  .map-block .mark {
+    text-align: center;
+  }
+  .map-block .mark .km {
+    font-size: 22pt;
+    color: var(--habanero);
+    line-height: 1;
+  }
+  .map-block .mark .km-lbl {
+    font-size: 8pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cream-deep);
+  }
+
+</style>
+</head>
+<body>
+
+<!-- =================== PAGE 1: COVER =================== -->
+<section class="page cover">
+
+  <div class="cover-mark">
+    <img src="ehc-logo-wide.png" alt="European Heat Council">
+    <div class="doc-type">Briefing Document</div>
+  </div>
+
+  <div class="cover-body">
+    <div>
+      <h1>Sauce Werk<br>Wildau</h1>
+      <p class="subtitle">A bootstrapped 24-month path from €20k of founder cash to EU-funded production capacity for ROH in the Lausitz transition region. Phase 0 contract bottling, Phase 1 owned production with JTF, Phase 2 scale-up under stacked grants.</p>
+    </div>
+
+    <div class="meta">
+      <span>Wildau · Brandenburg</span>
+      <span>Internal · v2</span>
+      <span>2026-06-24</span>
+    </div>
+  </div>
+
+  <div class="cover-motto">IN ARDORE CONCORDIA</div>
+
+</section>
+
+
+<!-- =================== PAGE 2: THE POSITION =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">I</div>
+      <div class="sec-title">The position</div>
+    </div>
+    <div class="sec-num">01</div>
+  </div>
+
+  <p>Republic of Heat (ROH) is a German commercial entity in the food sector, currently doing around <strong>€20,000 of revenue per year</strong> and operating at a loss. The European Heat Council (EHC) is its institutional brand vehicle, running certification, press and council activity. Neither has a dedicated production facility. Sauces are made in shared / borrowed kitchens with no scale and no margin.</p>
+
+  <p>This is a small business. It is also sitting on the doorstep of a serious EU funding opportunity, with a viable bootstrapped path to use it. <strong>The Just Transition Fund Brandenburg pays 70 percent of fit-out costs up to €300,000 for SMEs in the Lausitz region.</strong> Wildau, in Landkreis Dahme-Spreewald, is JTF-eligible, S-Bahn-reachable from Berlin, and on the natural commercial map for a German food business serving DACH B2B + e-commerce.</p>
+
+  <div class="rule-double"></div>
+
+  <div class="stat-grid four">
+    <div class="stat">
+      <div class="num">€20k</div>
+      <div class="lbl">Founder cash<br>available</div>
+    </div>
+    <div class="stat">
+      <div class="num">€20k</div>
+      <div class="lbl">Current ROH<br>annual revenue</div>
+    </div>
+    <div class="stat dark">
+      <div class="num">€210k</div>
+      <div class="lbl">Phase 1<br>grant ceiling</div>
+    </div>
+    <div class="stat">
+      <div class="num">24mo</div>
+      <div class="lbl">Plan from go<br>to operation</div>
+    </div>
+  </div>
+
+  <h3>The plan in three lines</h3>
+  <ul class="tight">
+    <li><strong>Phase 0 (months 1-12):</strong> pay-per-batch contract bottling at a Brandenburg Lohnabfüller. No fixed cost. Focus 100% on growing ROH revenue from €20k toward €60-80k.</li>
+    <li><strong>Phase 1 (months 12-18):</strong> file JTF application for owned Wildau production capacity at €100-150k project size. Open the venue with €70-105k of EU money.</li>
+    <li><strong>Phase 2 (year 2-3):</strong> second De-minimis tranche funds scale-up to full B2B capacity. Stacked JTF + GRW + GAK pulls grant total toward €280k.</li>
+  </ul>
+
+  <div class="pull">
+    "Crazy Bastard Sauce in Neukölln went home kitchen, to market stall, to own production space. They never used a shared kitchen. The Berlin per-day rate would have eaten 31 percent of their early revenue. That is the precedent."
+  </div>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 02</span>
+  </div>
+</section>
+
+
+<!-- =================== PAGE 3: THE FUNDING LANDSCAPE =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">II</div>
+      <div class="sec-title">The funding landscape</div>
+    </div>
+    <div class="sec-num">02</div>
+  </div>
+
+  <p>Three pots stack on a Brandenburg SME productive-investment project, on separate cost categories. Combined, they can fund up to <strong>80 percent of total project cost</strong> at full project scale.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Programme</th>
+        <th>Body</th>
+        <th class="num">Co-finance</th>
+        <th>Covers</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>JTF-Unternehmensförderung</strong> (De-minimis track)</td>
+        <td>ILB</td>
+        <td class="num">70%</td>
+        <td>Production equipment, fit-out, retail. €300k project cap, €210k grant ceiling</td>
+      </tr>
+      <tr>
+        <td><strong>GRW-G Brandenburg</strong> + 10% Polish-border bonus</td>
+        <td>ILB</td>
+        <td class="num">up to 45%</td>
+        <td>Building works, site preparation, ancillary fit-out</td>
+      </tr>
+      <tr>
+        <td><strong>GAK/AFP Marktstrukturverbesserung</strong></td>
+        <td>BMEL via Land</td>
+        <td class="num">25-40%</td>
+        <td>Agricultural-product-processing equipment (fermentation, processing machinery)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>What gets funded, what doesn't</h3>
+
+  <div class="two-col">
+    <div>
+      <h4>Eligible</h4>
+      <ul class="tight">
+        <li>Bottling, filling, capping, labelling machines</li>
+        <li>Cooking kettles, vessels, fermentation tanks</li>
+        <li>Cold storage, walk-in fridges</li>
+        <li>QA lab equipment (pH, refractometer, scales)</li>
+        <li>Packing line, retail fixtures, signage</li>
+        <li>Software, ERP, batch-tracking systems</li>
+        <li>Planning and design fees</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Not eligible</h4>
+      <ul class="tight">
+        <li>Land purchase</li>
+        <li>Rent and lease payments</li>
+        <li>Used goods</li>
+        <li>Vehicles for transport</li>
+        <li>Ingredients and consumables</li>
+        <li>Salaries before opening</li>
+        <li>Trade fair stands</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>The reimbursement model.</strong> ILB pays against documented, paid invoices submitted after the work is done. Cash flow is on the applicant for 6-12 weeks per claim. A €100k project needs the applicant to front the full €100k before any grant money arrives. Working capital is the binding constraint, not the application itself.</p>
+  </div>
+
+  <h3>Hard timing rule</h3>
+  <p>Application must be filed <strong>before any work begins on the project</strong>. Programme window closes <strong>30 June 2027</strong>. By August 2025 over 1,000 JTF applications had already been filed in Lausitz. The pot is saturating. Phase 1 application should land Q4 2026 / Q1 2027 at latest.</p>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 03</span>
+  </div>
+</section>
+
+
+<!-- =================== PAGE 4: WHY BRANDENBURG NOT BERLIN =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">III</div>
+      <div class="sec-title">Why Brandenburg, not Berlin</div>
+    </div>
+    <div class="sec-num">03</div>
+  </div>
+
+  <p>Berlin is the most expensive way to fit out a small food business in eastern Germany. It has no JTF, no GRW Wildau-style stack, no programme that pays anywhere near 70 percent on production capex. Berlin's grant map skews to R&amp;D, AI and digitalisation, not to bottling lines.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>For a €100k production project</th>
+        <th class="num">Wildau</th>
+        <th class="num">Berlin</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Top headline grant rate</td><td class="num">70% (JTF)</td><td class="num">50% (GründungsBONUS Plus)</td></tr>
+      <tr><td>Realistic grant ceiling at €100k project</td><td class="num">€70-80k</td><td class="num">€25-50k</td></tr>
+      <tr><td>Industrial rent (€/m²/month)</td><td class="num">€7-10</td><td class="num">€15-30</td></tr>
+      <tr><td>Gewerbesteuer (effective rate on profit)</td><td class="num">12.25%</td><td class="num">14.35%</td></tr>
+      <tr><td>S-Bahn reach from central Berlin</td><td class="num">40 min</td><td class="num">in city</td></tr>
+    </tbody>
+  </table>
+
+  <h3>The shared-kitchen alternative does not work at this scale</h3>
+
+  <p>A Berlin shared production kitchen (Herzensküche-class) charges <strong>€250 per day shared, €450 per day exclusive</strong>. At a 30,000-bottle-per-year target the unit math is brutal:</p>
+
+  <div class="callout">
+    <p><strong>30,000 bottles/year ÷ 1,200 bottles/production day = 25 production days/year.</strong></p>
+    <p><strong>25 days × €250 shared rate = €6,250 per year in kitchen rent alone.</strong></p>
+    <p>That is 31 percent of current ROH revenue spent on a non-improvable, non-owned cost line. Before storage, transport, insurance, packaging logistics.</p>
+  </div>
+
+  <h3>The Berlin precedent confirms it</h3>
+
+  <p>Crazy Bastard Sauce, Berlin's most-recognised independent sauce maker, never used a shared kitchen. They went home kitchen (2013), market stand, then straight to their own production-by-weekday / restaurant-by-weekend space in Neukölln. The only purpose-built Berlin production kitchen for indie makers, KitchenTown, gave up on rental in January 2026 and pivoted to an equity-for-accelerator model.</p>
+
+  <p>Shared kitchen as a permanent operating model does not pencil for a small-batch sauce producer. The real options are <strong>contract bottling in Brandenburg</strong> as Phase 0, then <strong>owned production in Wildau under JTF</strong> as Phase 1.</p>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 04</span>
+  </div>
+</section>
+
+
+<!-- =================== PAGE 5: THE 24-MONTH PLAN =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">IV</div>
+      <div class="sec-title">The 24-month plan</div>
+    </div>
+    <div class="sec-num">04</div>
+  </div>
+
+  <p>From go decision to live production in Wildau. Three phases, each with its own commercial logic. No commitment to Phase 1 until Phase 0 has proven the unit economics work at scale.</p>
+
+  <div class="timeline">
+    <div class="when">Month 1-2</div>
+    <div class="what"><strong>Phase 0 contract-bottler selection.</strong> Two phone calls to Brandenburg Lohnabfüller (Yuneiko, BeFoodFilled / YouFlake). Per-batch quotes for acidified chilli sauce. Recipe, packaging, MOQ confirmed. First production run booked.</div>
+
+    <div class="when">Month 2-12</div>
+    <div class="what"><strong>Phase 0 in production.</strong> All ROH sauce output runs through the Lohnabfüller. No fixed cost. Revenue focus: lift ROH from €20k to €60-80k/year. Build EHSA + EHC pipelines. Validate B2B demand and DTC e-commerce conversion.</div>
+
+    <div class="when">Month 9-10</div>
+    <div class="what"><strong>ILB Beratung call.</strong> Free 30-60 min consultation with ILB programme officer. Validate Sauce Werk Wildau scope as fundable under JTF De-minimis. Test the GRW + GAK stack question. Identify caseworker contact.</div>
+
+    <div class="when">Month 10-12</div>
+    <div class="what"><strong>Wildau premises scouting.</strong> 80-150 m² production-grade commercial space in the Schwartzkopff-Siedlung / TH Wildau corridor. Use clause for Gewerbe + Einzelhandel. Tenant-improvement rider with German Wirtschaftsanwalt review.</div>
+
+    <div class="when">Month 12-14</div>
+    <div class="what"><strong>Phase 1 application package.</strong> ROH books closed, Verwendungsplan drafted, supplier quotes collected, ILB project plan written. KfW StartGeld application via Hausbank with Bürgschaftsbank Brandenburg guarantee.</div>
+
+    <div class="when">Month 14</div>
+    <div class="what"><strong>JTF application filed.</strong> Before any work begins on site. Lease signed conditional on grant approval. Stage 1 budget: €100-150k project, €70-105k grant.</div>
+
+    <div class="when">Month 16-20</div>
+    <div class="what"><strong>Zuwendungsbescheid received. Build-out begins.</strong> Equipment installed, HACCP plan registered with Veterinäramt LDS, Gewerbeanmeldung at Stadt Wildau, ERP and POS commissioned.</div>
+
+    <div class="when">Month 20-24</div>
+    <div class="what"><strong>Sauce Werk Wildau opens.</strong> Production migrates from Lohnabfüller to owned site. Phase 0 contract bottler relationship preserved as overflow capacity. Year 2 planning for Phase 2 second tranche begins.</div>
+  </div>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 05</span>
+  </div>
+</section>
+
+
+<!-- =================== PAGE 6: PHASE 0 — CONTRACT BOTTLING =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">V</div>
+      <div class="sec-title">Phase 0: contract bottling</div>
+    </div>
+    <div class="sec-num">05</div>
+  </div>
+
+  <p>Months 1-12. No fixed cost. ROH pays per batch to a Brandenburg Lohnabfüller (contract bottler), keeping working capital free to fund revenue growth. The Phase 0 outcome is twelve months of operating data, a believable P&amp;L for the JTF application, and proven product-market fit at scale before any owned-production commitment.</p>
+
+  <h3>The two operators to phone this week</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Operator</th>
+        <th>Location</th>
+        <th>Offer</th>
+        <th>Why it fits</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Yuneiko</strong></td>
+        <td>Berlin Grüngürtel</td>
+        <td>Bio-certified contract filler, per-batch quote</td>
+        <td>Bio certification optionality, sub-30 min drive from Berlin, talks to small makers</td>
+      </tr>
+      <tr>
+        <td><strong>YouFlake / BeFoodFilled</strong></td>
+        <td>Berlin-Lichtenberg</td>
+        <td>Bio contract production + fulfilment, 12 years experience</td>
+        <td>Production + e-com fulfilment in one supplier, sauces possible via custom quote</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Phase 0 economics, illustrative</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Line</th>
+        <th class="num">€/bottle</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Lohnabfüller fee (production + bottling)</td><td class="num">€1.20-1.80</td><td>To be confirmed by quote</td></tr>
+      <tr><td>Ingredients (chilli, vinegar, salt, spices)</td><td class="num">€0.60-1.00</td><td>Better at scale</td></tr>
+      <tr><td>Bottle + cap + label</td><td class="num">€0.50-0.80</td><td>Volume-dependent</td></tr>
+      <tr><td>Logistics + storage allocation</td><td class="num">€0.20-0.40</td><td>Depends on fulfilment model</td></tr>
+      <tr class="total"><td>Total cost per bottle</td><td class="num">€2.50-4.00</td><td></td></tr>
+      <tr><td>Target retail / B2B price</td><td class="num">€7.50-12.00</td><td>3× cost rule of thumb</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Why Phase 0 is essential, not optional</h3>
+  <ul class="tight">
+    <li><strong>No upfront capex.</strong> €20k cash stays in marketing, sales, EHC certification programme, EHSA pipeline</li>
+    <li><strong>Revenue history for the JTF application.</strong> Twelve months of growth turns a €20k loss-making business into a credible €60-80k applicant</li>
+    <li><strong>Stress-test the supply chain.</strong> Bottle, label, cap, ingredient logistics worked out under someone else's roof before ROH owns the problem</li>
+    <li><strong>Preserves the bottler relationship.</strong> After Wildau opens, the Lohnabfüller stays as overflow capacity for peak demand and special runs</li>
+  </ul>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 06</span>
+  </div>
+</section>
+
+
+<!-- =================== PAGE 7: PHASE 1 — SIZING =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">VI</div>
+      <div class="sec-title">Phase 1: sizing the application</div>
+    </div>
+    <div class="sec-num">06</div>
+  </div>
+
+  <p>JTF De-minimis fixes the grant at 70 percent of project cost. Own contribution is therefore always 30 percent. Project size is determined by how much own contribution ROH can put on the table — either as cash, or as private debt that ILB counts as own contribution.</p>
+
+  <h3>How own contribution drives project size</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Own contribution</th>
+        <th class="num">Max project</th>
+        <th class="num">Grant (70%)</th>
+        <th>Source of own contribution</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>€15,000</td><td class="num">€50,000</td><td class="num">€35,000</td><td>Founder cash only, minimum-viable Phase 1</td></tr>
+      <tr><td>€20,000</td><td class="num">€66,667</td><td class="num">€46,667</td><td>Founder cash only, slightly larger</td></tr>
+      <tr style="background: var(--cream-deep);"><td><strong>€45,000</strong></td><td class="num"><strong>€150,000</strong></td><td class="num"><strong>€105,000</strong></td><td><strong>€20k cash + €25k Brandenburg Mikrokredit. The bootstrap target.</strong></td></tr>
+      <tr><td>€70,000</td><td class="num">€230,000</td><td class="num">€160,000</td><td>€20k cash + €50k KfW StartGeld with BBB guarantee</td></tr>
+      <tr><td>€90,000</td><td class="num">€300,000 (De-minimis cap)</td><td class="num">€210,000</td><td>€20k cash + €70k KfW Universell, maxes Phase 1</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <p><strong>KfW loans count as own contribution under ILB rules.</strong> Every €1 of loan unlocks €3.33 of project capacity and €2.33 of grant. The multiplier is large. The constraint at ROH's current stage is bank-ability of the debt, not the headline rate.</p>
+  </div>
+
+  <h3>The €45k/€150k bootstrap target</h3>
+
+  <p>Best fit for ROH given €20k cash + loss-making €20k revenue: <strong>€20k founder cash combined with €25k Brandenburg Mikrokredit (Mikrokreditfonds Deutschland) totals €45k of own contribution</strong>. This unlocks a €150k project and ~€105k grant. The Mikrokredit is specifically designed for businesses below typical bank thresholds, requires no founder salary, and serves a second purpose as the working-capital bridge during the 6-12 week ILB reimbursement cycle.</p>
+
+  <p>The €45k/€150k tier gets ROH a real B2B production line. Budget breakdown on the next page. Larger tiers exist but require credit-worthy ROH books that twelve months of Phase 0 revenue growth will produce.</p>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 07</span>
+  </div>
+</section>
+
+
+<!-- =================== PAGE 8: PHASE 1 — BUILD BUDGET =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">VII</div>
+      <div class="sec-title">Phase 1: the build budget</div>
+    </div>
+    <div class="sec-num">07</div>
+  </div>
+
+  <p>Sized to the €150k project / €105k grant tier. Real B2B production capacity. Output capability of 5,000-10,000 bottles per month depending on shift pattern. Designed to mirror the Reuner Denise template line-for-line so ILB caseworkers in LDS read it as a known shape.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Line item</th>
+        <th class="num">Cost</th>
+        <th>Category</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Semi-auto bottling rig (200-500 bottles/hour)</td><td class="num">€22,000</td><td>Equipment</td></tr>
+      <tr><td>Steam-jacketed cooking kettle (100-200L)</td><td class="num">€16,000</td><td>Equipment</td></tr>
+      <tr><td>Walk-in cold storage (or large fridge bank)</td><td class="num">€14,000</td><td>Equipment</td></tr>
+      <tr><td>Capping + semi-auto labelling machines</td><td class="num">€14,000</td><td>Equipment</td></tr>
+      <tr><td>Stainless prep area (tables, sinks, extraction)</td><td class="num">€12,000</td><td>Fixture</td></tr>
+      <tr><td>Branded fit-out (industrial, EHC identity)</td><td class="num">€10,000</td><td>Fit-out</td></tr>
+      <tr><td>Packing line (shrink wrapper, boxer, dispatch)</td><td class="num">€8,000</td><td>Equipment</td></tr>
+      <tr><td>Retail counter + display shelving</td><td class="num">€7,000</td><td>Fixture</td></tr>
+      <tr><td>QA lab corner (pH, refractometer, scales, EHC Verified)</td><td class="num">€7,000</td><td>Equipment</td></tr>
+      <tr><td>Software (batch tracking, ERP, e-commerce integration)</td><td class="num">€7,000</td><td>Intangible</td></tr>
+      <tr><td>Mobile POS, kitchen display, card terminals</td><td class="num">€6,000</td><td>Equipment</td></tr>
+      <tr><td>Planning fees (architect, ILB project plan)</td><td class="num">€6,000</td><td>Planning</td></tr>
+      <tr><td>Signage and wayfinding (exterior + interior)</td><td class="num">€5,000</td><td>Equipment</td></tr>
+      <tr><td>Contingency (10%)</td><td class="num">€16,000</td><td>—</td></tr>
+      <tr class="total"><td>Phase 1 project total</td><td class="num">€150,000</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <div class="stat-grid three" style="margin-top: 4mm;">
+    <div class="stat dark">
+      <div class="num">€105,000</div>
+      <div class="lbl">JTF grant<br>70%</div>
+    </div>
+    <div class="stat">
+      <div class="num">€45,000</div>
+      <div class="lbl">Own contribution<br>(€20k cash + €25k loan)</div>
+    </div>
+    <div class="stat">
+      <div class="num">€15k</div>
+      <div class="lbl">Opening budget<br>(separate, working capital)</div>
+    </div>
+  </div>
+
+  <p>Lease deposit, six months of rent, opening stock, first hire, and marketing launch are <strong>not eligible costs</strong>. Plan for a separate ~€15k working-capital pool from Phase 0 revenue growth.</p>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 08</span>
+  </div>
+</section>
+
+
+<!-- =================== PAGE 9: PHASE 2 — SCALE-UP =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">VIII</div>
+      <div class="sec-title">Phase 2: scale-up (year 2-3)</div>
+    </div>
+    <div class="sec-num">08</div>
+  </div>
+
+  <p>Phase 1's €105k grant uses €105k of the €300k De-minimis ceiling per beneficiary per rolling three years. That leaves <strong>€195k of De-minimis headroom</strong> available for a second tranche, plus full access to GRW and GAK which are not De-minimis-counted.</p>
+
+  <p>Phase 2 targets the full Sauce Werk Wildau ambition: automated bottling line, larger cold-storage, full event/retail showroom, possibly the tasting room ambition revisited as a B2B trade-event venue. Funded primarily from operating revenue (which Phase 1 production unlocks) plus a stacked grant application.</p>
+
+  <h3>The Phase 2 stacked grant model</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Pot</th>
+        <th class="num">Eligible cost</th>
+        <th class="num">Rate</th>
+        <th class="num">Grant</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>JTF De-minimis (second tranche)</td><td class="num">€200,000</td><td class="num">70%</td><td class="num">€140,000</td></tr>
+      <tr><td>GRW-G + Polish-border bonus</td><td class="num">€80,000</td><td class="num">45%</td><td class="num">€36,000</td></tr>
+      <tr><td>GAK/AFP food processing</td><td class="num">€70,000</td><td class="num">35%</td><td class="num">€24,500</td></tr>
+      <tr class="total"><td>Phase 2 totals</td><td class="num">€350,000</td><td class="num">~57% blended</td><td class="num">€200,500</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <p><strong>Across Phase 1 + Phase 2:</strong> €500,000 total project value, ~€305,500 of EU/Federal grants, ~€195,000 own contribution funded from cash, debt and operating revenue. Sauce Werk Wildau reaches full-capacity production over a 24-36 month build.</p>
+  </div>
+
+  <h3>What Phase 2 triggers require</h3>
+  <ul class="tight">
+    <li><strong>Operating revenue showing the model works.</strong> ILB will not approve a second tranche to a beneficiary whose first tranche has not produced commercial results</li>
+    <li><strong>Bank-able books.</strong> Phase 1 operating period creates the cashflow record needed to access KfW Universell or Mikromezzaninfonds for the larger Phase 2 own contribution</li>
+    <li><strong>Programme window still open.</strong> JTF closes 30 June 2027. Phase 2 application must be filed before then or wait for a successor programme</li>
+    <li><strong>A Fördermittelberater.</strong> The stacked-pot application is technical. Budget ~€3-5k for a Brandenburg-experienced grant advisor to split cost categories without overlap</li>
+  </ul>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 09</span>
+  </div>
+</section>
+
+
+<!-- =================== PAGE 10: FINANCING OPTIONS =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">IX</div>
+      <div class="sec-title">Financing the own contribution</div>
+    </div>
+    <div class="sec-num">09</div>
+  </div>
+
+  <p>ROH cannot lift the own contribution above €20k from cash alone. The bridge is project-secured debt that ILB counts as Eigenkapital. Three instruments are realistic at ROH's current scale.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Instrument</th>
+        <th class="num">Amount</th>
+        <th class="num">Cost</th>
+        <th>Fit at ROH's stage</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Brandenburg Mikrokredit</strong></td>
+        <td class="num">up to €25k</td>
+        <td class="num">varies</td>
+        <td>Designed exactly for businesses below bank thresholds. No founder salary check. Looser collateral. <strong>The right Phase 1 instrument.</strong></td>
+      </tr>
+      <tr>
+        <td><strong>KfW StartGeld (067)</strong> + Bürgschaftsbank Brandenburg guarantee</td>
+        <td class="num">up to €125k</td>
+        <td class="num">~4.8%, 5-10y, 1-2 grace years</td>
+        <td>Possible if ROH books defensible. BBB guarantee covers 50-80% of bank risk so house bank lends despite weak collateral</td>
+      </tr>
+      <tr>
+        <td><strong>Mikromezzaninfonds Deutschland III</strong></td>
+        <td class="num">up to €100k</td>
+        <td class="num">stille Beteiligung, profit-share only</td>
+        <td><strong>Phase 2 instrument.</strong> Counts as Eigenkapital, no monthly debt service, but wants growth signals — not available until ROH has 12 months of post-Phase-0 revenue</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>The Phase 1 financing stack</h3>
+
+  <div class="callout">
+    <p><strong>€20k founder cash + €25k Brandenburg Mikrokredit = €45k own contribution.</strong></p>
+    <p>Mikrokredit also serves as the working-capital bridge during the 6-12 week ILB reimbursement cycle. Loan service approximately €280-320 per month. Sustainable if Wildau production lifts ROH revenue toward €60-100k within 12 months of opening.</p>
+  </div>
+
+  <h3>What counts as own contribution</h3>
+
+  <div class="two-col">
+    <div>
+      <h4>Counts (yes)</h4>
+      <ul class="tight">
+        <li>Founder cash</li>
+        <li>Brandenburg Mikrokredit</li>
+        <li>KfW loans (StartGeld, Universell, Digitalisierungskredit)</li>
+        <li>Bürgschaftsbank-guaranteed bank loans</li>
+        <li>Mikromezzaninfonds III (stille Beteiligung)</li>
+        <li>Retained earnings from ROH itself</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Does not count</h4>
+      <ul class="tight">
+        <li>Other EU or federal grants on same costs</li>
+        <li>Land or Stadt grants on same costs</li>
+        <li>Anything inside another De-minimis pot</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 10</span>
+  </div>
+</section>
+
+
+<!-- =================== PAGE 11: COMPARABLES =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">X</div>
+      <div class="sec-title">Comparables</div>
+    </div>
+    <div class="sec-num">10</div>
+  </div>
+
+  <p>Three sets of evidence anchor the plan. The Berlin scale ladder shows the right operational path. The Wildau JTF dataset shows the funding path is real and reproducible. The Reuner template shows the exact shape of a successful LDS application.</p>
+
+  <h3>The Berlin sauce-maker scale ladder</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Stage</th>
+        <th>Revenue band</th>
+        <th>Production</th>
+        <th>Reference</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1. Home kitchen, grey zone</td><td>€0-15k</td><td>Domestic, markets, online</td><td>Crazy Bastard 2013</td></tr>
+      <tr><td>2. Sublet from a friendly food maker</td><td>€15-50k</td><td>Pay-per-session in someone else's space</td><td>Common indie route</td></tr>
+      <tr><td>3. Shared production kitchen</td><td>€30-80k</td><td>Herzensküche / GLÜXGEFÜHL — €1-2k/month</td><td>Mostly used by caterers, not bottlers</td></tr>
+      <tr style="background: var(--cream-deep);"><td><strong>4. Own production space</strong></td><td><strong>€80-200k+</strong></td><td><strong>Mixed-use building, ~€2-4k/month + fitout</strong></td><td><strong>Crazy Bastard Neukölln</strong></td></tr>
+      <tr><td>5. Regional own facility</td><td>€200k+</td><td>Brandenburg / industrial zone, ~€8-15/m²</td><td><strong>Sauce Werk Wildau target</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p>ROH is between stages 1 and 2. Phase 0 contract bottling skips stage 3 (which doesn't work for bottled product) and lands ROH at stage 2 with revenue growth. Phase 1 JTF jumps to stage 5 directly, funded by the EU.</p>
+
+  <h3>Wildau JTF projects funded (Vorhabenliste, April 2026)</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Cost</th>
+        <th class="num">Rate</th>
+        <th>Beneficiary</th>
+        <th>Project</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="num">€366,817</td><td class="num">70%</td><td>Gexx aeroSol GmbH</td><td>Productive capacity expansion</td></tr>
+      <tr><td class="num">€198,649</td><td class="num">70%</td><td>Bühr Anlagenbau &amp; Service GmbH</td><td>New operating site set-up</td></tr>
+      <tr style="background: var(--cream-deep);"><td class="num"><strong>€299,600</strong></td><td class="num"><strong>70%</strong></td><td><strong>Reuner Denise (Schlepzig, same Landkreis)</strong></td><td><strong>Outdoor kitchen, bar, terrace, event kit, POS — the template</strong></td></tr>
+      <tr><td class="num">€426,930</td><td class="num">68%</td><td>Deqish Handels GmbH (Cottbus)</td><td>Food-manufacturing machinery + room conversion</td></tr>
+      <tr><td class="num">€950,000</td><td class="num">45%</td><td>Kunella Feinkost GmbH (Cottbus)</td><td>Food manufacturing capacity expansion</td></tr>
+    </tbody>
+  </table>
+
+  <p>Eight JTF projects funded in Wildau itself to date; none have been food production. Sauce Werk would be the first Wildau food-production fit-out. The Reuner Denise template (20 km south, same Landkreis, same Richtlinie, same Maßnahme) gives ILB caseworkers a known shape to anchor on.</p>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 11</span>
+  </div>
+</section>
+
+
+<!-- =================== PAGE 12: RISK REGISTER =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">XI</div>
+      <div class="sec-title">Risk register</div>
+    </div>
+    <div class="sec-num">11</div>
+  </div>
+
+  <p>Each item has been weighed before this plan was committed to paper. The phased shape exists specifically because the risks were too concentrated when collapsed into a single Phase 1 build. The bigger ones now sit in execution, not in plan structure.</p>
+
+  <div class="risk-grid">
+
+    <div class="risk-item">
+      <h4>Cash-flow gap on reimbursement</h4>
+      <p>ILB pays grant against paid invoices, 6-12 weeks behind. €150k project requires fronting €150k. Mitigation: Brandenburg Mikrokredit doubles as bridge facility; phased equipment purchase if needed.</p>
+    </div>
+
+    <div class="risk-item">
+      <h4>ROH commercial viability under ILB scrutiny</h4>
+      <p>Loss-making €20k applicant invites questions. Mitigation: Phase 0 revenue growth gives 12 months of operating data and a credible 3-year P&amp;L for the application file.</p>
+    </div>
+
+    <div class="risk-item">
+      <h4>Programme window closing 30 June 2027</h4>
+      <p>JTF Lausitz saturating. Late application risks rejection on allocation, not merit. Mitigation: anchor Phase 1 application to Q4 2026 / Q1 2027. If Phase 0 revenue is slow, reassess.</p>
+    </div>
+
+    <div class="risk-item">
+      <h4>Bürgschaftsbank approval uncertainty</h4>
+      <p>BBB guarantee on KfW loan is discretionary. Mitigation: Brandenburg Mikrokredit (no guarantee needed) is the Phase 1 default. KfW only triggers if Phase 2 own contribution targets justify it.</p>
+    </div>
+
+    <div class="risk-item">
+      <h4>Contract bottler dependency</h4>
+      <p>Phase 0 puts production quality in someone else's hands. Mitigation: visit operator before signing. Run pilot batch with quality testing. Document recipe and quality criteria in writing.</p>
+    </div>
+
+    <div class="risk-item">
+      <h4>Hold-period clawback</h4>
+      <p>Funded assets must stay in JTF region for 3 years. Lease ending inside that triggers clawback. Mitigation: 5+5 year lease, tenant-improvement clause, Wirtschaftsanwalt review.</p>
+    </div>
+
+    <div class="risk-item">
+      <h4>No hospitality JTF precedent in Wildau</h4>
+      <p>Eight Wildau JTF projects, none food. Caseworkers process a new pattern. Mitigation: lean on Reuner template (LDS, same Richtlinie). Add TH Wildau food-research letter of support.</p>
+    </div>
+
+    <div class="risk-item">
+      <h4>Phase 0 revenue does not grow</h4>
+      <p>If 12 months of Phase 0 leaves ROH at €30k revenue not €60-80k, the Phase 1 case weakens. Mitigation: extend Phase 0 by 6 months; reduce Phase 1 project size; consider holding off Phase 1 until 2027.</p>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 12</span>
+  </div>
+</section>
+
+
+<!-- =================== PAGE 13: DECISIONS + SOURCES =================== -->
+<section class="page">
+  <div class="section-band">
+    <div>
+      <div class="sec-tag">XII</div>
+      <div class="sec-title">Open decisions &amp; next steps</div>
+    </div>
+    <div class="sec-num">12</div>
+  </div>
+
+  <h3>This week</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th>Who</th>
+        <th>Outcome wanted</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Phone Yuneiko</strong></td>
+        <td>Founder</td>
+        <td>Per-batch quote for acidified chilli sauce, MOQ, lead time, ingredients-supplied option</td>
+      </tr>
+      <tr>
+        <td><strong>Phone YouFlake / BeFoodFilled</strong></td>
+        <td>Founder</td>
+        <td>Same questions as Yuneiko. Compare. Pick one</td>
+      </tr>
+      <tr>
+        <td><strong>Confirm ROH legal form</strong></td>
+        <td>Founder</td>
+        <td>German GmbH / UG / GbR. Determines JTF applicant eligibility</td>
+      </tr>
+      <tr>
+        <td><strong>Pull ROH De-minimis history</strong></td>
+        <td>Founder + bookkeeper</td>
+        <td>Any prior De-minimis aid in last 3 years counts against the €300k ceiling</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Month 9-10 (queued)</h3>
+
+  <div class="callout">
+    <p><strong>Book the ILB Beratung call.</strong> Phone +49 331 660 1234 or email kundencenter@ilb.de. Ask for JTF-Unternehmensförderung Beratung. Free 30-60 min call. Validates Sauce Werk Wildau scope and the stacked JTF + GRW + GAK question at zero cost. Talking points in companion document <em>ilb-beratung-call-prep.md</em>.</p>
+  </div>
+
+  <h3>Sources</h3>
+
+  <ul class="tight" style="font-size: 9pt;">
+    <li>EFRE/JTF Brandenburg, Liste der Vorhaben, 30 April 2026 — efre.brandenburg.de</li>
+    <li>Richtlinie JTF-Unternehmensförderung 2023, amended 27 June 2024 — bravors.brandenburg.de</li>
+    <li>Investitionsbank des Landes Brandenburg, Wirtschaftsförderprogramme — ilb.de</li>
+    <li>GRW-G Brandenburg Große Richtlinie 2025 — bravors.brandenburg.de</li>
+    <li>Mikrokredit Brandenburg — ilb.de</li>
+    <li>KfW ERP-Gründerkredit StartGeld (067) — kfw.de</li>
+    <li>Bürgschaftsbank Brandenburg — bbb-bb.de</li>
+    <li>Mikromezzaninfonds Deutschland III — mikromezzaninfonds-deutschland.de</li>
+    <li>Yuneiko Lohnabfüllung — yuneiko.de</li>
+    <li>YouFlake / BeFoodFilled — youflake.com</li>
+    <li>Herzensküche Berlin — herzenskueche.com</li>
+    <li>Crazy Bastard Sauce, Berlin — crazybsauce.com</li>
+    <li>Stork Club Whiskey, Reuner's Hofgarten, Dorfstraße 56, 15910 Schlepzig — source photograph of EFRE/JTF plaque, 21 June 2026</li>
+  </ul>
+
+  <div class="rule-double" style="margin-top: 8mm;"></div>
+
+  <div style="text-align: center; margin-top: 6mm;">
+    <div class="small-caps" style="color: var(--forest);">European Heat Council</div>
+    <p style="font-style: italic; color: var(--forest); margin-top: 3mm; font-size: 10pt;">IN ARDORE CONCORDIA</p>
+  </div>
+
+  <div class="footer">
+    <span class="left"><img class="footer-mark" src="ehc-logo-wide.png" alt="">Sauce Werk Wildau · Briefing Document</span>
+    <span>Page 13</span>
+  </div>
+</section>
+
+</body>
+</html>

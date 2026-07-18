@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EHC Producer Catalog, Visual Sketch A/W 2026</title>
+<style>
+  :root {
+    --forest: #1d3a2a;
+    --forest-deep: #142720;
+    --habanero: #c8612e;
+    --habanero-deep: #a04d24;
+    --cream: #f5ecd9;
+    --cream-deep: #ecdfc4;
+    --paper: #faf6ea;
+    --charcoal: #1a1a1a;
+    --stone: #6b6b6b;
+    --rule: #c9c0a8;
+    --rule-strong: #8a7f5c;
+  }
+
+  @page { size: A4 portrait; margin: 0; }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #888;
+    font-family: Georgia, "Source Serif Pro", "Times New Roman", serif;
+    color: var(--charcoal);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    background: var(--paper);
+    margin: 12mm auto;
+    padding: 18mm 18mm;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+
+  @media print {
+    body { background: white; }
+    .page { margin: 0; box-shadow: none; }
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: Georgia, "Source Serif Pro", serif;
+    color: var(--forest);
+    font-weight: normal;
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+
+  p { margin: 0 0 3mm 0; font-size: 10pt; line-height: 1.55; }
+  ul, ol { margin: 0 0 4mm 0; padding-left: 5mm; }
+  li { font-size: 10pt; line-height: 1.5; margin-bottom: 1.5mm; }
+
+  strong { color: var(--forest); }
+
+  .caps {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 8.5pt;
+    color: var(--stone);
+  }
+
+  .caps-forest { color: var(--forest); }
+  .caps-habanero { color: var(--habanero); }
+
+  .rule-thin { border: 0; border-top: 0.4pt solid var(--rule); margin: 4mm 0; }
+  .rule-forest { border: 0; border-top: 0.8pt solid var(--forest); margin: 5mm 0; }
+  .rule-habanero-short { display: inline-block; width: 22mm; height: 0.8pt; background: var(--habanero); vertical-align: middle; }
+
+  /* ===================== COVER ===================== */
+  .cover {
+    padding: 0 !important;
+    background: var(--forest);
+    color: var(--cream);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cover .top-strip {
+    padding: 12mm 18mm 0 18mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .cover .wordmark {
+    font-size: 11pt;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  .cover .edition {
+    font-size: 9pt;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--cream-deep);
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  .cover .center {
+    padding: 0 18mm;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+  }
+
+  .cover .kicker {
+    font-size: 10pt;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--habanero);
+    margin-bottom: 8mm;
+  }
+
+  .cover .title {
+    font-size: 62pt;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    margin-bottom: 8mm;
+  }
+
+  .cover .sub {
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 15pt;
+    line-height: 1.35;
+    color: var(--cream-deep);
+    max-width: 150mm;
+    margin-bottom: 12mm;
+  }
+
+  .cover .cover-stats {
+    display: flex;
+    gap: 12mm;
+    margin-top: 6mm;
+  }
+
+  .cover .cover-stat .n {
+    font-size: 34pt;
+    color: var(--habanero);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .cover .cover-stat .l {
+    font-size: 8.5pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cream-deep);
+    margin-top: 2mm;
+  }
+
+  .cover .motto {
+    background: var(--habanero);
+    color: var(--cream);
+    padding: 6mm 18mm;
+    text-align: center;
+    font-style: italic;
+    font-size: 12pt;
+    letter-spacing: 0.08em;
+  }
+
+  /* ===================== EDITORIAL LETTER ===================== */
+  .letter .letter-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 0.6pt solid var(--rule-strong);
+    padding-bottom: 4mm;
+    margin-bottom: 10mm;
+  }
+
+  .letter .letter-title {
+    font-size: 30pt;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .letter .from {
+    font-size: 9pt;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--habanero);
+  }
+
+  .letter .body {
+    columns: 2;
+    column-gap: 10mm;
+    column-rule: 0.4pt solid var(--rule);
+    font-size: 10.5pt;
+    line-height: 1.6;
+  }
+
+  .letter .body p { text-align: justify; hyphens: auto; }
+  .letter .body p:first-child::first-letter {
+    font-size: 32pt;
+    line-height: 0.9;
+    color: var(--habanero);
+    float: left;
+    padding: 2mm 3mm 0 0;
+    font-family: Georgia, serif;
+  }
+
+  .letter .signoff {
+    margin-top: 8mm;
+    border-top: 0.4pt solid var(--rule);
+    padding-top: 5mm;
+    font-size: 9.5pt;
+    color: var(--stone);
+  }
+
+  .letter .signoff .sig-name {
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 14pt;
+    color: var(--forest);
+    display: block;
+    margin-bottom: 2mm;
+  }
+
+  /* ===================== HOW TO READ / REQUEST ===================== */
+  .how .how-head { margin-bottom: 8mm; }
+  .how .h-title { font-size: 26pt; margin-bottom: 3mm; letter-spacing: -0.01em; }
+  .how .h-sub { font-size: 11pt; color: var(--stone); font-style: italic; }
+
+  .how .grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 10mm;
+  }
+
+  .how .anno {
+    background: var(--cream);
+    border: 0.6pt solid var(--rule-strong);
+    padding: 6mm;
+    position: relative;
+  }
+
+  .how .anno .a-name {
+    font-size: 15pt;
+    color: var(--forest);
+    margin-bottom: 1mm;
+  }
+
+  .how .anno .a-line { font-size: 9pt; color: var(--stone); margin-bottom: 4mm; }
+
+  .how .anno .a-block {
+    border-top: 0.4pt solid var(--rule);
+    padding-top: 3mm;
+    margin-top: 3mm;
+    font-size: 9pt;
+    color: var(--charcoal);
+  }
+
+  .how .callouts { display: flex; flex-direction: column; gap: 4mm; }
+
+  .how .callout {
+    display: grid;
+    grid-template-columns: 12mm 1fr;
+    gap: 4mm;
+    align-items: start;
+  }
+
+  .how .callout .num {
+    font-size: 22pt;
+    color: var(--habanero);
+    line-height: 1;
+  }
+
+  .how .callout h5 {
+    font-size: 10.5pt;
+    color: var(--forest);
+    letter-spacing: 0.06em;
+    margin-bottom: 1mm;
+  }
+
+  .how .callout p { font-size: 9.5pt; line-height: 1.5; margin: 0; }
+
+  .how .quote-flow {
+    margin-top: 10mm;
+    background: var(--forest);
+    color: var(--cream);
+    padding: 6mm 8mm;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6mm;
+  }
+
+  .how .quote-flow .qf-step .qf-num {
+    color: var(--habanero);
+    font-size: 20pt;
+    line-height: 1;
+    margin-bottom: 2mm;
+  }
+
+  .how .quote-flow .qf-step .qf-t {
+    color: var(--cream);
+    font-size: 10pt;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 2mm;
+  }
+
+  .how .quote-flow .qf-step p { color: var(--cream-deep); font-size: 9pt; margin: 0; }
+
+  /* ===================== INDEX ===================== */
+  .index .index-head { margin-bottom: 8mm; }
+  .index .h-title { font-size: 26pt; letter-spacing: -0.01em; margin-bottom: 2mm; }
+  .index .h-sub { font-size: 11pt; color: var(--stone); font-style: italic; }
+
+  .index table { width: 100%; border-collapse: collapse; margin-top: 4mm; }
+
+  .index th {
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 8pt;
+    color: var(--habanero);
+    border-bottom: 0.8pt solid var(--forest);
+    padding: 3mm 3mm;
+    font-weight: normal;
+  }
+
+  .index td {
+    padding: 3mm 3mm;
+    border-bottom: 0.4pt solid var(--rule);
+    font-size: 10pt;
+    vertical-align: top;
+  }
+
+  .index td.country {
+    font-family: Georgia, serif;
+    color: var(--forest);
+    font-size: 13pt;
+    letter-spacing: 0.02em;
+    width: 30mm;
+  }
+
+  .index td.count {
+    color: var(--habanero);
+    text-align: right;
+    width: 20mm;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .index td.pg {
+    color: var(--stone);
+    text-align: right;
+    width: 22mm;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 8.5pt;
+  }
+
+  /* ===================== PRODUCER PAGE ===================== */
+  .producer .top-band {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.6pt solid var(--rule-strong);
+    padding-bottom: 3mm;
+    margin-bottom: 6mm;
+  }
+
+  .producer .top-band .country-tag {
+    font-size: 10pt;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--forest);
+  }
+
+  .producer .top-band .cohort {
+    font-size: 8.5pt;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .producer .top-band .medals {
+    display: flex;
+    gap: 3mm;
+  }
+
+  .producer .top-band .medal {
+    background: var(--habanero);
+    color: var(--cream);
+    font-size: 8pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 1.5mm 3mm;
+  }
+
+  .producer .top-band .medal.silver { background: var(--stone); }
+
+  .producer .hero {
+    display: grid;
+    grid-template-columns: 62mm 1fr;
+    gap: 8mm;
+    margin-bottom: 6mm;
+  }
+
+  .producer .portrait {
+    width: 62mm;
+    height: 78mm;
+    background: var(--cream-deep);
+    border: 0.6pt solid var(--rule-strong);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .producer .portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+
+  .producer .portrait.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--stone);
+    font-size: 9pt;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 4mm;
+  }
+
+  .producer .identity h2 {
+    font-size: 32pt;
+    line-height: 1;
+    margin-bottom: 3mm;
+    letter-spacing: -0.02em;
+  }
+
+  .producer .identity .style-line {
+    font-style: italic;
+    color: var(--habanero);
+    font-size: 12pt;
+    margin-bottom: 4mm;
+    line-height: 1.3;
+  }
+
+  .producer .identity .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm 6mm;
+    margin-top: 4mm;
+    padding-top: 4mm;
+    border-top: 0.4pt solid var(--rule);
+  }
+
+  .producer .identity .meta-grid .k {
+    font-size: 8pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 0.5mm;
+  }
+
+  .producer .identity .meta-grid .v {
+    font-size: 10pt;
+    color: var(--forest);
+  }
+
+  .producer .story { margin-bottom: 5mm; font-size: 10pt; line-height: 1.6; }
+  .producer .story p { text-align: justify; hyphens: auto; }
+
+  .producer h3.section-h {
+    font-size: 9.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--habanero);
+    margin: 6mm 0 3mm 0;
+    border-bottom: 0.4pt solid var(--rule);
+    padding-bottom: 1.5mm;
+  }
+
+  .producer .skus { width: 100%; border-collapse: collapse; margin-bottom: 4mm; }
+
+  .producer .skus th {
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 7.5pt;
+    color: var(--stone);
+    padding: 2mm 3mm;
+    border-bottom: 0.6pt solid var(--rule);
+    font-weight: normal;
+  }
+
+  .producer .skus td {
+    padding: 2.5mm 3mm;
+    border-bottom: 0.4pt solid var(--rule);
+    font-size: 9.5pt;
+    vertical-align: top;
+  }
+
+  .producer .skus td.sku-name {
+    font-style: italic;
+    color: var(--forest);
+    font-size: 10pt;
+  }
+
+  .producer .skus td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .producer .compliance {
+    display: flex;
+    gap: 3mm;
+    margin-top: 4mm;
+    flex-wrap: wrap;
+  }
+
+  .producer .flag {
+    background: var(--cream);
+    border: 0.4pt solid var(--rule-strong);
+    padding: 1.5mm 3mm;
+    font-size: 8pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--forest);
+  }
+
+  .producer .flag.on { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+
+  .producer .press-strip {
+    margin-top: 5mm;
+    padding-top: 3mm;
+    border-top: 0.4pt solid var(--rule);
+    font-size: 9pt;
+    color: var(--stone);
+    font-style: italic;
+  }
+
+  .producer .cta-row {
+    position: absolute;
+    left: 18mm;
+    right: 18mm;
+    bottom: 12mm;
+    background: var(--forest);
+    color: var(--cream);
+    padding: 5mm 6mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .producer .cta-row .cta-t {
+    font-size: 10pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  .producer .cta-row .cta-e {
+    font-family: Georgia, serif;
+    font-style: italic;
+    color: var(--habanero);
+    font-size: 11pt;
+  }
+
+  .producer .page-foot {
+    position: absolute;
+    left: 18mm;
+    right: 18mm;
+    bottom: 5mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7.5pt;
+    color: var(--stone);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ===================== BACK ===================== */
+  .back { background: var(--forest); color: var(--cream); padding: 24mm 20mm; }
+  .back h2 { color: var(--cream); font-size: 28pt; margin-bottom: 5mm; letter-spacing: -0.01em; }
+  .back .lead { font-style: italic; color: var(--cream-deep); font-size: 13pt; line-height: 1.4; margin-bottom: 12mm; max-width: 155mm; }
+  .back h4 { color: var(--habanero); font-size: 9pt; letter-spacing: 0.28em; text-transform: uppercase; margin-bottom: 3mm; }
+  .back p { color: var(--cream-deep); font-size: 10pt; line-height: 1.6; }
+  .back a { color: var(--habanero); text-decoration: none; }
+
+  .back .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm 12mm; margin-bottom: 12mm; }
+  .back .foot-band {
+    position: absolute;
+    left: 20mm;
+    right: 20mm;
+    bottom: 14mm;
+    border-top: 0.6pt solid rgba(245, 236, 217, 0.3);
+    padding-top: 4mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cream-deep);
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- 01 COVER -->
+<!-- ============================================================ -->
+<section class="page cover">
+  <div class="top-strip">
+    <div class="wordmark">European Heat Council</div>
+    <div class="edition">
+      Producer Catalog<br>
+      Autumn / Winter 2026
+    </div>
+  </div>
+
+  <div class="center">
+    <div class="kicker">Trade &middot; Buyer &middot; Editorial</div>
+    <div class="title">European<br>Craft Hot<br>Sauce.</div>
+    <div class="sub">A curated cohort of independent makers, presented to specialty buyers, gastro groups, and importers on one page each. Real prices, real lead times, direct contact.</div>
+
+    <div class="cover-stats">
+      <div class="cover-stat"><div class="n">14</div><div class="l">Producers</div></div>
+      <div class="cover-stat"><div class="n">7</div><div class="l">Countries</div></div>
+      <div class="cover-stat"><div class="n">62</div><div class="l">SKUs</div></div>
+      <div class="cover-stat"><div class="n">1</div><div class="l">Point of contact</div></div>
+    </div>
+  </div>
+
+  <div class="motto">In Ardore Concordia</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 02 EDITORIAL LETTER -->
+<!-- ============================================================ -->
+<section class="page letter">
+  <div class="letter-head">
+    <div>
+      <div class="caps caps-habanero">A note from the Council</div>
+      <div class="letter-title" style="margin-top:3mm;">About this catalog.</div>
+    </div>
+    <div class="from">Edition 01 &middot; A/W 2026</div>
+  </div>
+
+  <div class="body">
+    <p>Independent hot sauce in Europe grew up in the last decade the same way craft beer did in the one before it. Farm-side fermenters in Portugal, chilli growers in Poland, table-side sauce houses in the Netherlands and Belgium, small kitchens in Spain and Italy that started as market stalls and ended up on gastro menus. What was missing was a single door for buyers who want the category but do not have time to find every maker one by one.</p>
+    <p>This catalog is that door. Fourteen producers, seven countries, one cohort. The European Heat Council does not hold stock. Every price and every lead time on the pages that follow is the producer's own, signed off before print. Buyers reach producers directly. The Council routes the introduction, translates where needed, and stays out of the way of the deal.</p>
+    <p>Inclusion is by curation, not fee. Producers meet a minimum bar on allergen documentation and product liability, and commit to standing behind the MOQs and lead times they publish here. Selection is by house style, category coverage, and reliability. A shorter roster serves buyers better than a longer one.</p>
+    <p>What you will not find in the pages that follow: private-label offers, promotional pricing, or exclusivity terms. This is a wholesale catalog for buyers who want to build a range around named makers with real stories, and who intend to pay for what those stories are worth.</p>
+  </div>
+
+  <div class="signoff">
+    <span class="caps caps-habanero">Signed for the Council</span>
+    <span class="sig-name">The European Heat Council</span>
+    Curation &middot; Coordination &middot; Introductions<br>
+    catalog@europeanheatcouncil.eu
+  </div>
+
+  <div class="page-foot" style="position:absolute;left:18mm;right:18mm;bottom:8mm;display:flex;justify-content:space-between;font-size:7.5pt;color:var(--stone);letter-spacing:0.2em;text-transform:uppercase;border-top:0.4pt solid var(--rule);padding-top:2.5mm;">
+    <span>European Heat Council &middot; Producer Catalog A/W 2026</span>
+    <span>02</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 03 HOW TO READ / REQUEST -->
+<!-- ============================================================ -->
+<section class="page how">
+  <div class="how-head">
+    <div class="caps caps-habanero">Buyer guide</div>
+    <div class="h-title" style="margin-top:3mm;">How to read a producer page, and how to request a quote.</div>
+  </div>
+
+  <div class="grid">
+    <div class="anno">
+      <div class="caps" style="margin-bottom:3mm;">Anatomy of a page</div>
+      <div class="a-name">Producer Name</div>
+      <div class="a-line">One-line house style, italicised.</div>
+
+      <div class="a-block">
+        <div class="caps" style="font-size:7pt;">Story</div>
+        Two short paragraphs. Origin, technique, what the sauces taste of.
+      </div>
+
+      <div class="a-block">
+        <div class="caps" style="font-size:7pt;">Meta grid</div>
+        Country and city, founding year, house style, EHSA record, IFS status, insurance.
+      </div>
+
+      <div class="a-block">
+        <div class="caps" style="font-size:7pt;">Hero SKUs</div>
+        SKU name, category, wholesale price band per bottle, MOQ per SKU, lead time from PO.
+      </div>
+
+      <div class="a-block">
+        <div class="caps" style="font-size:7pt;">Compliance flags</div>
+        Allergen dossier, IFS or BRC, product liability insurance. Filled squares mean confirmed.
+      </div>
+
+      <div class="a-block">
+        <div class="caps" style="font-size:7pt;">Press strip</div>
+        Selected press mentions. Buyers can request full pickups on demand.
+      </div>
+    </div>
+
+    <div class="callouts">
+      <div class="caps caps-forest">What to check first</div>
+
+      <div class="callout">
+        <div class="num">1</div>
+        <div>
+          <h5>House style, then category</h5>
+          <p>The style line under the producer name signals fit faster than the SKU list. Read it before scanning prices.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="num">2</div>
+        <div>
+          <h5>MOQ and lead time together</h5>
+          <p>Small producers publish honest lead times. A 6-week lead time on a signature SKU is common and rarely negotiable.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="num">3</div>
+        <div>
+          <h5>Compliance flags for your channel</h5>
+          <p>Grocery buyers need IFS filled. Gastro and Feinkost buyers rarely do. Allergen dossier and liability insurance are the floor.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="num">4</div>
+        <div>
+          <h5>Press strip as tie-breaker</h5>
+          <p>Between two producers you like equally, editorial coverage is the shortest path to a retail buyer's shelf yes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quote-flow">
+    <div class="qf-step">
+      <div class="qf-num">01</div>
+      <div class="qf-t">Shortlist</div>
+      <p>Mark the producers you want quotes from. Any number, any country. There is no cohort minimum.</p>
+    </div>
+    <div class="qf-step">
+      <div class="qf-num">02</div>
+      <div class="qf-t">One request</div>
+      <p>Send one email to catalog@europeanheatcouncil.eu naming the producers, SKUs, and target volumes.</p>
+    </div>
+    <div class="qf-step">
+      <div class="qf-num">03</div>
+      <div class="qf-t">Direct quotes</div>
+      <p>Producers reply to you directly within five working days. Council is copied for coordination only.</p>
+    </div>
+  </div>
+
+  <div class="page-foot" style="position:absolute;left:18mm;right:18mm;bottom:8mm;display:flex;justify-content:space-between;font-size:7.5pt;color:var(--stone);letter-spacing:0.2em;text-transform:uppercase;border-top:0.4pt solid var(--rule);padding-top:2.5mm;">
+    <span>European Heat Council &middot; Producer Catalog A/W 2026</span>
+    <span>03</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 04 COHORT INDEX -->
+<!-- ============================================================ -->
+<section class="page index">
+  <div class="index-head">
+    <div class="caps caps-habanero">Cohort</div>
+    <div class="h-title" style="margin-top:3mm;">Fourteen producers, seven countries.</div>
+    <div class="h-sub" style="margin-top:3mm;">Grouped by country, in order of first appearance.</div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30mm;">Country</th>
+        <th>Producers</th>
+        <th class="count" style="width:20mm; text-align:right;">Count</th>
+        <th class="pg" style="width:22mm; text-align:right;">Pages</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="country">Germany</td>
+        <td><em>Pandemonic</em>, HotZeg, Chilma, [Producer 04], [Producer 05]</td>
+        <td class="count">5</td>
+        <td class="pg">06 &ndash; 10</td>
+      </tr>
+      <tr>
+        <td class="country">Portugal</td>
+        <td><em>Piri-Piri &amp; Co</em>, [Producer 07]</td>
+        <td class="count">2</td>
+        <td class="pg">05, 11</td>
+      </tr>
+      <tr>
+        <td class="country">Netherlands</td>
+        <td><em>De Vergulde Tong</em>, Kaathoon, Qudo'tjes</td>
+        <td class="count">3</td>
+        <td class="pg">07, 12, 13</td>
+      </tr>
+      <tr>
+        <td class="country">Belgium</td>
+        <td>Chardys, Kerri</td>
+        <td class="count">2</td>
+        <td class="pg">14, 15</td>
+      </tr>
+      <tr>
+        <td class="country">Spain</td>
+        <td>La Chipotlera</td>
+        <td class="count">1</td>
+        <td class="pg">16</td>
+      </tr>
+      <tr>
+        <td class="country">Italy</td>
+        <td>Ornitodrinko</td>
+        <td class="count">1</td>
+        <td class="pg">17</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:12mm; padding-top:6mm; border-top:0.8pt solid var(--forest);">
+    <div class="caps caps-habanero" style="margin-bottom:3mm;">Coverage across the range</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap:6mm;">
+      <div>
+        <div class="caps" style="font-size:7.5pt;">Mild</div>
+        <div style="font-size:20pt;color:var(--forest);margin-top:1mm;">18</div>
+        <div style="font-size:8.5pt;color:var(--stone);margin-top:1mm;">SKUs across cohort</div>
+      </div>
+      <div>
+        <div class="caps" style="font-size:7.5pt;">Medium</div>
+        <div style="font-size:20pt;color:var(--forest);margin-top:1mm;">21</div>
+        <div style="font-size:8.5pt;color:var(--stone);margin-top:1mm;">SKUs across cohort</div>
+      </div>
+      <div>
+        <div class="caps" style="font-size:7.5pt;">Hot</div>
+        <div style="font-size:20pt;color:var(--forest);margin-top:1mm;">16</div>
+        <div style="font-size:8.5pt;color:var(--stone);margin-top:1mm;">SKUs across cohort</div>
+      </div>
+      <div>
+        <div class="caps" style="font-size:7.5pt;">Extra hot</div>
+        <div style="font-size:20pt;color:var(--forest);margin-top:1mm;">7</div>
+        <div style="font-size:8.5pt;color:var(--stone);margin-top:1mm;">SKUs across cohort</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot" style="position:absolute;left:18mm;right:18mm;bottom:8mm;display:flex;justify-content:space-between;font-size:7.5pt;color:var(--stone);letter-spacing:0.2em;text-transform:uppercase;border-top:0.4pt solid var(--rule);padding-top:2.5mm;">
+    <span>European Heat Council &middot; Producer Catalog A/W 2026</span>
+    <span>04</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 05 PRODUCER PAGE: PIRI-PIRI & CO -->
+<!-- ============================================================ -->
+<section class="page producer">
+  <div class="top-band">
+    <div class="country-tag">Portugal &middot; Quinta do Piri-Piri</div>
+    <div class="cohort">EHC Cohort 2026 &middot; No. 05</div>
+    <div class="medals">
+      <div class="medal">EHSA Gold, Extra Hot</div>
+      <div class="medal">EHSA Gold, Mild</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="portrait">
+      <img src="../public/img/producers/piri-piri-co.jpg" alt="Piri-Piri &amp; Co, maker portrait">
+    </div>
+    <div class="identity">
+      <h2>Piri-Piri<br>&amp; Co.</h2>
+      <div class="style-line">A fifteen-year piri-piri farm turned sauce house. [House style line TK.]</div>
+
+      <div class="meta-grid">
+        <div><div class="k">Founder</div><div class="v">Romeu Santos</div></div>
+        <div><div class="k">Founded</div><div class="v">[TK]</div></div>
+        <div><div class="k">House style</div><div class="v">[TK]</div></div>
+        <div><div class="k">Batch cadence</div><div class="v">[TK]</div></div>
+        <div><div class="k">Language</div><div class="v">[TK]</div></div>
+        <div><div class="k">Shipping from</div><div class="v">[TK]</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>Piri-Piri &amp; Co works from Quinta do Piri-Piri, the family farm where Romeu Santos has grown the chilli for fifteen years before pressing it. [Rest of paragraph one TK, drafted from maker signoff.]</p>
+    <p>Two 2026 EHSA Gold medals: <em>Asinhas Infernais</em> in Extra Hot, and <em>Manga e Mel</em> in Mild. [Distinctive Nathan note TK, one sentence, does not restate the lead.]</p>
+  </div>
+
+  <h3 class="section-h">Hero SKUs</h3>
+  <table class="skus">
+    <thead>
+      <tr><th>SKU</th><th>Category</th><th class="n">Wholesale, per 100 ml</th><th class="n">MOQ</th><th class="n">Lead time</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="sku-name">Asinhas Infernais</td>
+        <td>Extra Hot</td>
+        <td class="n">[TK]</td>
+        <td class="n">[TK]</td>
+        <td class="n">[TK]</td>
+      </tr>
+      <tr>
+        <td class="sku-name">Manga e Mel</td>
+        <td>Mild</td>
+        <td class="n">[TK]</td>
+        <td class="n">[TK]</td>
+        <td class="n">[TK]</td>
+      </tr>
+      <tr>
+        <td class="sku-name">[SKU 03 TK]</td>
+        <td>[Category]</td>
+        <td class="n">[TK]</td>
+        <td class="n">[TK]</td>
+        <td class="n">[TK]</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="compliance">
+    <div class="flag">Allergen dossier</div>
+    <div class="flag">Product liability</div>
+    <div class="flag">IFS Food</div>
+    <div class="flag">BRC</div>
+    <div class="flag">EU labelling</div>
+  </div>
+
+  <div class="press-strip">
+    Press pickups 2026 [TK]. Full ledger available on request.
+  </div>
+
+  <div class="cta-row">
+    <div class="cta-t">Request a quote</div>
+    <div class="cta-e">catalog@europeanheatcouncil.eu</div>
+  </div>
+
+  <div class="page-foot">
+    <span>European Heat Council &middot; Piri-Piri &amp; Co</span>
+    <span>05</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 06 PRODUCER PAGE: PANDEMONIC -->
+<!-- ============================================================ -->
+<section class="page producer">
+  <div class="top-band">
+    <div class="country-tag">Germany &middot; Berlin (Poland-grown fruit)</div>
+    <div class="cohort">EHC Cohort 2026 &middot; No. 06</div>
+    <div class="medals">
+      <div class="medal silver">EHSA Bronze, Medium</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="portrait placeholder">
+      Portrait TK<br>Karol, at the Berlin sauce kitchen.
+    </div>
+    <div class="identity">
+      <h2>Pandemonic.</h2>
+      <div class="style-line">Polish-grown chilli, Berlin-pressed sauce. Deep, roasted, tobacco-adjacent.</div>
+
+      <div class="meta-grid">
+        <div><div class="k">Founder</div><div class="v">Karol [surname TK]</div></div>
+        <div><div class="k">Founded</div><div class="v">2019</div></div>
+        <div><div class="k">House style</div><div class="v">Roast-forward medium heat</div></div>
+        <div><div class="k">Batch cadence</div><div class="v">Monthly</div></div>
+        <div><div class="k">Language</div><div class="v">EN, DE, PL</div></div>
+        <div><div class="k">Shipping from</div><div class="v">Berlin</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>Pandemonic grows chilli on a farm in Poland and presses the sauce in Berlin. Karol works a rotating range of cultivars, most of them cooked over live heat before pressing. The finished sauces read closer to a barbecue reduction than to a standard hot sauce, which is why they sell into gastro rather than novelty retail.</p>
+    <p>Two SKUs are permanent. The rest of the range rotates with the growing year and is announced at each harvest.</p>
+  </div>
+
+  <h3 class="section-h">Hero SKUs</h3>
+  <table class="skus">
+    <thead>
+      <tr><th>SKU</th><th>Category</th><th class="n">Wholesale, per 100 ml</th><th class="n">MOQ</th><th class="n">Lead time</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="sku-name">Pandemonic No. 1</td>
+        <td>Medium, roast-forward</td>
+        <td class="n">&euro;5.90 &ndash; &euro;7.10</td>
+        <td class="n">36 btl</td>
+        <td class="n">5 weeks</td>
+      </tr>
+      <tr>
+        <td class="sku-name">Pandemonic No. 2</td>
+        <td>Hot, smoked base</td>
+        <td class="n">&euro;6.40 &ndash; &euro;7.60</td>
+        <td class="n">36 btl</td>
+        <td class="n">6 weeks</td>
+      </tr>
+      <tr>
+        <td class="sku-name">Harvest Release [seasonal]</td>
+        <td>Varies by season</td>
+        <td class="n">On enquiry</td>
+        <td class="n">24 btl</td>
+        <td class="n">Harvest-tied</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="compliance">
+    <div class="flag on">Allergen dossier</div>
+    <div class="flag on">Product liability</div>
+    <div class="flag">IFS Food</div>
+    <div class="flag on">EU labelling</div>
+    <div class="flag on">DE small-producer</div>
+  </div>
+
+  <div class="press-strip">
+    Press pickups 2026 [TK]. Cohort feature in EHSA A/W ledger.
+  </div>
+
+  <div class="cta-row">
+    <div class="cta-t">Request a quote</div>
+    <div class="cta-e">catalog@europeanheatcouncil.eu</div>
+  </div>
+
+  <div class="page-foot">
+    <span>European Heat Council &middot; Pandemonic</span>
+    <span>06</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 07 PRODUCER PAGE: DE VERGULDE TONG -->
+<!-- ============================================================ -->
+<section class="page producer">
+  <div class="top-band">
+    <div class="country-tag">Netherlands &middot; [City TK]</div>
+    <div class="cohort">EHC Cohort 2026 &middot; No. 07</div>
+    <div class="medals">
+      <div class="medal">EHSA Silver [TK]</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="portrait">
+      <img src="../public/img/producers/de-vergulde-tong.jpg" alt="De Vergulde Tong, maker portrait">
+    </div>
+    <div class="identity">
+      <h2>De Vergulde<br>Tong.</h2>
+      <div class="style-line">[House style, one italic line TK] Sauces built around a Dutch table.</div>
+
+      <div class="meta-grid">
+        <div><div class="k">Founder</div><div class="v">[TK]</div></div>
+        <div><div class="k">Founded</div><div class="v">[TK]</div></div>
+        <div><div class="k">House style</div><div class="v">[TK]</div></div>
+        <div><div class="k">Batch cadence</div><div class="v">[TK]</div></div>
+        <div><div class="k">Language</div><div class="v">EN, NL</div></div>
+        <div><div class="k">Shipping from</div><div class="v">[TK]</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="story">
+    <p>[Story paragraph one TK, drafted from maker signoff. Two paragraphs total, roughly 80 words each. Origin, technique, sauces on the table now.]</p>
+    <p>[Story paragraph two TK. Distinctive note from Nathan under separate cover. Never restates the lead.]</p>
+  </div>
+
+  <h3 class="section-h">Hero SKUs</h3>
+  <table class="skus">
+    <thead>
+      <tr><th>SKU</th><th>Category</th><th class="n">Wholesale, per 100 ml</th><th class="n">MOQ</th><th class="n">Lead time</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="sku-name">[SKU 01 TK]</td>
+        <td>[Category]</td>
+        <td class="n">[Band]</td>
+        <td class="n">[MOQ]</td>
+        <td class="n">[Lead time]</td>
+      </tr>
+      <tr>
+        <td class="sku-name">[SKU 02 TK]</td>
+        <td>[Category]</td>
+        <td class="n">[Band]</td>
+        <td class="n">[MOQ]</td>
+        <td class="n">[Lead time]</td>
+      </tr>
+      <tr>
+        <td class="sku-name">[SKU 03 TK]</td>
+        <td>[Category]</td>
+        <td class="n">[Band]</td>
+        <td class="n">[MOQ]</td>
+        <td class="n">[Lead time]</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="compliance">
+    <div class="flag">Allergen dossier</div>
+    <div class="flag">Product liability</div>
+    <div class="flag">IFS Food</div>
+    <div class="flag">EU labelling</div>
+  </div>
+
+  <div class="press-strip">
+    Press pickups 2026 [TK].
+  </div>
+
+  <div class="cta-row">
+    <div class="cta-t">Request a quote</div>
+    <div class="cta-e">catalog@europeanheatcouncil.eu</div>
+  </div>
+
+  <div class="page-foot">
+    <span>European Heat Council &middot; De Vergulde Tong</span>
+    <span>07</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 08 BACK PAGE -->
+<!-- ============================================================ -->
+<section class="page back">
+  <div style="border-top: 0.6pt solid rgba(245,236,217,0.4); padding-top: 4mm; display:flex; justify-content:space-between; font-size:8pt; letter-spacing:0.28em; text-transform:uppercase; color: var(--cream-deep); margin-bottom: 24mm;">
+    <span>European Heat Council</span>
+    <span>Producer Catalog A/W 2026</span>
+  </div>
+
+  <h2>One door to fourteen makers.</h2>
+  <div class="lead">Send one email. Name the producers you want quotes from. Get direct replies from the makers themselves within five working days.</div>
+
+  <div class="grid">
+    <div>
+      <h4>Catalog inquiries</h4>
+      <p>catalog@europeanheatcouncil.eu<br>Response within one working day.</p>
+    </div>
+    <div>
+      <h4>Press and editorial</h4>
+      <p>press@republicofheat.com<br>EHSA coverage, maker interviews, image library.</p>
+    </div>
+    <div>
+      <h4>Event coordination</h4>
+      <p>Trade fair cohort blocks and photographer bundle at member rates. Details at europeanheatcouncil.eu/events.</p>
+    </div>
+    <div>
+      <h4>Sample requests</h4>
+      <p>Curated buyer-prospecting boxes available on request. Priced per shipment, dispatched from Berlin.</p>
+    </div>
+  </div>
+
+  <div class="foot-band">
+    <span>In Ardore Concordia</span>
+    <span>europeanheatcouncil.eu</span>
+  </div>
+</section>
+
+</body>
+</html>

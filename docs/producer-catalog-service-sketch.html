@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EHC Producer Catalog, Service Sketch</title>
+<style>
+  :root {
+    --forest: #1d3a2a;
+    --habanero: #c8612e;
+    --cream: #f5ecd9;
+    --cream-deep: #ecdfc4;
+    --charcoal: #1a1a1a;
+    --stone: #6b6b6b;
+    --rule: #c9c0a8;
+  }
+
+  @page { size: A4 portrait; margin: 0; }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #888;
+    font-family: Georgia, "Source Serif Pro", "Times New Roman", serif;
+    color: var(--charcoal);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    background: var(--cream);
+    margin: 12mm auto;
+    padding: 16mm 15mm;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+
+  @media print {
+    body { background: white; }
+    .page { margin: 0; box-shadow: none; }
+  }
+
+  h1, h2, h3, h4 {
+    font-family: Georgia, "Source Serif Pro", serif;
+    color: var(--forest);
+    font-weight: normal;
+    margin: 0 0 4mm 0;
+    letter-spacing: 0.01em;
+  }
+
+  h1 { font-size: 32pt; line-height: 1.1; letter-spacing: -0.01em; }
+  h2 { font-size: 22pt; line-height: 1.15; margin-bottom: 3mm; }
+
+  h3 {
+    font-size: 12pt;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--habanero);
+    margin: 5mm 0 2mm 0;
+  }
+
+  h4 {
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--forest);
+    margin: 4mm 0 1.5mm 0;
+  }
+
+  p, li, td, th { font-size: 10pt; line-height: 1.5; color: var(--charcoal); }
+  p { margin: 0 0 3mm 0; }
+  ul, ol { margin: 0 0 4mm 0; padding-left: 5mm; }
+  li { margin-bottom: 1.5mm; }
+
+  strong { color: var(--forest); }
+
+  .small-caps {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 9pt;
+    color: var(--stone);
+  }
+
+  .rule { border: 0; border-top: 0.6pt solid var(--rule); margin: 5mm 0; }
+
+  .rule-double {
+    border: 0;
+    border-top: 0.6pt solid var(--forest);
+    border-bottom: 0.6pt solid var(--forest);
+    height: 1.5mm;
+    margin: 6mm 0;
+  }
+
+  /* Cover */
+  .cover { padding: 0 !important; display: flex; flex-direction: column; overflow: hidden; }
+
+  .cover .cover-mark {
+    background: var(--cream);
+    padding: 26mm 18mm 14mm 18mm;
+    text-align: center;
+    border-bottom: 2pt solid var(--forest);
+  }
+
+  .cover .cover-mark .wordmark {
+    font-size: 14pt;
+    color: var(--forest);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    margin-bottom: 4mm;
+  }
+
+  .cover .cover-mark .wordmark-rule {
+    display: block;
+    width: 40mm;
+    height: 0.9pt;
+    background: var(--habanero);
+    margin: 0 auto 8mm auto;
+  }
+
+  .cover .cover-mark .doc-type {
+    font-size: 9pt;
+    color: var(--forest);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+
+  .cover .cover-body {
+    flex: 1;
+    background: var(--forest);
+    color: var(--cream);
+    padding: 24mm 18mm 14mm 18mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cover h1 {
+    color: var(--cream);
+    font-size: 54pt;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 6mm;
+  }
+
+  .cover .subtitle {
+    font-size: 15pt;
+    color: var(--cream-deep);
+    font-style: italic;
+    margin-bottom: 0;
+    max-width: 155mm;
+    line-height: 1.3;
+  }
+
+  .cover .meta {
+    font-size: 9pt;
+    color: var(--cream-deep);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border-top: 0.6pt solid rgba(245, 236, 217, 0.4);
+    padding-top: 4mm;
+    margin-top: 6mm;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .cover .cover-motto {
+    background: var(--habanero);
+    color: var(--cream);
+    padding: 7mm 18mm;
+    text-align: center;
+    font-style: italic;
+    font-size: 13pt;
+    letter-spacing: 0.08em;
+  }
+
+  /* Section header band */
+  .section-band {
+    background: var(--forest);
+    color: var(--cream);
+    margin: -16mm -15mm 6mm -15mm;
+    padding: 5mm 15mm 4mm 15mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .section-band .sec-num {
+    font-size: 28pt;
+    color: var(--habanero);
+    font-weight: normal;
+    line-height: 1;
+  }
+
+  .section-band .sec-title {
+    font-size: 11pt;
+    color: var(--cream);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+  }
+
+  /* Pull quote */
+  .pull {
+    border-left: 1.5mm solid var(--habanero);
+    padding: 2mm 0 2mm 5mm;
+    margin: 4mm 0 6mm 0;
+    font-style: italic;
+    font-size: 12pt;
+    color: var(--forest);
+    line-height: 1.35;
+  }
+
+  /* Two-column body */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 3mm 0 6mm 0;
+    font-size: 9.5pt;
+  }
+
+  th {
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 8pt;
+    color: var(--forest);
+    padding: 2mm 3mm;
+    border-bottom: 1pt solid var(--forest);
+    font-weight: normal;
+  }
+
+  td {
+    padding: 2mm 3mm;
+    border-bottom: 0.4pt solid var(--rule);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: 0; }
+
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* Footer strip */
+  .page-foot {
+    position: absolute;
+    left: 15mm;
+    right: 15mm;
+    bottom: 8mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+    color: var(--stone);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border-top: 0.4pt solid var(--rule);
+    padding-top: 2.5mm;
+  }
+
+  .page-foot .foot-mark { color: var(--forest); }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- COVER -->
+<!-- ============================================================ -->
+<section class="page cover">
+  <div class="cover-mark">
+    <div class="wordmark">European Heat Council</div>
+    <span class="wordmark-rule"></span>
+    <div class="doc-type">Service Sketch &nbsp; &middot; &nbsp; Version 0.1</div>
+  </div>
+
+  <div class="cover-body">
+    <div>
+      <h1>Producer<br>Catalog</h1>
+      <p class="subtitle">A cohort route-to-shelf service for independent European hot sauce makers, sitting between producer and buyer without touching stock.</p>
+    </div>
+    <div class="meta">
+      <span>Internal Working Document</span>
+      <span>July 2026</span>
+    </div>
+  </div>
+
+  <div class="cover-motto">In Ardore Concordia</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 01 POSITIONING -->
+<!-- ============================================================ -->
+<section class="page">
+  <div class="section-band">
+    <span class="sec-num">01</span>
+    <span class="sec-title">Positioning</span>
+  </div>
+
+  <div class="pull">
+    EHC never takes title to stock. The catalog is a curated cohort listing plus a routing layer, not a distributor.
+  </div>
+
+  <p>Producers stay owners of their own sales. That keeps VAT, warehousing, and inventory risk off the EHC balance sheet, and it keeps producers in direct relationship with the buyers they win. EHC's contribution is the cohort story, the buyer-facing shopfront, and the initial vetting that gets a small maker into a room they could not reach alone.</p>
+
+  <p>The reference model is SNBI's Nego'Brass supplier programme in French craft brewing, applied to route-to-shelf instead of route-to-supply, and pitched at a category the existing chili-focused importer catalogs (Chili Food, Pepperworld, Feuer &amp; Glas) do not curate collectively across borders.</p>
+
+  <h3>What it is</h3>
+  <ul>
+    <li>A curated PDF and web page listing 15 to 25 European craft hot sauce producers, one page per producer.</li>
+    <li>A buyer-facing landing at europeanheatcouncil.eu/catalog with a request-quote form on every producer page.</li>
+    <li>Refreshed quarterly, with seasonal releases and limited drops called out on the front page.</li>
+  </ul>
+
+  <h3>What it is not</h3>
+  <ul>
+    <li>Not a shop. EHC never sells to end consumers.</li>
+    <li>Not a distributor. EHC never buys stock from producers.</li>
+    <li>Not a certification body. Any seal work sits under a separate future track and does not gate catalog inclusion.</li>
+  </ul>
+
+  <div class="page-foot">
+    <span class="foot-mark">EHC &middot; Producer Catalog</span>
+    <span>01 / 04</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 02 BUYER TARGETS AND PRODUCER PAGE -->
+<!-- ============================================================ -->
+<section class="page">
+  <div class="section-band">
+    <span class="sec-num">02</span>
+    <span class="sec-title">Buyer targets and producer page</span>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>Buyer targets</h3>
+
+      <h4>HoReCa</h4>
+      <p>Menu-differentiating condiments for restaurant groups, gastro concepts, hotel kitchens. Hot sauce sells at margin here, not at grocery unit economics. INTERNORGA is the shop window for this buyer.</p>
+
+      <h4>Specialty wholesalers</h4>
+      <p>Frischeparadies, Rungis Express, Metro C&amp;C, regional Feinkost distributors. Aggregate SKUs into their range, pallet-level MOQs, listing fees, real volume when they commit.</p>
+
+      <h4>Curated craft retailers</h4>
+      <p>Manufactum, KaDeWe and Galeria Feinschmecker food halls, regional Feinkost shops. High margin, low volume, brand halo effect for the producer.</p>
+
+      <h4>Export importers</h4>
+      <p>US, Asia, UK importers looking for a European cohort story rather than one-off SKUs. Cohort framing is the reason to talk to EHC instead of chasing producers one by one.</p>
+    </div>
+
+    <div>
+      <h3>What each producer page carries</h3>
+      <ul>
+        <li>Story, two short paragraphs, in EN and DE.</li>
+        <li>Category, hero SKUs, wholesale price bands, MOQ per SKU.</li>
+        <li>Allergen dossier, food-safety cert status (IFS, BRC, or none), product liability insurance status.</li>
+        <li>Lead time, minimum shipping lane, packaging format.</li>
+        <li>One production photo and one product photo, drawn from the Nightjar pipeline.</li>
+        <li>A press-mentions strip when relevant, sourced from EHSA and ROH coverage.</li>
+      </ul>
+
+      <h3>Intake filters</h3>
+      <ul>
+        <li>No exclusive-distributor contract that blocks multi-listing.</li>
+        <li>Allergen dossier present.</li>
+        <li>Product liability insurance in force.</li>
+        <li>Willing to be contacted directly by buyers, no gatekeeping through a rep.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <span class="foot-mark">EHC &middot; Producer Catalog</span>
+    <span>02 / 04</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 03 ECONOMICS -->
+<!-- ============================================================ -->
+<section class="page">
+  <div class="section-band">
+    <span class="sec-num">03</span>
+    <span class="sec-title">Economics</span>
+  </div>
+
+  <h3>Revenue model</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30%;">Source</th>
+        <th style="width:50%;">Notes</th>
+        <th class="num" style="width:20%;">Per producer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Annual listing (entry)</td>
+        <td>Standard producer page, EN plus one added language.</td>
+        <td class="num">&euro;200</td>
+      </tr>
+      <tr>
+        <td>Annual listing (featured)</td>
+        <td>Front-of-catalog placement, seasonal drop call-outs, first pick for the samples box.</td>
+        <td class="num">&euro;500</td>
+      </tr>
+      <tr>
+        <td>Order commission</td>
+        <td>Self-reported on catalog-attributed orders. Honor system in v1, audit trail added in v2.</td>
+        <td class="num">5&ndash;10%</td>
+      </tr>
+      <tr>
+        <td>Buyer-prospecting samples box</td>
+        <td>Optional add-on. Curated shipper of 6&ndash;8 sauces sent to named buyer prospect.</td>
+        <td class="num">Per shipment</td>
+      </tr>
+      <tr>
+        <td>Event bundle upsell</td>
+        <td>Listing plus EHC-coordinated stand slot at a target fair, photographer included.</td>
+        <td class="num">&euro;50 / &euro;75</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>What producers get for the fee</h3>
+  <ul>
+    <li>Buyer exposure they cannot buy alone at this price point.</li>
+    <li>EHC handles buyer inquiries, translation, initial vetting, and routing to the right producer contact.</li>
+    <li>Inclusion in the curated buyer-prospecting samples box sent to named buyer targets.</li>
+    <li>A cohort press asset in every listing, drawing on EHSA and ROH coverage where relevant.</li>
+    <li>Cross-referral: buyers landing on one producer see the cohort, producers land on each other's leads.</li>
+  </ul>
+
+  <h3>What producers do not get</h3>
+  <ul>
+    <li>Guaranteed sales. This is a shopfront, not a sales team.</li>
+    <li>Exclusive rep in any market. EHC does not sign single-market exclusives with producers.</li>
+    <li>Fulfilment. Producers ship their own stock on their own terms.</li>
+  </ul>
+
+  <div class="page-foot">
+    <span class="foot-mark">EHC &middot; Producer Catalog</span>
+    <span>03 / 04</span>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 04 MVP AND RISK -->
+<!-- ============================================================ -->
+<section class="page">
+  <div class="section-band">
+    <span class="sec-num">04</span>
+    <span class="sec-title">MVP and risk</span>
+  </div>
+
+  <h3>MVP to test demand before any dev spend</h3>
+  <ol>
+    <li>Build a PDF plus one web page. 10 to 12 pre-committed producers. Real prices, real MOQs, real contact details.</li>
+    <li>Compile five named buyer targets: one at Frischeparadies, one at Manufactum, one Berlin gastro group, one UK importer, one US importer. Real people, not addresses of the form info@.</li>
+    <li>Send each buyer target a personalised email plus the PDF, or a physical samples box where the buyer profile justifies the cost.</li>
+    <li>Measure: how many buyer prospects request follow-up quotes within 30 days.</li>
+    <li>Success gate: three or more genuine buyer inquiries within 30 days means the model has signal. Fewer than three means pivot.</li>
+  </ol>
+
+  <h3>Watch-outs</h3>
+  <ul>
+    <li><strong>Exclusive-distributor contracts.</strong> Any producer already tied to a national distributor cannot multi-list. Filter on intake.</li>
+    <li><strong>Cert floor.</strong> Food-safety compliance varies wildly across the cohort. Set a minimum floor of allergen dossier plus product liability insurance. IFS and BRC stay as page-level signals, not gates.</li>
+    <li><strong>Inventory drift.</strong> If EHC ever holds stock, warehousing plus VAT overhead kicks in fast. Stay routing-only in v1. Consolidated freight is a v2 decision.</li>
+    <li><strong>Producer overpromise.</strong> If listed MOQs and lead times drift from reality, the catalog burns credibility in one bad quote. Quarterly refresh includes a fact check.</li>
+  </ul>
+
+  <h3>Open decisions</h3>
+  <ul>
+    <li>Do we sequence the catalog behind or in front of the events-bundle pitch, or run them as one combined ask?</li>
+    <li>Is the samples box EHC-fulfilled from Berlin, or drop-shipped by the producers themselves?</li>
+    <li>Which two markets lead the buyer-target list: DACH gastro plus one export target, and which one?</li>
+    <li>Language coverage in v1: EN plus DE only, or EN plus DE plus one Romance language?</li>
+  </ul>
+
+  <hr class="rule-double">
+  <p class="small-caps">Next step</p>
+  <p>Draft the fake-front-door producer pitch for a cohort of ten to twelve makers. Confirm sign-ups before any development work on the web page. The catalog only exists once producers have committed a real fee to be in it.</p>
+
+  <div class="page-foot">
+    <span class="foot-mark">EHC &middot; Producer Catalog</span>
+    <span>04 / 04</span>
+  </div>
+</section>
+
+</body>
+</html>
