@@ -181,6 +181,40 @@ function MakerCard({
   );
 }
 
+// Republic of Heat — festival partner. Not a maker card: a double-wide, dark
+// band that gives the discovery subscription its own spot at the end.
+function PartnerBlock({ t }: { t: (typeof COPY)["en"] }) {
+  return (
+    <section
+      aria-label="Republic of Heat"
+      className="border-t-2 border-accent bg-ink-deep text-white overflow-hidden"
+    >
+      <div className="p-8 sm:p-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="label text-white/60">{t.partnerEyebrow}</p>
+          <h2 className="mt-3 text-2xl sm:text-3xl font-semibold tracking-tight">
+            Republic of Heat
+          </h2>
+          <p className="mt-3 max-w-xl leading-relaxed text-white/85">
+            {t.partnerLine}
+          </p>
+        </div>
+        <div className="shrink-0 flex flex-col gap-2 sm:items-end">
+          <a
+            href="https://republicofheat.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded bg-accent px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          >
+            {t.partnerCta} →
+          </a>
+          <span className="text-xs text-white/50">republicofheat.com</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default async function MakersPage({
   searchParams,
 }: {
@@ -291,6 +325,8 @@ export default async function MakersPage({
               </section>
             );
           })}
+
+          <PartnerBlock t={t} />
 
           <div className="pt-8 border-t border-rule flex flex-col sm:flex-row justify-between gap-4 text-sm print:hidden">
             <Link

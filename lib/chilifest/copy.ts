@@ -76,6 +76,10 @@ interface Copy {
   backToHub: string;
   photos: string;
   downloadImage: string;
+  // Republic of Heat partner block (makers page)
+  partnerEyebrow: string;
+  partnerLine: string;
+  partnerCta: string;
 }
 
 export const COPY: Record<Lang, Copy> = {
@@ -146,6 +150,10 @@ export const COPY: Record<Lang, Copy> = {
     backToHub: "Back to the press hub",
     photos: "Photos",
     downloadImage: "Download image",
+    partnerEyebrow: "Berlin Chili Fest partner",
+    partnerLine:
+      "The discovery subscription for Europe's most incredible hot sauces — shipped to your door every 1, 2 or 3 months.",
+    partnerCta: "Explore the subscription",
   },
   de: {
     langName: "Deutsch",
@@ -214,5 +222,9 @@ export const COPY: Record<Lang, Copy> = {
     backToHub: "Zurück zum Presse-Hub",
     photos: "Fotos",
     downloadImage: "Bild herunterladen",
+    partnerEyebrow: "Berlin Chili Fest Partner",
+    partnerLine:
+      "Das Entdecker-Abo für Europas unglaublichste Hot Sauces — alle 1, 2 oder 3 Monate direkt zu dir nach Hause geliefert.",
+    partnerCta: "Zum Entdecker-Abo",
   },
 };
