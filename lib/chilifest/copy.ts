@@ -35,6 +35,11 @@ interface Copy {
   producersCta: string;
   // releases
   releasesHeading: string;
+  releaseLabel: string;
+  releaseTitle: string;
+  releaseDate: string;
+  dlEnglish: string;
+  dlGerman: string;
   allReleases: string;
   // media
   mediaHeading: string;
@@ -96,6 +101,11 @@ export const COPY: Record<Lang, Copy> = {
       "Berlin Chili Fest brings together more than 50 independent makers. These {n} have offered samples and interviews to press, gathered here one maker a page.",
     producersCta: "Meet the {n} featured producers",
     releasesHeading: "Press releases",
+    releaseLabel: "Launch announcement",
+    releaseTitle: "Berlin Chili Fest returns for Harvest 2026",
+    releaseDate: "17 July 2026",
+    dlEnglish: "English (PDF)",
+    dlGerman: "German (PDF)",
     allReleases: "All Council releases",
     mediaHeading: "Media files",
     mediaIntro:
@@ -155,6 +165,11 @@ export const COPY: Record<Lang, Copy> = {
       "Das Berlin Chili Fest bringt mehr als 50 unabhängige Macher zusammen. Diese {n} haben der Presse Muster und Interviews angeboten, hier versammelt, ein Macher pro Seite.",
     producersCta: "Alle {n} Produzenten ansehen",
     releasesHeading: "Pressemitteilungen",
+    releaseLabel: "Launch-Ankündigung",
+    releaseTitle: "Berlin Chili Fest kehrt zur Harvest 2026 zurück",
+    releaseDate: "17. Juli 2026",
+    dlEnglish: "Englisch (PDF)",
+    dlGerman: "Deutsch (PDF)",
     allReleases: "Alle Mitteilungen des Councils",
     mediaHeading: "Bildmaterial",
     mediaIntro:

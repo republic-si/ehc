@@ -13,7 +13,6 @@ import {
   PRESS_EVENING,
 } from "@/lib/chilifest/media";
 import { MAKERS } from "@/lib/chilifest/makers";
-import { RELEASE } from "@/lib/chilifest/release";
 import { COPY, asLang } from "@/lib/chilifest/copy";
 
 // Language-neutral festival facts, per ~/BCF-press/BCF-MASTER.md.
@@ -35,6 +34,7 @@ const FEST = {
 
 const CANONICAL = `${SITE_URL}/chilifest`;
 const OG_IMAGE = `${SITE_URL}/chilifest/og.jpg`;
+// Habanero orange (--accent, #c8612e) — the EHC accent, used sparingly on the forest-green makers band below.
 type SP = Promise<{ lang?: string }>;
 
 export async function generateMetadata({
@@ -93,6 +93,23 @@ const eventJsonLd = {
   },
 };
 
+function DownloadIcon() {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 20 20"
+      className="h-4 w-4 shrink-0"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M10 3v10m0 0 4-4m-4 4-4-4M4 16h12" />
+    </svg>
+  );
+}
+
 function LaneHeading({
   kicker,
   title,
@@ -119,7 +136,6 @@ export default async function ChiliFestPage({
 }) {
   const lang = asLang((await searchParams).lang);
   const t = COPY[lang];
-  const release = RELEASE[lang];
   const n = MAKERS.length;
   const makersHref = lang === "de" ? "/chilifest/makers?lang=de" : "/chilifest/makers";
 
@@ -258,77 +274,80 @@ export default async function ChiliFestPage({
         </div>
       </section>
 
+      {/* Meet the producers — full-bleed forest-green standout with habanero-orange highlights */}
+      <section id="makers" className="scroll-mt-8 bg-ink text-white">
+        <div className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
+          <p className="label text-accent">01</p>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">
+            {t.producersHeading}
+          </h2>
+          <span className="mt-4 block h-1 w-16 bg-accent" />
+          <p className="mt-6 max-w-2xl text-base sm:text-lg leading-relaxed text-white/85">
+            {t.producersIntro.replace("{n}", String(n))}
+          </p>
+          <div className="mt-8 flex flex-wrap gap-2">
+            {MAKERS.filter((m) => m.photo)
+              .slice(0, 8)
+              .map((m) => (
+                <div
+                  key={m.id}
+                  className="relative h-20 w-20 overflow-hidden border border-white/20"
+                  title={m.name}
+                >
+                  <Image
+                    src={m.photo as string}
+                    alt={m.name}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+          </div>
+          <Link
+            href={makersHref}
+            className="mt-9 inline-flex items-center px-6 py-3 rounded-full bg-accent text-white text-sm font-semibold tracking-wide hover:bg-accent/90 transition-colors"
+          >
+            {t.producersCta.replace("{n}", String(n))}
+          </Link>
+        </div>
+      </section>
+
       {/* Action lanes */}
       <main className="bg-white">
         <div className="max-w-5xl mx-auto px-6 divide-y divide-rule">
-          {/* Meet the producers — standout */}
-          <section id="makers" className="scroll-mt-8 py-14">
-            <div className="border border-ink/25 bg-white">
-              <div className="bg-ink text-white px-6 sm:px-8 py-6">
-                <p className="label text-white/70">01</p>
-                <h2 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight">
-                  {t.producersHeading}
-                </h2>
-              </div>
-              <div className="px-6 sm:px-8 py-8">
-                <p className="max-w-2xl text-base leading-relaxed text-foreground/90">
-                  {t.producersIntro.replace("{n}", String(n))}
-                </p>
-                <div className="mt-8 flex flex-wrap gap-2">
-                  {MAKERS.filter((m) => m.photo)
-                    .slice(0, 8)
-                    .map((m) => (
-                      <div
-                        key={m.id}
-                        className="relative h-20 w-20 overflow-hidden bg-paper-green/50 border border-rule"
-                        title={m.name}
-                      >
-                        <Image
-                          src={m.photo as string}
-                          alt={m.name}
-                          fill
-                          sizes="80px"
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
-                </div>
-                <Link
-                  href={makersHref}
-                  className="mt-8 inline-flex items-center px-6 py-3 rounded-full bg-ink text-white text-sm font-semibold tracking-wide hover:bg-ink-deep transition-colors"
-                >
-                  {t.producersCta.replace("{n}", String(n))}
-                </Link>
-              </div>
-            </div>
-          </section>
-
-          {/* Release */}
+          {/* Releases — downloadable list */}
           <section className="py-14">
             <LaneHeading kicker="02" title={t.releasesHeading} id="releases" />
-            <article className="mt-8 max-w-2xl">
-              <p className="label text-muted">{release.dateline}</p>
-              <h3 className="mt-2 text-2xl font-semibold tracking-tight text-ink leading-snug">
-                {release.headline}
-              </h3>
-              <p className="mt-3 text-lg text-foreground/85 leading-relaxed">
-                {release.subhead}
-              </p>
-              <div className="mt-6 space-y-4 text-base leading-relaxed text-foreground/90">
-                {release.body.map((p, i) =>
-                  /^["„“]/.test(p) ? (
-                    <blockquote
-                      key={i}
-                      className="border-l-2 border-accent pl-4 italic text-ink"
-                    >
-                      {p}
-                    </blockquote>
-                  ) : (
-                    <p key={i}>{p}</p>
-                  ),
-                )}
-              </div>
-            </article>
+            <ul className="mt-8 max-w-2xl border-y border-rule divide-y divide-rule">
+              <li className="py-6">
+                <p className="label text-accent">{t.releaseLabel}</p>
+                <h3 className="mt-2 text-lg sm:text-xl font-semibold tracking-tight text-ink leading-snug">
+                  {t.releaseTitle}
+                </h3>
+                <p className="mt-1 text-sm text-muted">{t.releaseDate}</p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <a
+                    href="/chilifest/releases/bcf-harvest-2026-launch-en.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-ink/25 px-4 py-2 text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors"
+                  >
+                    <DownloadIcon />
+                    {t.dlEnglish}
+                  </a>
+                  <a
+                    href="/chilifest/releases/bcf-harvest-2026-launch-de.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-ink/25 px-4 py-2 text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors"
+                  >
+                    <DownloadIcon />
+                    {t.dlGerman}
+                  </a>
+                </div>
+              </li>
+            </ul>
             <Link href="/releases" className="mt-8 inline-block more-link">
               {t.allReleases}
             </Link>

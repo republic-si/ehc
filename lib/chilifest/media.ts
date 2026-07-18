@@ -6,8 +6,9 @@ export const PHOTO_USAGE = "Free for editorial use with credit to Berlin Chili F
 
 // Public "Download all images" link. Google Drive folder, shared as
 // "Anyone with the link -> Viewer" so journalists can download it as a ZIP.
-// TODO(simon): paste the Drive folder share link here to activate the button.
-export const PRESS_KIT_URL = "";
+// Last year's Berlin Chili Fest image pack (Neil's official images).
+export const PRESS_KIT_URL =
+  "https://drive.google.com/drive/folders/1V3RV8FA2I6Db_BznHbFGeNy7NqFDfbZ2";
 
 export interface FestImage {
   src: string;
