@@ -1,6 +1,6 @@
 # ehc-site — status
 
-> Last updated: 2026-07-18
+> Last updated: 2026-07-19
 
 Next.js 16 / React 19 app on Vercel (`republic-si/ehc`), Neon Postgres shared
 with `~/ehc-press`. Public site (europeanheatcouncil.eu) + the internal `/admin`.
@@ -37,3 +37,6 @@ with `~/ehc-press`. Public site (europeanheatcouncil.eu) + the internal `/admin`
 
 - Multiple Claude sessions sometimes run here — see `AGENTS.md` (stage by name,
   no `git add -A`).
+- Public site now has a stylised-habanero favicon (`app/favicon.ico` +
+  `icon.png` + `apple-icon.png`, App Router file convention). ChiliFest makers
+  page carries a Republic of Heat partner block (EN/DE).
