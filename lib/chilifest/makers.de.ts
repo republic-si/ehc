@@ -145,11 +145,11 @@ export const MAKERS_DE: Record<string, MakerDe> = {
   },
   "roots-radicals": {
     story:
-      "Ein Berliner Produzent, gegründet von einer Molekularbiologin und Köchin, die das unperfekte Gemüse, das Märkte wegwerfen, in fermentierte Hot Sauces verwandelt.",
+      "Ein Berliner Produzent, gegründet von einer Molekularbiologin und Köchin, die das Gemüse, das Märkte wegwerfen, in fermentierte Hot Sauces verwandelt. Ihre Fermentierte Jalapeño reift sechs Wochen, dann wird das übrige Mark zu einer zweiten Sauce und die Knoblauchschalen zu einem Würzsalz aufgewertet.",
     angles: [
       "Eine Molekularbiologin und Köchin, die einen Zero-Waste-Produzenten in Berlin führt.",
       "Hot Sauce aus geretteten, aufgewerteten Zutaten: der Nachhaltigkeitswinkel fürs Wirtschafts- oder Öko-Ressort.",
-      "Eine fermentierte Harissa-Hot-Sauce, gebaut aus dem Gemüse, das Märkte wegwerfen.",
+      "Fermentierte Jalapeño, eine milde grüne Sauce aus sechs Wochen fermentierten Chilis, bei der nichts verschwendet wird.",
     ],
   },
   "yak-thai": {
