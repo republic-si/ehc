@@ -122,16 +122,16 @@ export const MAKERS_DE: Record<string, MakerDe> = {
     angles: [
       "Ein Berliner Momo-Restaurant, das den Himalaya-Timur-Pfeffer abfüllt, der sein Essen nach Heimat schmecken ließ.",
       "Timur, der zitrisch prickelnde Himalaya-Verwandte des Sichuanpfeffers, auf dem Weg aus nepalesischen Küchen ins Regal.",
-      "Snakebite Chilli Oil bei 7/10: erst der Chili-Kick, dann das betäubende Zitrusspiel des Timur.",
+      "Snakebite Chilli Oil bei 7/10: erst der Chili-Kick, dann das kribbelnde Zitrusspiel des Timur.",
     ],
   },
   "teig-fullung": {
     story:
-      "Ein schwäbischer Koch kochte sich ein Jahr lang durch asiatische Restaurants und kam süchtig nach taiwanesischem Crispy Chili Oil zurück. Er baute sein eigenes, um die Maultaschen seiner Familie zu krönen.",
+      "Ein schwäbischer Koch kochte sich ein Jahr lang durch die Küchen Taiwans und Hongkongs und kam süchtig nach Crispy Chili Oil zurück, also baute er sein eigenes. Es begann mit den Maultaschen seiner Familie, macht sich aber genauso gut auf Dumplings, Nudeln, Reis, sogar Pizza.",
     angles: [
-      "Ein schwäbischer Koch, der in asiatischen Küchen hospitierte und ein Chiliöl für die eigenen Maultaschen baute.",
+      "Ein schwäbischer Koch, der in Taiwan und Hongkong hospitierte und in Deutschland sein eigenes Crispy Chili Oil baute.",
       "Crispy Chili Oil, das Format der Stunde, von einem deutschen Macher und kein Import.",
-      "Crispy Chili Öl bei 4/10, gemacht, um einen Teller handgemachter Maultaschen zu heben.",
+      "Crispy Chili Öl bei 4/10, auf Dumplings, Nudeln und Reis so gut wie auf handgemachten Maultaschen.",
     ],
   },
   "harissa-co": {
