@@ -117,7 +117,7 @@ export const MAKERS: Maker[] = [
     awards: "",
     story: "A Berlin maker wants to lead here with something gentler than a sauce: a hot honey.",
     angles: ["A Berlin maker spanning citrus-mild to Carolina Reaper, leading with a gentler idea.", "Hot honey, the crossover condiment breaking out of the chilli aisle.", "A hot honey to open with, and a roasted lemon-habanero for the heat desk."],
-    photo: null,
+    photo: "/chilifest/makers/chiliwerk.jpg",
   },
   {
     id: "don-cabron",
