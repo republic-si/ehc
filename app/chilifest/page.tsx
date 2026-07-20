@@ -330,7 +330,7 @@ export default async function ChiliFestPage({
                 <p className="mt-1 text-sm text-muted">{t.releaseDate}</p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   <a
-                    href="/chilifest/releases/bcf-harvest-2026-launch-en.pdf"
+                    href="/chilifest/releases/bcf-harvest-2026-flavour-en.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-full border border-ink/25 px-4 py-2 text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors"
@@ -339,7 +339,7 @@ export default async function ChiliFestPage({
                     {t.dlEnglish}
                   </a>
                   <a
-                    href="/chilifest/releases/bcf-harvest-2026-launch-de.pdf"
+                    href="/chilifest/releases/bcf-harvest-2026-flavour-de.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-full border border-ink/25 px-4 py-2 text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors"
