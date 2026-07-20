@@ -179,4 +179,13 @@ export const MAKERS_DE: Record<string, MakerDe> = {
       "In kleinen Chargen in Berlin abgefüllt.",
     ],
   },
+  "julies-chili": {
+    story:
+      "Nachdem sie von Kongo nach Deutschland gezogen war, fand Julie die Schärfe ihrer Kindheit nirgends wieder und baute sich kurzerhand ihre eigene Saucenlinie auf. Diese mildere gelbe Habanero machte sie für die Freunde ihres Sohnes, denen die rote Version zu scharf war, und traf damit genau ins Schwarze. Vegan, mit natürlichen Zutaten.",
+    angles: [
+      "Eine Köchin, die von Kongo nach Deutschland zog und ihre eigene Linie aufbaute, um die vermisste Schärfe zu ersetzen.",
+      "Eine mildere gelbe Habanero, gemacht für die nächste Generation: die Freunde ihres Sohnes, denen die rote zu scharf war.",
+      "Yellow Habanero bei 3/10, vegan und geschmacksbetont, das milde Ende einer selbst aufgebauten Reihe.",
+    ],
+  },
 };

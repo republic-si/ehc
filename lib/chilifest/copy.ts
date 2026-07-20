@@ -140,7 +140,7 @@ export const COPY: Record<Lang, Copy> = {
     makersEyebrow: "Press selection · sample-ready makers",
     makersTitle: "The Makers of the Harvest",
     makersIntro:
-      "Berlin Chili Fest brings together more than 50 independent makers. The nineteen featured here have offered samples and interviews to press ahead of the show, gathered one maker a page: who they are, how the sauce tastes, and what to put it on.",
+      "Berlin Chili Fest brings together more than 50 independent makers. The twenty featured here have offered samples and interviews to press ahead of the show, gathered one maker a page: who they are, how the sauce tastes, and what to put it on.",
     indexLabel: (n) => `Index · ${n} featured makers`,
     segHotSauces: "Hot sauces",
     segOilsCrisps: "Chilli oils & crisps",
@@ -212,7 +212,7 @@ export const COPY: Record<Lang, Copy> = {
     makersEyebrow: "Presseauswahl · musterbereite Macher",
     makersTitle: "Die Macher der Harvest",
     makersIntro:
-      "Das Berlin Chili Fest bringt mehr als 50 unabhängige Macher zusammen. Die neunzehn hier vorgestellten haben der Presse vor dem Festival Muster und Interviews angeboten, ein Macher pro Seite: wer sie sind, wie die Sauce schmeckt und wozu sie passt.",
+      "Das Berlin Chili Fest bringt mehr als 50 unabhängige Macher zusammen. Die zwanzig hier vorgestellten haben der Presse vor dem Festival Muster und Interviews angeboten, ein Macher pro Seite: wer sie sind, wie die Sauce schmeckt und wozu sie passt.",
     indexLabel: (n) => `Index · ${n} ausgewählte Macher`,
     segHotSauces: "Hot Sauces",
     segOilsCrisps: "Chiliöle & Crisps",

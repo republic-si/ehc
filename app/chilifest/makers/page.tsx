@@ -27,6 +27,7 @@ const SEGMENT_OF: Record<string, Segment> = {
   "roots-radicals": "Hot sauces",
   "dr-john-s-hot-sauce": "Hot sauces",
   "salsa-boy": "Hot sauces",
+  "julies-chili": "Hot sauces",
   "instant-taste": "Chilli oils & crisps",
   "don-cabron": "Chilli oils & crisps",
   moja: "Chilli oils & crisps",

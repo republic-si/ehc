@@ -201,7 +201,7 @@ export const MAKERS: Maker[] = [
     awards: "",
     story: "Every plate of momo at this Berlin restaurant tasted of home except for one thing: the wild Himalayan Timur pepper. Biplav Dahal bottled it as Snakebite Chilli Oil, a first chilli kick followed by the citrusy tingle of Nepal that keeps you reaching back.",
     angles: ["A Berlin momo restaurant bottling the Himalayan Timur pepper that made its food taste of home.", "Timur, the citrus-tingling Himalayan cousin of Sichuan pepper, moving from Nepali kitchens onto shelves.", "Snakebite Chilli Oil at 7/10: a chilli kick first, then the numbing citrus lift of Timur."],
-    photo: null,
+    photo: "/chilifest/makers/momo-haus.jpg",
   },
   {
     id: "teig-fullung",
@@ -286,5 +286,19 @@ export const MAKERS: Maker[] = [
     story: "A one-person Berlin project with a straight face and a bold claim printed on the label: 'Berlin's premium chilli sauce.'",
     angles: ["A one-person Berlin project making a big claim on the label.", "Single-maker premium positioning: 'Berlin's premium chilli sauce'.", "Bottled in small runs in Berlin."],
     photo: null,
+  },
+  {
+    id: "julies-chili",
+    name: "Julie's Chili",
+    legalName: "",
+    maker: "Julie",
+    location: "Germany",
+    track: "Flavour",
+    flagship: "Yellow Habanero",
+    heat: "3/10",
+    awards: "",
+    story: "After moving from Congo to Germany, Julie couldn't find the spice she grew up with, so she built her own line of sauces. She made this milder yellow habanero for her son's friends who found the red version too hot, and by their verdict it was a hit. Vegan, made with natural ingredients.",
+    angles: ["A cook who moved from Congo to Germany and built her own line to replace the spice she couldn't find.", "A milder yellow habanero made for the next generation: her son's friends who found the red one too hot.", "Yellow Habanero at 3/10, vegan and flavour-led, the gentle end of a home-built range."],
+    photo: "/chilifest/makers/julies-chili.jpg",
   },
 ];

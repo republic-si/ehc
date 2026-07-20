@@ -1,6 +1,9 @@
 # ehc-site — status
 
-> Last updated: 2026-07-19
+> Last updated: 2026-07-20
+
+> **2026-07-20 — chilifest makers: added Julie's Chili (now 20 makers) + 3 Nightjar photos.**
+> New maker `julies-chili` (Yellow Habanero, 3/10, Hot sauces segment) added to `makers.ts` + `makers.de.ts` + `SEGMENT_OF` in `app/chilifest/makers/page.tsx`; photo `public/chilifest/makers/julies-chili.jpg`. Set Momo Haus photo (`momo-haus.jpg`, was null) and swapped Teig's to the Nightjar version (`teig-fullung.jpg`). Bumped the hardcoded "nineteen/neunzehn" maker count to "twenty/zwanzig" in `copy.ts` (the `{n}` CTA is dynamic). NB: typecheck was not run before commit — watch the Vercel deploy. Still missing photos: harissa-co, roots-radicals, yak-thai, dr-john-s, salsa-boy (makers never sent one).
 
 Next.js 16 / React 19 app on Vercel (`republic-si/ehc`), Neon Postgres shared
 with `~/ehc-press`. Public site (europeanheatcouncil.eu) + the internal `/admin`.
