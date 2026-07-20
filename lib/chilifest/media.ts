@@ -40,6 +40,10 @@ export const IMAGES: Record<string, FestImage> = {
     src: "/chilifest/crowd.jpg",
     alt: "Crowds sampling sauces among the stalls at Berlin Chili Fest.",
   },
+  rohBox: {
+    src: "/chilifest/roh-box.jpg",
+    alt: "Republic of Heat sample boxes and a tasting board of sauces at a Berlin Chili Fest stall.",
+  },
 };
 
 // Order for the downloadable media-kit preview grid.

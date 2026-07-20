@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 import { TopBar, SiteHeader, SiteFooter } from "@/app/_components/SiteChrome";
-import { PHOTO_CREDIT } from "@/lib/chilifest/media";
+import { PHOTO_CREDIT, IMAGES } from "@/lib/chilifest/media";
 import { MAKERS, type Maker } from "@/lib/chilifest/makers";
 import { MAKERS_DE } from "@/lib/chilifest/makers.de";
 import { COPY, asLang, type Lang } from "@/lib/chilifest/copy";
@@ -190,26 +190,37 @@ function PartnerBlock({ t }: { t: (typeof COPY)["en"] }) {
       aria-label="Republic of Heat"
       className="border-t-2 border-accent bg-ink-deep text-white overflow-hidden"
     >
-      <div className="p-8 sm:p-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="label text-white/60">{t.partnerEyebrow}</p>
-          <h2 className="mt-3 text-2xl sm:text-3xl font-semibold tracking-tight">
-            Republic of Heat
-          </h2>
-          <p className="mt-3 max-w-xl leading-relaxed text-white/85">
-            {t.partnerLine}
-          </p>
+      <div className="flex flex-col md:flex-row">
+        <div className="relative w-full aspect-square md:aspect-auto md:w-2/5 md:self-stretch">
+          <Image
+            src={IMAGES.rohBox.src}
+            alt={IMAGES.rohBox.alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 40vw"
+            className="object-cover"
+          />
         </div>
-        <div className="shrink-0 flex flex-col gap-2 sm:items-end">
-          <a
-            href="https://republicofheat.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded bg-accent px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-          >
-            {t.partnerCta} →
-          </a>
-          <span className="text-xs text-white/50">republicofheat.com</span>
+        <div className="flex-1 p-8 sm:p-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="label text-white/60">{t.partnerEyebrow}</p>
+            <h2 className="mt-3 text-2xl sm:text-3xl font-semibold tracking-tight">
+              Republic of Heat
+            </h2>
+            <p className="mt-3 max-w-xl leading-relaxed text-white/85">
+              {t.partnerLine}
+            </p>
+          </div>
+          <div className="shrink-0 flex flex-col gap-2 sm:items-end">
+            <a
+              href="https://republicofheat.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded bg-accent px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            >
+              {t.partnerCta} →
+            </a>
+            <span className="text-xs text-white/50">republicofheat.com</span>
+          </div>
         </div>
       </div>
     </section>

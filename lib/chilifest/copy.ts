@@ -114,9 +114,9 @@ export const COPY: Record<Lang, Copy> = {
       "Berlin Chili Fest brings together more than 50 independent makers. These {n} have offered samples and interviews to press, gathered here one maker a page.",
     producersCta: "Meet the {n} featured producers",
     releasesHeading: "Press releases",
-    releaseLabel: "Launch announcement",
-    releaseTitle: "Berlin Chili Fest returns for Harvest 2026",
-    releaseDate: "17 July 2026",
+    releaseLabel: "Press release",
+    releaseTitle: "At Berlin Chili Fest, the makers ask to be judged on flavour, not heat",
+    releaseDate: "18 July 2026",
     dlEnglish: "English (PDF)",
     dlGerman: "German (PDF)",
     allReleases: "All Council releases",
@@ -152,7 +152,7 @@ export const COPY: Record<Lang, Copy> = {
     downloadImage: "Download image",
     partnerEyebrow: "Berlin Chili Fest partner",
     partnerLine:
-      "The discovery subscription for Europe's most incredible hot sauces — shipped to your door every 1, 2 or 3 months.",
+      "Republic of Heat will be showcasing the European Hot Sauce Awards with two hot sauce sets, Europe's Best and Definitely Hot, plus their own collections including the Berlin BBQ Box Set, made exclusively for the festival.",
     partnerCta: "Explore the subscription",
   },
   de: {
@@ -186,9 +186,9 @@ export const COPY: Record<Lang, Copy> = {
       "Das Berlin Chili Fest bringt mehr als 50 unabhängige Macher zusammen. Diese {n} haben der Presse Muster und Interviews angeboten, hier versammelt, ein Macher pro Seite.",
     producersCta: "Alle {n} Produzenten ansehen",
     releasesHeading: "Pressemitteilungen",
-    releaseLabel: "Launch-Ankündigung",
-    releaseTitle: "Berlin Chili Fest kehrt zur Harvest 2026 zurück",
-    releaseDate: "17. Juli 2026",
+    releaseLabel: "Pressemitteilung",
+    releaseTitle: "Beim Berlin Chili Fest wollen die Macher am Geschmack gemessen werden, nicht an der Schärfe",
+    releaseDate: "18. Juli 2026",
     dlEnglish: "Englisch (PDF)",
     dlGerman: "Deutsch (PDF)",
     allReleases: "Alle Mitteilungen des Councils",
@@ -224,7 +224,7 @@ export const COPY: Record<Lang, Copy> = {
     downloadImage: "Bild herunterladen",
     partnerEyebrow: "Berlin Chili Fest Partner",
     partnerLine:
-      "Das Entdecker-Abo für Europas unglaublichste Hot Sauces — alle 1, 2 oder 3 Monate direkt zu dir nach Hause geliefert.",
+      "Republic of Heat präsentiert die European Hot Sauce Awards mit zwei Hot-Sauce-Sets, Europe's Best und Definitely Hot, sowie eigene Kollektionen, darunter das exklusiv für das Festival gemachte Berlin BBQ Box Set.",
     partnerCta: "Zum Entdecker-Abo",
   },
 };
