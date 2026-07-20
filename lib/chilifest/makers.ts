@@ -18,6 +18,7 @@ export interface Maker {
   story: string;
   angles: string[];
   photo: string | null;
+  logo?: string | null;
 }
 
 export const MAKERS: Maker[] = [

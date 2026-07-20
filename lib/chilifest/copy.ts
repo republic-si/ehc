@@ -76,6 +76,7 @@ interface Copy {
   backToHub: string;
   photos: string;
   downloadImage: string;
+  downloadLogo: string;
   // Republic of Heat partner block (makers page)
   partnerEyebrow: string;
   partnerLine: string;
@@ -150,6 +151,7 @@ export const COPY: Record<Lang, Copy> = {
     backToHub: "Back to the press hub",
     photos: "Photos",
     downloadImage: "Download image",
+    downloadLogo: "Logos",
     partnerEyebrow: "Berlin Chili Fest partner",
     partnerLine:
       "Republic of Heat will be showcasing the European Hot Sauce Awards with two hot sauce sets, Europe's Best and Definitely Hot, plus their own collections including the Berlin BBQ Box Set, made exclusively for the festival.",
@@ -222,6 +224,7 @@ export const COPY: Record<Lang, Copy> = {
     backToHub: "Zurück zum Presse-Hub",
     photos: "Fotos",
     downloadImage: "Bild herunterladen",
+    downloadLogo: "Logos",
     partnerEyebrow: "Berlin Chili Fest Partner",
     partnerLine:
       "Republic of Heat präsentiert die European Hot Sauce Awards mit zwei Hot-Sauce-Sets, Europe's Best und Definitely Hot, sowie eigene Kollektionen, darunter das exklusiv für das Festival gemachte Berlin BBQ Box Set.",

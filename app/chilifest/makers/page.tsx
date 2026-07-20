@@ -111,16 +111,26 @@ function MakerCard({
                 sizes="(min-width:640px) 34vw, 100vw"
                 className="object-cover"
               />
-              <a
-                href={m.photo}
-                download={`${m.id}-berlin-chili-fest.jpg`}
-                aria-label={`${t.downloadImage}: ${m.name}`}
-                className="absolute inset-0 flex items-end justify-end p-2"
-              >
-                <span className="inline-flex items-center gap-1 rounded bg-ink/85 text-white text-[10px] font-semibold px-2 py-1 opacity-90 group-hover:bg-accent transition-colors">
+              <div className="absolute inset-0 flex items-end justify-end gap-1 p-2">
+                <a
+                  href={m.photo}
+                  download={`${m.id}-berlin-chili-fest.jpg`}
+                  aria-label={`${t.downloadImage}: ${m.name}`}
+                  className="inline-flex items-center gap-1 rounded bg-ink/85 text-white text-[10px] font-semibold px-2 py-1 opacity-90 hover:bg-accent transition-colors"
+                >
                   ↓ {t.downloadImage}
-                </span>
-              </a>
+                </a>
+                {m.logo ? (
+                  <a
+                    href={m.logo}
+                    download={`${m.id}-logo.png`}
+                    aria-label={`${t.downloadLogo}: ${m.name}`}
+                    className="inline-flex items-center gap-1 rounded bg-ink/85 text-white text-[10px] font-semibold px-2 py-1 opacity-90 hover:bg-accent transition-colors"
+                  >
+                    ↓ {t.downloadLogo}
+                  </a>
+                ) : null}
+              </div>
             </>
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
