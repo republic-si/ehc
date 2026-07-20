@@ -28,7 +28,7 @@ export const MAKERS_DE: Record<string, MakerDe> = {
   },
   "neck-dart": {
     story:
-      "Ein Berliner Sommelier begann im Lockdown, Habaneros zu fermentieren, und holt heute Medaillen bei den European Hot Sauce Awards. Seine mildeste Flasche, eine vegane Knoblauch-Chili-Mayo, soll genau die überzeugen, die am Tisch behaupten, Hot Sauce zu hassen.",
+      "Ein Berliner Sommelier begann im Lockdown, Habaneros zu fermentieren. Seine mildeste Flasche, eine vegane Knoblauch-Chili-Mayo, soll genau die überzeugen, die am Tisch behaupten, Hot Sauce zu hassen.",
     angles: [
       "Ein Berliner Sommelier, der im Lockdown anfing, Habaneros zu fermentieren.",
       "Lebendig fermentierte, unpasteurisierte Saucen auf der Welle der Darmgesundheit.",
@@ -46,29 +46,29 @@ export const MAKERS_DE: Record<string, MakerDe> = {
   },
   chillipeterson: {
     story:
-      "In der tschechischen Stahlstadt Ostrava füllt Petr Schejbal Chilisauce ganz ohne Konservierungsstoffe ab. Seine allererste, die rauchige „Zpečený Indián“, wurde beim Mechov-Chilifestival zum Produkt des Jahres gewählt.",
+      "In der tschechischen Stahlstadt Ostrava füllt Petr Schejbal Chilisauce ganz ohne Konservierungsstoffe ab. Seine allererste, die milde „Zpečený Indián“, brachte die Marke ins Rollen.",
     angles: [
       "Ein Macher aus Ostrava, der seit 2020 konservierungsstofffreie Chilisauce abfüllt.",
-      "Mitteleuropäisches Chili-Handwerk, ein Preisträger aus dem tschechischen Stahlgürtel.",
-      "„Zpečený Indián“, eine milde, rauchige Sauce im Tikka-Stil, seine erste und ein Festival-Produkt des Jahres.",
+      "Mitteleuropäisches Chili-Handwerk aus dem tschechischen Stahlgürtel.",
+      "„Zpečený Indián“, eine milde Sauce im Tikka-Stil, seine erste.",
     ],
   },
   "marie-sharp-s": {
     story:
       "Marie Sharp machte sich in Belize einen Namen, indem sie den Essig in der Flasche durch Karotten ersetzte. Ihre deutschen Fürsprecher bringen die Mango-Variante, die sanfteste der Reihe, nach Berlin.",
     angles: [
-      "Ein deutscher Importeur, der sich für Marie Sharp's einsetzt, die belizische Marke, die Essig durch Karotten tauschte.",
+      "Ein deutscher Importeur, der sich für Marie Sharp's einsetzt, die belizische Marke, die sie nach 20 Jahren in Belize zur Legende machte.",
       "Eine Traditionsmarken-Geschichte: Karotte und Habanero als die ursprüngliche geschmacksbetonte Hot Sauce.",
       "Mango Pepper bei 2/10, mild genug für Wassermelonensalat oder das Frühstücksmüsli.",
     ],
   },
   chiliwerk: {
     story:
-      "Ein Berliner Macher, der mit seiner gerösteten Zitronen-Habanero-Sauce EHSA-Silber 2025 holte, will hier mit etwas Sanfterem vorangehen: einem Hot Honey.",
+      "Ein Berliner Macher will hier mit etwas Sanfterem vorangehen als einer Sauce: einem Hot Honey.",
     angles: [
       "Ein Berliner Macher, der von zitrusmild bis Carolina Reaper reicht und mit der sanfteren Idee führt.",
       "Hot Honey, das Crossover-Condiment, das aus dem Chili-Regal ausbricht.",
-      "Ein Hot Honey zum Einstieg und die EHSA-Silber-Zitrone-Habanero fürs Schärfe-Ressort.",
+      "Ein Hot Honey zum Einstieg und eine geröstete Zitronen-Habanero fürs Schärfe-Ressort.",
     ],
   },
   "don-cabron": {
@@ -109,10 +109,10 @@ export const MAKERS_DE: Record<string, MakerDe> = {
   },
   "ti-dodo-epice": {
     story:
-      "Vaanee wuchs auf Mauritius auf und vermisste die Küche ihrer Mutter, als sie in die Niederlande zog, also brachte sie sie sich selbst bei. Ihre Compote Tamarin begann als Rest: das Tamarindenmark, das von einer schärferen Sauce übrig blieb, eingekocht zu jenem süßen, klebrigen Kompott, das ihre Mutter einst vor ihr und ihren Brüdern verstecken musste.",
+      "Vaanee wuchs auf Mauritius inmitten seiner Melting-Pot-Küche auf, allen voran der ihrer Mutter, und vermisste sie, als sie in die Niederlande zog, also fing sie an, sie selbst zu kochen. Ihre Compote Tamarin begann als Rest: Tamarindenmark, das von ihrer Pima Tamarin übrig blieb, eingekocht zu jenem klebrigen Kompott, das ihre Mutter einst vor ihr und ihren Brüdern versteckte.",
     angles: [
-      "Eine mauritische Köchin in den Niederlanden, die die Saucen und Pickles abfüllt, die zu Hause zu jedem Gericht gehörten.",
-      "Upcycling mit Geschmack: Das Kompott entsteht aus dem Tamarindenmark, das von ihrer schärferen Pima-Tamarin-Sauce übrig bleibt.",
+      "Eine mauritische Kleinproduzentin in den Niederlanden, die die Saucen und Pickles abfüllt, die zu Hause zu jedem Gericht gehörten.",
+      "Upcycling mit Geschmack: Das Kompott entsteht aus dem Tamarindenmark, das von ihrer scharfen Pima-Tamarin-Sauce übrig bleibt.",
       "Compote Tamarin bei 2/10, süß, klebrig und würzig mit Chili-Abgang, auf Vanilleeis so gut wie auf dem Käsebrett.",
     ],
   },
@@ -136,11 +136,11 @@ export const MAKERS_DE: Record<string, MakerDe> = {
   },
   "harissa-co": {
     story:
-      "Eine in Berlin lebende tunesische Ingenieurin machte aus dem Rezept ihrer Großmutter ein Unternehmen, das auf einer einzigen Harissa steht: alte Baklouti-Chilisorten, über zwölf Stunden über Olivenholz geräuchert.",
+      "Eine in Berlin lebende tunesische Ingenieurin machte aus dem Rezept ihrer Großmutter, was sie Deutschlands erste handwerkliche geräucherte Harissa nennt: alte Baklouti-Chilis, über zwölf Stunden über Olivenholz geräuchert. Das „& Co“ steht für die Gemeinschaft dahinter, die Frauen, die das Rezept weitergaben, und die Bauern, die die Baklouti noch auf die alte Art räuchern.",
     angles: [
-      "Eine in Berlin lebende tunesische Ingenieurin, die auf dem Rezept ihrer Großmutter ein Unternehmen aufbaut.",
-      "Single-Origin-Harissa mit nur einem Produkt: Herkunft und alte Chilisorten fürs Slow-Food-Ressort.",
-      "Eine geräucherte Harissa, alte Baklouti-Chilis über Olivenholz, kompromisslos scharf.",
+      "Eine in Berlin lebende tunesische Ingenieurin, die auf dem Rezept ihrer Großmutter und der sommerlichen Harissa-Tradition ihrer Familie ein Unternehmen aufbaut.",
+      "Single-Origin-Harissa mit nur einem Produkt: alte Baklouti-Chilis, 12+ Stunden über Olivenholz geräuchert, fürs Slow-Food- oder Herkunftsressort.",
+      "Eine geräucherte Harissa bei 3/10, sauber im Etikett und voller Geschmack, für alle, die wässrige Supermarktpaste satthaben.",
     ],
   },
   "roots-radicals": {
@@ -154,20 +154,20 @@ export const MAKERS_DE: Record<string, MakerDe> = {
   },
   "yak-thai": {
     story:
-      "Eine thailändische Bäckerin, die fünfzehn Jahre lang ihren eigenen Laden führte, macht heute im ländlichen Bayern von Hand Curry- und Chilipasten und importiert ihre getrockneten Chilis aus Thailand, weil die europäischen nicht gut genug waren.",
+      "Als eine thailändische Konditorin mit ihrem Mann nach Deutschland zog, fanden sie die echten thailändischen Aromen nicht, die sie vermissten, also begannen sie, im ländlichen Bayern eigene Curry- und Chilipasten zu machen, mit direkt aus Thailand importierten getrockneten Chilis. Nichts wird für den deutschen Markt abgemildert: dieselbe Fischsauce, Garnelenpaste und Austernsauce wie zu Hause. Ihre Namprik Sam Het, eine „Drei-Pilze“-Chilipaste, ist der umami-reiche Star, als Dip so gut wie als Kochbasis.",
     angles: [
-      "Eine thailändische Bäckerin, die fünfzehn Jahre ihren eigenen Laden führte und heute im ländlichen Bayern Pasten macht.",
-      "Authentische Curry- und Chilipasten, ohne Zusätze, mit für den echten Geschmack importierten Chilis.",
-      "Thailändische Curry- und Chilipasten, bewertet auf ihrer eigenen Schärfeskala, auf Bestellung gemacht.",
+      "Eine thailändische Konditorin und ihr Mann, die im ländlichen Bayern zusatzstofffreie Curry- und Chilipasten machen, nichts für Deutschland abgemildert.",
+      "Namprik Sam Het, eine „Drei-Pilze“-Chilipaste, umami-reich und als Dip wie als Kochbasis gut.",
+      "Eine Bandbreite von Khao-Soi-Currypaste bei 2/10 bis Namprik Sam Het bei 4–5, Chilis aus Thailand für echten Geschmack.",
     ],
   },
   "dr-john-s-hot-sauce": {
     story:
-      "Ein unabhängiger Hot-Sauce-Macher in Nürnberg, der handgefüllte Flaschen durch Franken und darüber hinaus verschickt.",
+      "Albert Ortez kochte eine Mango-Habanero-Sauce als einmaliges Weihnachtsgeschenk für seinen Bruder, einen bekennenden Hot-Sauce-Süchtigen. Der Bruder flippte aus, dann wollten dessen Freunde eine Flasche, dann fragten Fremde, wo es „dieses Mango-Habanero-Zeug“ zu kaufen gibt. Aus einem Scherzgeschenk wurde Dr. John's, die Nürnberger Marke, die Albert seit 2020 führt.",
     angles: [
-      "Ein unabhängiger Macher aus Nürnberg, im chili-freundlichen Franken.",
-      "Frankens unabhängige Hot-Sauce-Szene, fürs Regionalressort.",
-      "Handgemachte Hot Sauce, deutschlandweit verschickt.",
+      "Ein Nürnberger Macher, dessen Mango-Habanero-Sauce als einmaliges Weihnachtsgeschenk für seinen Hot-Sauce-süchtigen Bruder begann und zur Marke wurde.",
+      "Trippy Habanero Mango bei 7/10: fruchtige Habanero, mit reifer Mango weitergetrieben, süß und scharf mit einer Schärfe, die sich anschleicht.",
+      "Eine Reihe aus drei Saucen, von einer fermentierten „Twisted“-Sriracha mit Limettenschale bis zu einer für den Grill gebauten Carolina Reaper, aus dem chili-freundlichen Franken.",
     ],
   },
   "salsa-boy": {
