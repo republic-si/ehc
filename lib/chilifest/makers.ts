@@ -117,7 +117,7 @@ export const MAKERS: Maker[] = [
     awards: "",
     story: "A Berlin maker wants to lead here with something gentler than a sauce: a hot honey.",
     angles: ["A Berlin maker spanning citrus-mild to Carolina Reaper, leading with a gentler idea.", "Hot honey, the crossover condiment breaking out of the chilli aisle.", "A hot honey to open with, and a roasted lemon-habanero for the heat desk."],
-    photo: "/chilifest/makers/chiliwerk.jpg",
+    photo: null,
   },
   {
     id: "don-cabron",
@@ -201,7 +201,7 @@ export const MAKERS: Maker[] = [
     awards: "",
     story: "Every plate of momo at this Berlin restaurant tasted of home except for one thing: the wild Himalayan Timur pepper. Biplav Dahal bottled it as Snakebite Chilli Oil, a first chilli kick followed by the citrusy tingle of Nepal that keeps you reaching back.",
     angles: ["A Berlin momo restaurant bottling the Himalayan Timur pepper that made its food taste of home.", "Timur, the citrus-tingling Himalayan cousin of Sichuan pepper, moving from Nepali kitchens onto shelves.", "Snakebite Chilli Oil at 7/10: a chilli kick first, then the numbing citrus lift of Timur."],
-    photo: "/chilifest/makers/momo-haus.jpg",
+    photo: null,
   },
   {
     id: "teig-fullung",
@@ -215,7 +215,7 @@ export const MAKERS: Maker[] = [
     awards: "",
     story: "A Swabian chef spent a year cooking his way through Asian restaurants and came home hooked on Taiwanese crispy chilli oil. He built his own to crown his family's Maultaschen.",
     angles: ["A Swabian chef who staged across Asian kitchens and built a chilli oil for his own Maultaschen.", "Crispy chilli oil, the format of the moment, from a German maker and not an import.", "Crispy Chili Öl at 4/10, made to lift a plate of handmade Maultaschen."],
-    photo: "/chilifest/makers/teig-fullung.jpg",
+    photo: null,
   },
   {
     id: "harissa-co",
