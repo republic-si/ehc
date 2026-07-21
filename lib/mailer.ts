@@ -11,6 +11,7 @@ export interface MailInput {
   subject: string;
   text: string;
   replyTo?: string;
+  cc?: string | string[];
 }
 
 function getTransport() {
@@ -39,6 +40,7 @@ export async function sendMail(input: MailInput): Promise<boolean> {
   await transport.sendMail({
     from: process.env.EMAIL_FROM ?? "simon@republicofheat.com",
     to: input.to,
+    cc: input.cc,
     subject: input.subject,
     text: input.text,
     replyTo: input.replyTo,
