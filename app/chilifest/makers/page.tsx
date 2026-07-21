@@ -7,6 +7,7 @@ import { PHOTO_CREDIT, IMAGES } from "@/lib/chilifest/media";
 import { MAKERS, type Maker } from "@/lib/chilifest/makers";
 import { MAKERS_DE } from "@/lib/chilifest/makers.de";
 import { COPY, asLang, type Lang } from "@/lib/chilifest/copy";
+import { MAKER_TEMPLATES } from "@/lib/chilifest/templates";
 import { LangToggle } from "../LangToggle";
 import { ChiliFestNav } from "../ChiliFestNav";
 
@@ -85,6 +86,25 @@ export async function generateMetadata({
   };
 }
 
+function BottleIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="12"
+      height="12"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M10 2h4v2.5l1 2.5v12a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-12l1-2.5V2z" />
+      <path d="M9 12h6" />
+    </svg>
+  );
+}
+
 function MakerCard({
   maker: m,
   lang,
@@ -95,15 +115,32 @@ function MakerCard({
   t: (typeof COPY)["en"];
 }) {
   const angles = anglesOf(m, lang);
+  const detailHref = `/chilifest/makers/${m.id}${lang === "de" ? "?lang=de" : ""}`;
+  const sampleLabel = lang === "de" ? "Muster verfügbar" : "Sample available";
+  const hasProfile = MAKER_TEMPLATES[m.id] !== undefined;
   return (
     <article
       id={m.id}
       className="border border-rule overflow-hidden scroll-mt-24 break-inside-avoid"
     >
       <div className="grid grid-cols-1 sm:grid-cols-[34%_1fr]">
-        <div className="relative aspect-square bg-paper-green/50 group">
+        <div className="relative aspect-square bg-paper-green/50">
           {m.photo ? (
-            <>
+            hasProfile ? (
+              <Link href={detailHref} className="group block absolute inset-0">
+                <Image
+                  src={m.photo}
+                  alt={`${m.name} at Berlin Chili Fest`}
+                  fill
+                  sizes="(min-width:640px) 34vw, 100vw"
+                  className="object-cover transition-opacity group-hover:opacity-95"
+                />
+                <span className="absolute bottom-2 left-2 inline-flex items-center gap-1.5 rounded-full bg-[#3f7e2f] text-white text-[11px] font-bold px-3 py-1.5 shadow-sm">
+                  <BottleIcon />
+                  {sampleLabel}
+                </span>
+              </Link>
+            ) : (
               <Image
                 src={m.photo}
                 alt={`${m.name} at Berlin Chili Fest`}
@@ -111,27 +148,16 @@ function MakerCard({
                 sizes="(min-width:640px) 34vw, 100vw"
                 className="object-cover"
               />
-              <div className="absolute inset-0 flex items-end justify-end gap-1 p-2">
-                <a
-                  href={m.photo}
-                  download={`${m.id}-berlin-chili-fest.jpg`}
-                  aria-label={`${t.downloadImage}: ${m.name}`}
-                  className="inline-flex items-center gap-1 rounded bg-ink/85 text-white text-[10px] font-semibold px-2 py-1 opacity-90 hover:bg-accent transition-colors"
-                >
-                  ↓ {t.downloadImage}
-                </a>
-                {m.logo ? (
-                  <a
-                    href={m.logo}
-                    download={`${m.id}-logo.png`}
-                    aria-label={`${t.downloadLogo}: ${m.name}`}
-                    className="inline-flex items-center gap-1 rounded bg-ink/85 text-white text-[10px] font-semibold px-2 py-1 opacity-90 hover:bg-accent transition-colors"
-                  >
-                    ↓ {t.downloadLogo}
-                  </a>
-                ) : null}
-              </div>
-            </>
+            )
+          ) : hasProfile ? (
+            <Link
+              href={detailHref}
+              className="group absolute inset-0 flex flex-col items-center justify-center p-6 text-center"
+            >
+              <span className="font-semibold text-ink/70 text-lg leading-tight group-hover:text-accent">
+                {m.name}
+              </span>
+            </Link>
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
               <span className="font-semibold text-ink/70 text-lg leading-tight">
@@ -144,7 +170,13 @@ function MakerCard({
         <div className="p-6">
           <p className="label text-muted">{m.location}</p>
           <h3 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight text-ink leading-tight">
-            {m.name}
+            {hasProfile ? (
+              <Link href={detailHref} className="hover:text-accent transition-colors">
+                {m.name}
+              </Link>
+            ) : (
+              m.name
+            )}
           </h3>
           {m.maker ? (
             <p className="mt-1 text-sm text-muted">{m.maker}</p>
@@ -169,6 +201,13 @@ function MakerCard({
               <dt className="label text-muted">{t.flagship}</dt>
               <dd className="mt-1 text-foreground/90">{m.flagship}</dd>
             </dl>
+          ) : null}
+          {hasProfile ? (
+            <p className="mt-5">
+              <Link href={detailHref} className="more-link text-sm">
+                {lang === "de" ? "Vollständiges Profil" : "View full profile"} →
+              </Link>
+            </p>
           ) : null}
         </div>
       </div>
