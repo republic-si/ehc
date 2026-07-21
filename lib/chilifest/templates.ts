@@ -67,20 +67,6 @@ export const MAKER_TEMPLATES: Record<string, MakerTemplate> = {
     ],
     allergens: "Mustard, garlic",
   },
-  "queima-beicas": {
-    sauceName: "Goiaba",
-    heat: "1/10",
-    story:
-      "Este molho nasceu inspirado no Mercado dos Lavradores, no Funchal, um dos locais mais emblemáticos da Madeira, conhecido pela enorme variedade de frutas exóticas da ilha. Queríamos criar um molho onde o protagonista fosse realmente o sabor da goiaba. As notas de canela e limão acompanham a fruta sem a esconder e o picante aparece apenas no final, para completar a experiência em vez de dominar o sabor.",
-    storyLang: "pt",
-    pairings: [
-      "Tábuas de queijos, realça os sabores dos queijos sem os sobrepor",
-      "Saladas frescas, acrescenta fruta, frescura e um toque final de picante",
-      "Carne de porco grelhada, a doçura da goiaba combina muito bem com carnes grelhadas",
-    ],
-    funFact:
-      "Feito com goiaba da Madeira e pensado para quem procura mais sabor do que intensidade.",
-  },
   chillipeterson: {
     sauceName: "Zpečený Indian",
     story:
@@ -188,6 +174,61 @@ export const MAKER_TEMPLATES: Record<string, MakerTemplate> = {
     ],
     allergens: "Vegan, natural ingredients",
   },
+  "qudo-tjes": {
+    sauceName: "Stormur Chili Crisp",
+    heat: "2/10",
+    story:
+      "After years of writing software, it was literally time to spice up my work, so I turned my hobby into my craft. Stormur was inspired by my travels through Iceland, the land of ice and fire: a smoky chili crisp with apple pieces, pine nuts and smoked chipotle flakes, warm and full of flavour.",
+    storyLang: "en",
+    pairings: [
+      "Flammkuchen with bacon and mushrooms: the chipotle enhances the smoky bacon",
+      "A cheese sandwich: the creamy cheese balances the heat and the smoky crunch lifts it",
+      "Stamppot, Dutch mashed potato with kale: a spoonful adds smoke, crunch and heat",
+    ],
+    allergens: "Soybean oil, walnut oil, wheat flour",
+    funFact:
+      "I'm proud I can take my company to events like Berlin Chili Fest, an eight-hour drive away. Most of the time I sleep in a tent to keep the cost down.",
+  },
+  "don-cabron": {
+    sauceName: "Smoky-Sweet Chili Oil",
+    heat: "6/10",
+    story:
+      "This smoky and sweet salsa is a traditional Mexican chili oil, with a deep smoky flavour from Mexican peppers. We added cranberries for a sweet touch and some seeds for a crunch. It reminds Mexicans of home, and shows the rest of the world what Mexico has to offer.",
+    storyLang: "en",
+    pairings: [
+      "A few drops over scrambled eggs",
+      "Drizzled over pasta",
+      "Finish your tacos with a spoonful",
+    ],
+    funFact: "Absolutely proud that Mexicans love these salsas.",
+  },
+  "roots-radicals": {
+    sauceName: "Fermented Jalapeño Hot Sauce",
+    heat: "3/10",
+    story:
+      "Founded by Peruvian scientist and chef Mónica Kisic Aguirre, Roots Radicals transforms overlooked and imperfect ingredients into bold sauces through circular cooking. Their Fermented Jalapeño ferments the chillies for six weeks, then blends them with roasted garlic and apple cider vinegar into a simple, bold, flavourful hot sauce. The fermented chilli stems are infused in vinegar to make a bright, spicy chilli vinegar, a byproduct made to add a kick to recipes or enjoyed as a morning shot.",
+    storyLang: "en",
+    pairings: ["Eggs", "Beans", "Bloody Marys"],
+    funFact:
+      "Circular cooking with at least 40% rescued ingredients, where every byproduct gets a second life.",
+  },
+  chiliwerk: {
+    sauceName: "Hot Honey",
+    storyLang: "en",
+  },
+  "salsa-boy": {
+    sauceName: "Salsa Boy 01",
+    heat: "2/10",
+    story:
+      "Two weeks of fermented jalapeños and cayenne for a deep, umami-rich foundation, rounded off with fresh lime.",
+    storyLang: "en",
+  },
+  "not-that-spicy": {
+    sauceName: "Princess Passion",
+    storyLang: "en",
+    funFact:
+      "Flavour over burn, no extracts. Three Golds at the 2026 European Hot Sauce Awards.",
+  },
 };
 
 export const MAKER_IMAGES: Record<string, string[]> = {
@@ -228,4 +269,7 @@ export const MAKER_IMAGES: Record<string, string[]> = {
     "/chilifest/makers/raw/julies-chili/2.jpg",
     "/chilifest/makers/raw/julies-chili/3.jpg",
   ],
+  "qudo-tjes": ["/chilifest/makers/raw/qudo-tjes/1.jpg"],
+  "don-cabron": ["/chilifest/makers/raw/don-cabron/1.jpg"],
+  chiliwerk: ["/chilifest/makers/raw/chiliwerk/1.jpg"],
 };

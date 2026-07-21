@@ -35,15 +35,6 @@ export const MAKERS_DE: Record<string, MakerDe> = {
       "Garlic Habamayo, eine vegane Chili-Mayo bei 2/10, die Schärfe-Fans und -Muffel verbindet.",
     ],
   },
-  "queima-beicas": {
-    story:
-      "Madeira ist für Likörwein bekannt, nicht für Chili. Francisco Silva füllt die Insel trotzdem ab: Saucen aus Guave und Zuckerrohrhonig, bei denen zuerst die Frucht kommt und die Schärfe erst am Ende grüßt.",
-    angles: [
-      "Ein junger Macher, der Madeiras eigene Speisekammer abfüllt, von Guave bis Zuckerrohrhonig.",
-      "Fruchtbetonte Saucen, bei denen der Geschmack führt und die Schärfe folgt, für Abenteuerlustige, nicht für Masochisten.",
-      "Goiaba, eine Guaven-Sauce bei 1/10, zu Käse oder gegrilltem Schwein.",
-    ],
-  },
   chillipeterson: {
     story:
       "In der tschechischen Stahlstadt Ostrava füllt Petr Schejbal Chilisauce ganz ohne Konservierungsstoffe ab. Seine allererste, die milde „Zpečený Indián“, brachte die Marke ins Rollen.",
@@ -145,9 +136,9 @@ export const MAKERS_DE: Record<string, MakerDe> = {
   },
   "roots-radicals": {
     story:
-      "Ein Berliner Produzent, gegründet von einer Molekularbiologin und Köchin, die das Gemüse, das Märkte wegwerfen, in fermentierte Hot Sauces verwandelt. Ihre Fermentierte Jalapeño reift sechs Wochen, dann wird das übrige Mark zu einer zweiten Sauce und die Knoblauchschalen zu einem Würzsalz aufgewertet.",
+      "Ein Berliner Produzent, gegründet von der peruanischen Wissenschaftlerin und Köchin Mónica Kisic Aguirre, die die unperfekten Zutaten, die Märkte wegwerfen, durch zirkuläres Kochen in kräftige fermentierte Hot Sauces verwandelt. Ihre Fermentierte Jalapeño reift sechs Wochen und wird dann mit geröstetem Knoblauch und Apfelessig verfeinert; selbst die fermentierten Stiele werden zu einem würzigen Chili-Essig.",
     angles: [
-      "Eine Molekularbiologin und Köchin, die einen Zero-Waste-Produzenten in Berlin führt.",
+      "Eine peruanische Wissenschaftlerin und Köchin, die einen Zero-Waste-Produzenten in Berlin führt.",
       "Hot Sauce aus geretteten, aufgewerteten Zutaten: der Nachhaltigkeitswinkel fürs Wirtschafts- oder Öko-Ressort.",
       "Fermentierte Jalapeño, eine milde grüne Sauce aus sechs Wochen fermentierten Chilis, bei der nichts verschwendet wird.",
     ],

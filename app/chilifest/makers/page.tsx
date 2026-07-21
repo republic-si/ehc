@@ -21,7 +21,6 @@ type Segment = (typeof SEGMENTS)[number];
 // Product-type segmentation (from each maker's flagship + description), replacing
 // the deprecated Flavour / Seed-to-Sauce / Hyperlocal tracks.
 const SEGMENT_OF: Record<string, Segment> = {
-  "queima-beicas": "Hot sauces",
   chillipeterson: "Hot sauces",
   "marie-sharp-s": "Hot sauces",
   "not-that-spicy": "Hot sauces",
