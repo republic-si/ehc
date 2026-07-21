@@ -1,6 +1,11 @@
 # ehc-site — status
 
-> Last updated: 2026-07-20
+> Last updated: 2026-07-21
+
+> **2026-07-21 — chilifest press-wave fixes (both live on main/prod).**
+> 1. **Trailing-dot redirect:** the Dutch press wave printed the bare microsite URL at a sentence end, so auto-linkers swallowed the full stop and recipients hit `/chilifest.` → 404. Added `redirects()` in `next.config.ts` mapping `/chilifest.` → `/chilifest` (308). Verified live. Root cause = press template emitting a bare URL sentence-final; redirect is the safety net (see EHC follow-up task).
+> 2. **Press-preview line** added to the When block on `/chilifest` (EN + DE) via a new `pressPreviewWhen` key in `lib/chilifest/copy.ts` + render in `app/chilifest/page.tsx`: "Exclusive press preview: Fri 4 September, 16:30 — accredited press only". Verified live.
+> Shipped by cherry-lifting only the two chilifest files onto `main` — a parallel session had bundled them into a `wip` commit (`776e27e`) on branch `chilifest-flavour-release-publish` alongside a **draft `/ehsa` page + coverage-report script**, which stay parked on that branch until the `/ehsa` `TODO(Simon)` copy decisions are cleared (Todoist: "EHSA press hub — sign off draft copy…").
 
 > **2026-07-20 — chilifest makers: added Julie's Chili (now 20 makers) + 3 Nightjar photos.**
 > New maker `julies-chili` (Yellow Habanero, 3/10, Hot sauces segment) added to `makers.ts` + `makers.de.ts` + `SEGMENT_OF` in `app/chilifest/makers/page.tsx`; photo `public/chilifest/makers/julies-chili.jpg`. Set Momo Haus photo (`momo-haus.jpg`, was null) and swapped Teig's to the Nightjar version (`teig-fullung.jpg`). Bumped the hardcoded "nineteen/neunzehn" maker count to "twenty/zwanzig" in `copy.ts` (the `{n}` CTA is dynamic). NB: typecheck was not run before commit — watch the Vercel deploy. Still missing photos: harissa-co, roots-radicals, yak-thai, dr-john-s, salsa-boy (makers never sent one).
