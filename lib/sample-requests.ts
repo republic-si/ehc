@@ -31,6 +31,7 @@ export interface SampleRequestRow {
   source: string;
   wants_samples: boolean;
   wants_press_evening: boolean;
+  attended: boolean;
   status: string;
   reviewed_at: string | null;
 }
@@ -50,6 +51,7 @@ export interface SampleRequest {
   source: string;
   wantsSamples: boolean;
   wantsPressEvening: boolean;
+  attended: boolean;
   status: SampleRequestStatus;
   reviewedAt: string | null;
 }
@@ -70,6 +72,7 @@ function toSampleRequest(row: SampleRequestRow): SampleRequest {
     source: row.source,
     wantsSamples: row.wants_samples,
     wantsPressEvening: row.wants_press_evening,
+    attended: row.attended,
     status: (row.status as SampleRequestStatus) ?? "new",
     reviewedAt: row.reviewed_at,
   };
@@ -88,6 +91,9 @@ export interface NewSampleRequest {
   source?: string;
   wantsSamples?: boolean;
   wantsPressEvening?: boolean;
+  /** Manual admin entries land straight in an approved state; the public
+   *  form omits this and gets the 'new' default. */
+  status?: SampleRequestStatus;
 }
 
 export async function createSampleRequest(
@@ -97,16 +103,17 @@ export async function createSampleRequest(
     INSERT INTO sample_requests
       (name, email, organisation, web_or_instagram,
        addr_street, addr_postcode, addr_city, addr_country, note, source,
-       wants_samples, wants_press_evening)
+       wants_samples, wants_press_evening, status)
     VALUES
       (${input.name}, ${input.email}, ${input.organisation}, ${input.webOrInstagram},
        ${input.addrStreet}, ${input.addrPostcode}, ${input.addrCity},
        ${input.addrCountry}, ${input.note ?? ""}, ${input.source ?? "chilifest"},
-       ${input.wantsSamples ?? false}, ${input.wantsPressEvening ?? false})
+       ${input.wantsSamples ?? false}, ${input.wantsPressEvening ?? false},
+       ${input.status ?? "new"})
     RETURNING id, created_at::text AS created_at, name, email, organisation,
               web_or_instagram, addr_street, addr_postcode, addr_city,
               addr_country, note, source, wants_samples, wants_press_evening,
-              status, reviewed_at::text AS reviewed_at
+              attended, status, reviewed_at::text AS reviewed_at
   `) as SampleRequestRow[];
   return toSampleRequest(rows[0]);
 }
@@ -142,7 +149,7 @@ export async function getSampleRequests(
     SELECT id, created_at::text AS created_at, name, email, organisation,
            web_or_instagram, addr_street, addr_postcode, addr_city,
            addr_country, note, source, wants_samples, wants_press_evening,
-           status, reviewed_at::text AS reviewed_at
+           attended, status, reviewed_at::text AS reviewed_at
     FROM sample_requests
     ${where}
     ORDER BY created_at DESC
@@ -192,6 +199,17 @@ export async function setSampleRequestStatus(
   await sql`
     UPDATE sample_requests
     SET status = ${status}, reviewed_at = now()
+    WHERE id = ${id}::bigint
+  `;
+}
+
+export async function setSampleRequestAttended(
+  id: string,
+  attended: boolean,
+): Promise<void> {
+  await sql`
+    UPDATE sample_requests
+    SET attended = ${attended}
     WHERE id = ${id}::bigint
   `;
 }
