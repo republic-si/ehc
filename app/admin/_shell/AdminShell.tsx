@@ -34,7 +34,7 @@ export function AdminShell({
   return (
     <div className="min-h-screen bg-paper text-ink">
       {/* Tier 1 — areas */}
-      <div className="sticky top-0 z-30 bg-ink text-white text-[12px] shadow-sm">
+      <div className="bg-ink text-white text-[12px]">
         <div className="max-w-[1480px] mx-auto px-6 h-11 flex items-center justify-between gap-4">
           <div className="flex items-center gap-5">
             <span className="tracking-[0.2em] uppercase text-[10px] opacity-70 font-semibold whitespace-nowrap">
@@ -80,7 +80,7 @@ export function AdminShell({
 
       {/* Tier 2 — sections of the active area */}
       {showSections ? (
-        <div className="sticky top-11 z-20 bg-paper-green border-b border-rule">
+        <div className="bg-paper-green border-b border-rule">
           <div className="max-w-[1480px] mx-auto px-6 h-10 flex items-center gap-5 overflow-x-auto">
             {area.sections.map((s) => {
               const on = s.href === section?.href;
