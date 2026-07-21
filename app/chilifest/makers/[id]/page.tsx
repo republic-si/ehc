@@ -9,7 +9,9 @@ import { MAKERS, type Maker } from "@/lib/chilifest/makers";
 import { MAKERS_DE } from "@/lib/chilifest/makers.de";
 import { COPY, asLang, type Lang } from "@/lib/chilifest/copy";
 import { MAKER_TEMPLATES, MAKER_IMAGES } from "@/lib/chilifest/templates";
+import { makerHasContact } from "@/lib/chilifest/maker-contacts";
 import { ChiliFestNav } from "../../ChiliFestNav";
+import { ProducerContactForm } from "../../ProducerContactForm";
 
 function BottleIcon() {
   return (
@@ -353,6 +355,14 @@ export default async function MakerDetailPage({
                   </div>
                 ) : null}
               </dl>
+            </section>
+          ) : null}
+
+          {makerHasContact(id) ? (
+            <section className="mt-10 border-t border-rule pt-8 print:hidden">
+              <div className="rounded-lg border-2 border-accent bg-accent/5 p-5 sm:p-7">
+                <ProducerContactForm makerId={id} makerName={m.name} lang={lang} />
+              </div>
             </section>
           ) : null}
 

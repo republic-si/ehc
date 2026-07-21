@@ -196,8 +196,11 @@ function MakerCard({
           ) : null}
           {hasProfile ? (
             <p className="mt-5">
-              <Link href={detailHref} className="more-link text-sm">
-                {lang === "de" ? "Vollständiges Profil" : "View full profile"} →
+              <Link
+                href={detailHref}
+                className="inline-flex items-center gap-1.5 rounded-full bg-accent text-white text-sm font-semibold px-5 py-2.5 hover:opacity-90 transition-opacity"
+              >
+                {lang === "de" ? "Vollständiges Produzentenprofil" : "Full producer profile"} →
               </Link>
             </p>
           ) : null}

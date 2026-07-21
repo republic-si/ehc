@@ -195,3 +195,7 @@ UPDATE sample_requests SET wants_samples = true
 -- wants_press_evening (the request). Only meaningful for press-evening rows;
 -- toggled by hand in /admin/sample-requests on the night / after.
 ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS attended BOOLEAN NOT NULL DEFAULT false;
+
+-- Direct journalist->producer contact form (source='producer-contact'): which
+-- maker the message was addressed to. Empty for samples / press-evening rows.
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS maker TEXT NOT NULL DEFAULT '';

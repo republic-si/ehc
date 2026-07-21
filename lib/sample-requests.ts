@@ -29,6 +29,7 @@ export interface SampleRequestRow {
   addr_country: string;
   note: string;
   source: string;
+  maker: string;
   wants_samples: boolean;
   wants_press_evening: boolean;
   attended: boolean;
@@ -49,6 +50,7 @@ export interface SampleRequest {
   addrCountry: string;
   note: string;
   source: string;
+  maker: string;
   wantsSamples: boolean;
   wantsPressEvening: boolean;
   attended: boolean;
@@ -70,6 +72,7 @@ function toSampleRequest(row: SampleRequestRow): SampleRequest {
     addrCountry: row.addr_country,
     note: row.note,
     source: row.source,
+    maker: row.maker,
     wantsSamples: row.wants_samples,
     wantsPressEvening: row.wants_press_evening,
     attended: row.attended,
@@ -89,6 +92,7 @@ export interface NewSampleRequest {
   addrCountry: string;
   note?: string;
   source?: string;
+  maker?: string;
   wantsSamples?: boolean;
   wantsPressEvening?: boolean;
   /** Manual admin entries land straight in an approved state; the public
@@ -102,17 +106,18 @@ export async function createSampleRequest(
   const rows = (await sql`
     INSERT INTO sample_requests
       (name, email, organisation, web_or_instagram,
-       addr_street, addr_postcode, addr_city, addr_country, note, source,
+       addr_street, addr_postcode, addr_city, addr_country, note, source, maker,
        wants_samples, wants_press_evening, status)
     VALUES
       (${input.name}, ${input.email}, ${input.organisation}, ${input.webOrInstagram},
        ${input.addrStreet}, ${input.addrPostcode}, ${input.addrCity},
        ${input.addrCountry}, ${input.note ?? ""}, ${input.source ?? "chilifest"},
+       ${input.maker ?? ""},
        ${input.wantsSamples ?? false}, ${input.wantsPressEvening ?? false},
        ${input.status ?? "new"})
     RETURNING id, created_at::text AS created_at, name, email, organisation,
               web_or_instagram, addr_street, addr_postcode, addr_city,
-              addr_country, note, source, wants_samples, wants_press_evening,
+              addr_country, note, source, maker, wants_samples, wants_press_evening,
               attended, status, reviewed_at::text AS reviewed_at
   `) as SampleRequestRow[];
   return toSampleRequest(rows[0]);
@@ -121,6 +126,8 @@ export async function createSampleRequest(
 export interface RequestFilter {
   wantsSamples?: boolean;
   wantsPressEvening?: boolean;
+  /** Exact match on the `source` column, e.g. 'producer-contact'. */
+  source?: string;
 }
 
 export async function getSampleRequests(
@@ -143,12 +150,16 @@ export async function getSampleRequests(
     clauses.push(`wants_press_evening = $${i++}`);
     params.push(true);
   }
+  if (filter.source) {
+    clauses.push(`source = $${i++}`);
+    params.push(filter.source);
+  }
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
   params.push(limit);
   const text = `
     SELECT id, created_at::text AS created_at, name, email, organisation,
            web_or_instagram, addr_street, addr_postcode, addr_city,
-           addr_country, note, source, wants_samples, wants_press_evening,
+           addr_country, note, source, maker, wants_samples, wants_press_evening,
            attended, status, reviewed_at::text AS reviewed_at
     FROM sample_requests
     ${where}
@@ -172,6 +183,10 @@ export async function getSampleRequestCounts(
   if (filter.wantsPressEvening) {
     clauses.push(`wants_press_evening = $${i++}`);
     params.push(true);
+  }
+  if (filter.source) {
+    clauses.push(`source = $${i++}`);
+    params.push(filter.source);
   }
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
   const rows = (await sql.query(

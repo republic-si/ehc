@@ -82,6 +82,11 @@ const VIEWS = [
     label: "Press evening",
     filter: { wantsPressEvening: true },
   },
+  {
+    key: "producer-contact",
+    label: "Producer contact",
+    filter: { source: "producer-contact" },
+  },
 ] as const;
 
 interface Props {
@@ -273,6 +278,9 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
           <thead>
             <tr>
               <th style={thStyle}>Received</th>
+              {view.key === "producer-contact" && (
+                <th style={thStyle}>Producer</th>
+              )}
               <th style={thStyle}>Journalist</th>
               <th style={thStyle}>Outlet / handle</th>
               <th style={thStyle}>Wants</th>
@@ -291,6 +299,11 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                 <td style={{ ...tdStyle, ...codeStyle, whiteSpace: "nowrap" }}>
                   {r.createdAt.slice(0, 16)}
                 </td>
+                {view.key === "producer-contact" && (
+                  <td style={{ ...tdStyle, fontWeight: 700 }}>
+                    {r.maker || "—"}
+                  </td>
+                )}
                 <td style={tdStyle}>
                   <div style={{ fontWeight: 600 }}>{r.name}</div>
                   <div style={{ ...codeStyle, color: "#666" }}>
