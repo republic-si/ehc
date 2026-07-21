@@ -36,10 +36,11 @@ export async function submitPressRequest(
   const addrCity = get("addr_city");
   const addrCountry = get("addr_country");
 
-  if (!wantsSamples && !wantsPressEvening) {
+  if (!wantsSamples && !wantsPressEvening && !note) {
     return {
       ok: false,
-      error: "Tick at least one: samples, or the press preview.",
+      error:
+        "Tick samples or the press preview, or tell us what you'd like in the note.",
     };
   }
 
@@ -81,12 +82,10 @@ export async function submitPressRequest(
     };
   }
 
-  const wants = [
-    wantsSamples ? "samples" : null,
-    wantsPressEvening ? "press evening" : null,
-  ]
-    .filter(Boolean)
-    .join(" + ");
+  const wants =
+    [wantsSamples ? "samples" : null, wantsPressEvening ? "press evening" : null]
+      .filter(Boolean)
+      .join(" + ") || "enquiry";
 
   try {
     await sendMail({

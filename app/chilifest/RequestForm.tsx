@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { submitPressRequest } from "./actions";
 import type { Lang } from "@/lib/chilifest/copy";
 
@@ -35,6 +35,10 @@ const F: Record<
     samplePack: string;
     pressPlace: string;
     and: string;
+    ctx: (m: string) => string;
+    noteSample: (m: string, s: string) => string;
+    noteInfo: (m: string) => string;
+    noteInterview: (m: string) => string;
   }
 > = {
   en: {
@@ -57,7 +61,8 @@ const F: Record<
     sending: "Sending…",
     privacy:
       "Your details go to the European Heat Council for review. We use them only to assess and fulfil your request.",
-    needOne: "Tick at least one: samples, or the press preview.",
+    needOne:
+      "Tick samples or the press preview, or tell us what you'd like below.",
     genErr: "Something went wrong. Please try again.",
     received: "Request received",
     thanks: (w) =>
@@ -65,6 +70,10 @@ const F: Record<
     samplePack: "a sample pack",
     pressPlace: "a press-preview place",
     and: " and ",
+    ctx: (m) => `Regarding ${m}`,
+    noteSample: (m, s) => `I'd like a sample of ${m}${s ? ` (${s})` : ""}.`,
+    noteInfo: (m) => `I'd like more information about ${m}.`,
+    noteInterview: (m) => `I'd like to request an interview with ${m}.`,
   },
   de: {
     name: "Ihr Name",
@@ -87,7 +96,8 @@ const F: Record<
     sending: "Wird gesendet…",
     privacy:
       "Ihre Angaben gehen zur Prüfung an den European Heat Council. Wir nutzen sie ausschließlich, um Ihre Anfrage zu bewerten und zu erfüllen.",
-    needOne: "Bitte mindestens eines ankreuzen: Muster oder Presse-Vorabend.",
+    needOne:
+      "Muster oder Presse-Vorabend ankreuzen, oder unten kurz beschreiben, was Sie möchten.",
     genErr: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     received: "Anfrage erhalten",
     thanks: (w) =>
@@ -95,6 +105,10 @@ const F: Record<
     samplePack: "ein Musterpaket",
     pressPlace: "einen Platz beim Presse-Vorabend",
     and: " und ",
+    ctx: (m) => `Betrifft ${m}`,
+    noteSample: (m, s) => `Ich hätte gern ein Muster von ${m}${s ? ` (${s})` : ""}.`,
+    noteInfo: (m) => `Ich hätte gern weitere Informationen zu ${m}.`,
+    noteInterview: (m) => `Ich möchte ein Interview mit ${m} anfragen.`,
   },
 };
 
@@ -164,11 +178,29 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
   const [status, setStatus] = useState<"idle" | "submitting" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
   const [doneWants, setDoneWants] = useState("");
+  const [context, setContext] = useState<string | null>(null);
+
+  // Prefill from a profile deep link (?maker=…&ask=sample|info|interview&sauce=…).
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    const maker = p.get("maker");
+    const ask = p.get("ask");
+    if (!maker || !ask) return;
+    setContext(maker);
+    if (ask === "sample") {
+      setWantsSamples(true);
+      setNote(f.noteSample(maker, p.get("sauce") ?? ""));
+    } else if (ask === "interview") {
+      setNote(f.noteInterview(maker));
+    } else {
+      setNote(f.noteInfo(maker));
+    }
+  }, [f]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-    if (!wantsSamples && !wantsPressEvening) {
+    if (!wantsSamples && !wantsPressEvening && !note.trim()) {
       setError(f.needOne);
       return;
     }
@@ -225,6 +257,11 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
 
   return (
     <form onSubmit={handleSubmit} className="mt-8 space-y-6 max-w-2xl">
+      {context ? (
+        <p className="border border-accent/40 bg-accent/5 px-4 py-3 text-sm font-medium text-ink">
+          {f.ctx(context)}
+        </p>
+      ) : null}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <label className="block">
           <span className="label text-muted block mb-2">{f.name}</span>

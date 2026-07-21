@@ -82,6 +82,12 @@ interface Copy {
   partnerEyebrow: string;
   partnerLine: string;
   partnerCta: string;
+  // profile press-action bar
+  pressActions: string;
+  actSample: string;
+  actSampleSet: string;
+  actInfo: string;
+  actInterview: string;
 }
 
 export const COPY: Record<Lang, Copy> = {
@@ -158,6 +164,11 @@ export const COPY: Record<Lang, Copy> = {
     partnerLine:
       "Republic of Heat will be showcasing the European Hot Sauce Awards with two hot sauce sets, Europe's Best and Definitely Hot, plus their own collections including the Berlin BBQ Box Set, made exclusively for the festival.",
     partnerCta: "Explore the subscription",
+    pressActions: "For press",
+    actSample: "Get a sample of this sauce",
+    actSampleSet: "Request a sample set",
+    actInfo: "Request more information",
+    actInterview: "Request an interview",
   },
   de: {
     langName: "Deutsch",
@@ -232,5 +243,10 @@ export const COPY: Record<Lang, Copy> = {
     partnerLine:
       "Republic of Heat präsentiert die European Hot Sauce Awards mit zwei Hot-Sauce-Sets, Europe's Best und Definitely Hot, sowie eigene Kollektionen, darunter das exklusiv für das Festival gemachte Berlin BBQ Box Set.",
     partnerCta: "Zum Entdecker-Abo",
+    pressActions: "Für die Presse",
+    actSample: "Muster dieser Sauce anfragen",
+    actSampleSet: "Musterset anfragen",
+    actInfo: "Weitere Informationen anfragen",
+    actInterview: "Interview anfragen",
   },
 };

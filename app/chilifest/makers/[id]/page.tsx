@@ -111,6 +111,14 @@ export default async function MakerDetailPage({
     lang === "de" && template?.pairingsDe ? template.pairingsDe : template?.pairings;
   const makersHref = lang === "de" ? "/chilifest/makers?lang=de" : "/chilifest/makers";
 
+  // Press-action deep links: carry the maker + intent into the hub request form.
+  const isRoh = id === "republic-of-heat";
+  const q = lang === "de" ? "&lang=de" : "";
+  const reqBase = `/chilifest?maker=${encodeURIComponent(m.name)}`;
+  const sampleHref = `${reqBase}&sauce=${encodeURIComponent(m.flagship)}&ask=sample${q}#request`;
+  const infoHref = `${reqBase}&ask=info${q}#request`;
+  const interviewHref = `${reqBase}&ask=interview${q}#request`;
+
   return (
     <>
       <div className="print:hidden">
@@ -180,26 +188,50 @@ export default async function MakerDetailPage({
 
           <p className="mt-6 text-lg leading-relaxed text-foreground/90">{storyOf(m, lang)}</p>
 
-          {m.photo ? (
-            <div className="mt-6 flex flex-wrap gap-2">
-              <a
-                href={m.photo}
-                download={`${m.id}-berlin-chili-fest.jpg`}
-                className="inline-flex items-center gap-1 rounded bg-ink/85 text-white text-xs font-semibold px-3 py-2 hover:bg-accent transition-colors"
+          {/* Press-action bar: sample / info / interview, plus asset downloads */}
+          <section className="mt-8 rounded-lg border border-rule bg-paper-green/40 p-5 sm:p-6 print:hidden">
+            <p className="label text-muted">{t.pressActions}</p>
+            <div className="mt-3 flex flex-wrap gap-2.5">
+              <Link
+                href={sampleHref}
+                className="inline-flex items-center gap-1.5 rounded-full bg-accent text-white text-sm font-semibold px-4 py-2.5 hover:opacity-90 transition-opacity"
               >
-                ↓ {t.downloadImage}
-              </a>
-              {m.logo ? (
+                <span aria-hidden>🌶</span> {isRoh ? t.actSampleSet : t.actSample}
+              </Link>
+              <Link
+                href={infoHref}
+                className="inline-flex items-center rounded-full border border-ink/25 text-ink text-sm font-semibold px-4 py-2.5 hover:bg-ink hover:text-white transition-colors"
+              >
+                {t.actInfo}
+              </Link>
+              <Link
+                href={interviewHref}
+                className="inline-flex items-center rounded-full border border-ink/25 text-ink text-sm font-semibold px-4 py-2.5 hover:bg-ink hover:text-white transition-colors"
+              >
+                {t.actInterview}
+              </Link>
+            </div>
+            {m.photo ? (
+              <div className="mt-4 pt-4 border-t border-rule/70 flex flex-wrap gap-2">
                 <a
-                  href={m.logo}
-                  download={`${m.id}-logo.png`}
+                  href={m.photo}
+                  download={`${m.id}-berlin-chili-fest.jpg`}
                   className="inline-flex items-center gap-1 rounded bg-ink/85 text-white text-xs font-semibold px-3 py-2 hover:bg-accent transition-colors"
                 >
-                  ↓ {t.downloadLogo}
+                  ↓ {t.downloadImage}
                 </a>
-              ) : null}
-            </div>
-          ) : null}
+                {m.logo ? (
+                  <a
+                    href={m.logo}
+                    download={`${m.id}-logo.png`}
+                    className="inline-flex items-center gap-1 rounded bg-ink/85 text-white text-xs font-semibold px-3 py-2 hover:bg-accent transition-colors"
+                  >
+                    ↓ {t.downloadLogo}
+                  </a>
+                ) : null}
+              </div>
+            ) : null}
+          </section>
 
           {angles.length > 0 ? (
             <section className="mt-10 border-t border-rule pt-8">
