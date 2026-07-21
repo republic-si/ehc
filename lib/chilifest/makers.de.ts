@@ -35,6 +35,15 @@ export const MAKERS_DE: Record<string, MakerDe> = {
       "Garlic Habamayo, eine vegane Chili-Mayo bei 2/10, die Schärfe-Fans und -Muffel verbindet.",
     ],
   },
+  "queima-beicas": {
+    story:
+      "Madeira ist für Likörwein bekannt, nicht für Chili. Francisco Silva füllt die Insel trotzdem ab: Saucen aus Guave und Zuckerrohrhonig, bei denen zuerst die Frucht kommt und die Schärfe erst am Ende grüßt.",
+    angles: [
+      "Ein junger Macher, der Madeiras eigene Speisekammer abfüllt, von Guave bis Zuckerrohrhonig.",
+      "Fruchtbetonte Saucen, bei denen der Geschmack führt und die Schärfe folgt, für Abenteuerlustige, nicht für Masochisten.",
+      "Goiaba, eine Guaven-Sauce bei 1/10, zu Käse oder gegrilltem Schwein.",
+    ],
+  },
   chillipeterson: {
     story:
       "In der tschechischen Stahlstadt Ostrava füllt Petr Schejbal Chilisauce ganz ohne Konservierungsstoffe ab. Seine allererste, die milde „Zpečený Indián“, brachte die Marke ins Rollen.",
