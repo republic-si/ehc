@@ -9,7 +9,6 @@ import { MAKERS, type Maker } from "@/lib/chilifest/makers";
 import { MAKERS_DE } from "@/lib/chilifest/makers.de";
 import { COPY, asLang, type Lang } from "@/lib/chilifest/copy";
 import { MAKER_TEMPLATES, MAKER_IMAGES } from "@/lib/chilifest/templates";
-import { LangToggle } from "../../LangToggle";
 import { ChiliFestNav } from "../../ChiliFestNav";
 
 // Republic of Heat rendered as a producer profile (festival vendor + press partner).
@@ -24,10 +23,10 @@ const ROH_PROFILE: Maker = {
   heat: "",
   awards: "",
   story:
-    "Republic of Heat will be showcasing the European Hot Sauce Awards with two hot sauce sets, Europe's Best and Definitely Hot, plus their own collections including the Berlin BBQ Box Set, made exclusively for the festival.",
+    "Republic of Heat curates and ships Europe's best independent hot sauces from Berlin. At Berlin Chili Fest they showcase the European Hot Sauce Awards through three award sets, Europe's Best, Definitely Hot and the Reaper Collection, alongside their own creations including a Berlin BBQ Box built exclusively for the festival.",
   angles: [
-    "The European Hot Sauce Awards, showcased across two curated sets: Europe's Best and Definitely Hot.",
-    "A Berlin BBQ Box Set built exclusively for Berlin Chili Fest.",
+    "Three sets from the European Hot Sauce Awards: Europe's Best, Definitely Hot, and the Reaper Collection.",
+    "A Berlin BBQ Box built exclusively for Berlin Chili Fest.",
     "A discovery subscription for Europe's best independent hot sauces, delivered to the door.",
   ],
   photo: IMAGES.rohBox.src,
@@ -117,7 +116,7 @@ export default async function MakerDetailPage({
       <div className="print:hidden">
         <TopBar />
         <SiteHeader />
-        <ChiliFestNav lang={lang} current="makers" />
+        <ChiliFestNav lang={lang} current="makers" langBase={`/chilifest/makers/${id}`} />
       </div>
 
       <header className="bg-ink-deep text-white border-b border-rule">
@@ -125,7 +124,6 @@ export default async function MakerDetailPage({
           <Link href={makersHref} className="label text-white/60 hover:text-white">
             ← {t.navMakers}
           </Link>
-          <LangToggle base={`/chilifest/makers/${id}`} current={lang} />
         </div>
       </header>
 

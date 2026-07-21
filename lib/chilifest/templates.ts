@@ -292,4 +292,8 @@ export const MAKER_IMAGES: Record<string, string[]> = {
   "qudo-tjes": ["/chilifest/makers/raw/qudo-tjes/1.jpg"],
   "don-cabron": ["/chilifest/makers/raw/don-cabron/1.jpg"],
   chiliwerk: ["/chilifest/makers/raw/chiliwerk/1.jpg"],
+  "republic-of-heat": [
+    "/chilifest/makers/raw/republic-of-heat/1.jpg",
+    "/chilifest/makers/raw/republic-of-heat/2.jpg",
+  ],
 };

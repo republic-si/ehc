@@ -50,6 +50,7 @@ interface Copy {
   mediaHeading: string;
   mediaIntro: string;
   mediaCtaHave: string;
+  mediaCtaLogos: string;
   mediaCtaRequest: string;
   creditLabel: string;
   // request
@@ -125,6 +126,7 @@ export const COPY: Record<Lang, Copy> = {
     mediaIntro:
       "High-resolution photography from Berlin Chili Fest, ready to publish. Free for editorial use with credit to Berlin Chili Fest.",
     mediaCtaHave: "Download all images",
+    mediaCtaLogos: "Download logos",
     mediaCtaRequest: "Request the full image pack",
     creditLabel: "Credit: Berlin Chili Fest",
     requestHeading: "Request samples or a press pass",
@@ -198,6 +200,7 @@ export const COPY: Record<Lang, Copy> = {
     mediaIntro:
       "Hochauflösende Fotografie vom Berlin Chili Fest, druckfertig. Zur redaktionellen Nutzung mit Quellenangabe „Berlin Chili Fest“ frei.",
     mediaCtaHave: "Alle Bilder herunterladen",
+    mediaCtaLogos: "Logos herunterladen",
     mediaCtaRequest: "Das vollständige Bildpaket anfragen",
     creditLabel: "Bildnachweis: Berlin Chili Fest",
     requestHeading: "Muster oder Presseakkreditierung anfragen",

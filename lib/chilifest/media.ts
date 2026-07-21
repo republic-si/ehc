@@ -10,6 +10,10 @@ export const PHOTO_USAGE = "Free for editorial use with credit to Berlin Chili F
 export const PRESS_KIT_URL =
   "https://drive.google.com/drive/folders/1V3RV8FA2I6Db_BznHbFGeNy7NqFDfbZ2";
 
+// Maker + festival logos, shared Google Drive folder ("anyone with the link").
+export const LOGOS_URL =
+  "https://drive.google.com/drive/folders/1JEwCQ9x4iSZKxQC7MsF1pp3Zbn8hkFJz";
+
 export interface FestImage {
   src: string;
   alt: string;

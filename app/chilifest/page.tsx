@@ -4,13 +4,13 @@ import type { Metadata } from "next";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 import { TopBar, SiteHeader, SiteFooter } from "@/app/_components/SiteChrome";
 import { RequestForm } from "./RequestForm";
-import { LangToggle } from "./LangToggle";
 import { ChiliFestNav } from "./ChiliFestNav";
 import {
   IMAGES,
   GALLERY,
   PHOTO_CREDIT,
   PRESS_KIT_URL,
+  LOGOS_URL,
   PRESS_EVENING,
 } from "@/lib/chilifest/media";
 import { MAKERS } from "@/lib/chilifest/makers";
@@ -155,7 +155,7 @@ export default async function ChiliFestPage({
       />
       <TopBar />
       <SiteHeader />
-      <ChiliFestNav lang={lang} current="home" />
+      <ChiliFestNav lang={lang} current="home" langBase="/chilifest" />
 
       {/* Hero */}
       <section className="relative isolate">
@@ -171,10 +171,16 @@ export default async function ChiliFestPage({
           <div className="absolute inset-0 bg-ink-deep/75" />
         </div>
         <div className="max-w-5xl mx-auto px-6 py-24 sm:py-32 text-white">
-          <div className="flex items-center justify-between gap-4">
-            <p className="label text-white/70">{t.heroEyebrow}</p>
-            <LangToggle base="/chilifest" current={lang} />
-          </div>
+          <span className="inline-flex bg-white rounded-2xl p-2.5 shadow-lg mb-5">
+            <Image
+              src="/chilifest/bcf-logo.png"
+              alt="Berlin Chili Fest"
+              width={76}
+              height={78}
+              priority
+            />
+          </span>
+          <p className="label text-white/70">{t.heroEyebrow}</p>
           <h1 className="mt-4 text-4xl sm:text-6xl font-semibold leading-[1.04] tracking-tight">
             {t.heroHeadline}
           </h1>
@@ -383,18 +389,28 @@ export default async function ChiliFestPage({
                   href={PRESS_KIT_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 rounded-full bg-ink text-white text-sm font-medium tracking-wide hover:bg-ink-deep transition-colors"
+                  className="inline-flex items-center px-6 py-3 rounded-full bg-accent text-white text-sm font-semibold tracking-wide hover:opacity-90 transition-opacity"
                 >
                   {t.mediaCtaHave}
                 </a>
               ) : (
                 <Link
                   href="/contact?topic=Press"
-                  className="inline-flex items-center px-6 py-3 rounded-full bg-ink text-white text-sm font-medium tracking-wide hover:bg-ink-deep transition-colors"
+                  className="inline-flex items-center px-6 py-3 rounded-full bg-accent text-white text-sm font-semibold tracking-wide hover:opacity-90 transition-opacity"
                 >
                   {t.mediaCtaRequest}
                 </Link>
               )}
+              {LOGOS_URL ? (
+                <a
+                  href={LOGOS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-6 py-3 rounded-full border border-accent text-accent text-sm font-semibold tracking-wide hover:bg-accent hover:text-white transition-colors"
+                >
+                  {t.mediaCtaLogos}
+                </a>
+              ) : null}
               <p className="text-xs text-muted-soft">{t.creditLabel}</p>
             </div>
           </section>
