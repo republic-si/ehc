@@ -190,3 +190,8 @@ UPDATE sample_requests SET wants_press_evening = true
   WHERE source = 'press-evening' AND wants_press_evening = false;
 UPDATE sample_requests SET wants_samples = true
   WHERE source <> 'press-evening' AND wants_samples = false AND wants_press_evening = false;
+
+-- Did they actually turn up to the press evening? Distinct from
+-- wants_press_evening (the request). Only meaningful for press-evening rows;
+-- toggled by hand in /admin/sample-requests on the night / after.
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS attended BOOLEAN NOT NULL DEFAULT false;
