@@ -32,7 +32,7 @@ export function ChiliFestNav({
   ];
 
   return (
-    <nav className="sticky top-0 z-40 bg-[#2f6b2e] text-white shadow-sm">
+    <nav className="sticky top-0 z-40 bg-[#2f6b2e] text-white shadow-sm print:hidden">
       <div className="max-w-5xl mx-auto px-6">
         <ul className="flex items-center gap-5 sm:gap-7 h-14 overflow-x-auto text-sm whitespace-nowrap">
           {items.map((it) => {

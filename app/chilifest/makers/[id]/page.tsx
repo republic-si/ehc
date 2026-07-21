@@ -116,8 +116,8 @@ export default async function MakerDetailPage({
       <div className="print:hidden">
         <TopBar />
         <SiteHeader />
-        <ChiliFestNav lang={lang} current="makers" langBase={`/chilifest/makers/${id}`} />
       </div>
+      <ChiliFestNav lang={lang} current="makers" langBase={`/chilifest/makers/${id}`} />
 
       <header className="bg-ink-deep text-white border-b border-rule">
         <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between gap-4">
