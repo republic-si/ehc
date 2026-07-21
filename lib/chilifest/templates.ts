@@ -7,8 +7,10 @@ export interface MakerTemplate {
   sauceName?: string;
   heat?: string;
   story?: string;
+  storyDe?: string; // German verbatim, shown on the ?lang=de site; story holds the English
   storyLang?: "en" | "de" | "pt";
   pairings?: string[];
+  pairingsDe?: string[];
   allergens?: string;
   funFact?: string;
 }
@@ -31,9 +33,15 @@ export const MAKER_TEMPLATES: Record<string, MakerTemplate> = {
     sauceName: "Chimichurri Crisp",
     heat: "1–2/10",
     story:
+      "If chili crisp and chimichurri had a child, it would be this jar. I'm addicted to chili crisp. Not to the heat, but to the crunch, the depth, and that one spoonful that turns a good meal into a seriously good one. I love classic chimichurri, but after two days the bright green is gone and the herbs are past their best. The trick was the same as with Sichuan chili crisp: it's the hot oil that turns herbs into something you want to spoon straight from the jar. This isn't a new chimichurri. It's exactly the jar I'd been looking for, for years.",
+    storyDe:
       "Wenn Chili Crisp und Chimichurri ein Kind hätten, wäre es dieses Glas. Ich bin süchtig nach Chili Crisp. Nicht nach Schärfe, aber nach Crunch, Tiefe und diesem einen Löffel, der aus einem guten Essen plötzlich ein verdammt gutes macht. Klassisches Chimichurri liebe ich, aber nach zwei Tagen ist das leuchtende Grün verschwunden und die Kräuter haben ihre beste Zeit schon hinter sich. Der Trick war derselbe wie beim Szechuan Chili Crisp: Erst das heiße Öl macht aus Kräutern etwas, das man löffeln möchte. Das hier ist kein neues Chimichurri. Es ist genau das Glas, das ich jahrelang gesucht habe.",
-    storyLang: "de",
     pairings: [
+      "Burrata, ciabatta, Chimichurri Crisp. Long day? Ready in 45 seconds.",
+      "Greek yoghurt, poached eggs, Chimichurri Crisp.",
+      "Cold pasta, roasted tomatoes, Chimichurri Crisp. A crowd-pleaser for any garden party.",
+    ],
+    pairingsDe: [
       "Burrata, Ciabatta, Chimichurri Crisp. Langer Tag? Fertig in 45 Sekunden.",
       "Griechischer Joghurt, pochierte Eier, Chimichurri Crisp.",
       "Kalte Pasta, Ofentomaten, Chimichurri Crisp. Ein Crowdpleaser für jede Gartenparty.",
@@ -44,9 +52,15 @@ export const MAKER_TEMPLATES: Record<string, MakerTemplate> = {
     sauceName: "La Quebradora (Salsa Verde)",
     heat: "1–3/10",
     story:
+      "I've been cooking my own chilli sauces for a good 30 years. For my friends. For my family. For myself. For decades my friends kept telling me: 'You have to sell your sauces!' I've finally brought myself to do it. Industrial bottling is out of the question for me, I cook every sauce by hand. Alongside my hot ones, my Salsa Verde came out of my first trip to Mexico many years ago, perfect for a Sunday plate of Chilaquiles Verdes. The sauces are named after lucha libre wrestling moves.",
+    storyDe:
       "Ich koche seit gut 30 Jahren meine eigenen Chilisaucen. Für meine Freunde. Für meine Familie. Für mich. Seit Jahrzehnten liegen mir meine Freunde in den Ohren: 'Du musst deine Saucen verkaufen!' Nun konnte ich mich endlich dazu überwinden. Industrielle Abfüllungen kommen für mich nicht in Frage, ich koche alle Saucen eigenhändig. Neben meinen Hot-Ones ist im Zuge meines ersten Mexiko-Aufenthaltes vor vielen Jahren meine Salsa Verde entstanden, perfekt für sonntägliche Chilaquiles Verdes. Die Saucen sind nach Lucha-Libre-Griffen benannt.",
-    storyLang: "de",
     pairings: [
+      "Chilaquiles Verdes, the classic Mexican breakfast, with cheese, red onion and crema",
+      "As a snack with taquitos or papitas",
+      "With scrambled eggs, for enchiladas, or just on its own. Para bañarse!",
+    ],
+    pairingsDe: [
       "Chilaquiles Verdes, das klassische mexikanische Frühstücksgericht, mit Käse, roten Zwiebeln und Crema",
       "Zum Snacken mit Taquitos oder Papitas",
       "Mit Rührei, für Enchiladas, oder einfach nur so. Para bañarse!",

@@ -106,6 +106,10 @@ export default async function MakerDetailPage({
   const angles = anglesOf(m, lang);
   const template = MAKER_TEMPLATES[id];
   const makerImages = MAKER_IMAGES[id] ?? [];
+  const tmplStory =
+    lang === "de" && template?.storyDe ? template.storyDe : template?.story;
+  const tmplPairings =
+    lang === "de" && template?.pairingsDe ? template.pairingsDe : template?.pairings;
   const makersHref = lang === "de" ? "/chilifest/makers?lang=de" : "/chilifest/makers";
 
   return (
@@ -265,18 +269,18 @@ export default async function MakerDetailPage({
                     <dd className="mt-1">{template.heat}</dd>
                   </div>
                 ) : null}
-                {template.story ? (
+                {tmplStory ? (
                   <div>
                     <dt className="label text-muted">{lang === "de" ? "Geschichte" : "Story"}</dt>
-                    <dd className="mt-1 leading-relaxed whitespace-pre-line">{template.story}</dd>
+                    <dd className="mt-1 leading-relaxed whitespace-pre-line">{tmplStory}</dd>
                   </div>
                 ) : null}
-                {template.pairings && template.pairings.length > 0 ? (
+                {tmplPairings && tmplPairings.length > 0 ? (
                   <div>
                     <dt className="label text-muted">{lang === "de" ? "Pairings" : "Pairings"}</dt>
                     <dd className="mt-1">
                       <ul className="list-disc pl-5 space-y-1">
-                        {template.pairings.map((p, i) => (
+                        {tmplPairings.map((p, i) => (
                           <li key={i}>{p}</li>
                         ))}
                       </ul>
