@@ -26,7 +26,7 @@ export default async function AdminLayout({
   const { scope, projects } = await resolveScope();
 
   return (
-    <AdminShell pathname={pathname} scope={scope} projects={projects}>
+    <AdminShell scope={scope} projects={projects}>
       {children}
     </AdminShell>
   );

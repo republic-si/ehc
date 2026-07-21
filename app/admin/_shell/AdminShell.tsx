@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ADMIN_NAV, activeArea, activeSection } from "@/lib/admin-nav";
 import { logoutAction } from "@/app/admin/login/actions";
 import type { Scope, AllowedProject } from "@/lib/scope";
@@ -12,16 +15,18 @@ import { ProjectSwitcher } from "./ProjectSwitcher.client";
 // writes navigation.
 
 export function AdminShell({
-  pathname,
   scope,
   projects,
   children,
 }: {
-  pathname: string;
   scope: Scope;
   projects: AllowedProject[];
   children: React.ReactNode;
 }) {
+  // usePathname re-runs on every client-side navigation, so the active area and
+  // its sub-menu update instantly. The server layout does NOT re-render on
+  // navigation, which left the sub-menu stale until a full page refresh.
+  const pathname = usePathname() ?? "";
   const area = activeArea(pathname) ?? ADMIN_NAV[0];
   const section = activeSection(pathname, area);
   const showSections = area.sections.length > 1;
