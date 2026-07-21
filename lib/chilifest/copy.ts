@@ -31,6 +31,7 @@ interface Copy {
   lblTickets: string;
   lblOrganiser: string;
   hoursValue: string;
+  pressPreviewWhen: string;
   ticketsValue: string;
   ticketsVia: string;
   organiserSub: string;
@@ -115,6 +116,8 @@ export const COPY: Record<Lang, Copy> = {
     lblTickets: "Tickets",
     lblOrganiser: "Organiser",
     hoursValue: "Fri 6–10pm, Sat & Sun 12–10pm",
+    pressPreviewWhen:
+      "Exclusive press preview: Fri 4 September, 16:30 — accredited press only",
     ticketsValue: "€7 day / €12 weekend",
     ticketsVia: "via chilifest.eu",
     organiserSub: "Press handled by the European Heat Council",
@@ -195,6 +198,8 @@ export const COPY: Record<Lang, Copy> = {
     lblTickets: "Tickets",
     lblOrganiser: "Veranstalter",
     hoursValue: "Fr 18–22 Uhr, Sa & So 12–22 Uhr",
+    pressPreviewWhen:
+      "Exklusive Pressevorschau: Fr. 4. September, 16:30 Uhr — nur akkreditierte Presse",
     ticketsValue: "7 € Tag / 12 € Wochenende",
     ticketsVia: "über chilifest.eu",
     organiserSub: "Presse über den European Heat Council",

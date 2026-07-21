@@ -226,6 +226,10 @@ export default async function ChiliFestPage({
                   {FEST.datesDisplay}
                   <br />
                   <span className="text-muted">{t.hoursValue}</span>
+                  <br />
+                  <span className="mt-1 block text-accent">
+                    {t.pressPreviewWhen}
+                  </span>
                 </dd>
               </div>
               <div>
