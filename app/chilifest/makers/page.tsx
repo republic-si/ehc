@@ -87,19 +87,12 @@ export async function generateMetadata({
 
 function BottleIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      width="12"
-      height="12"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M10 2h4v2.5l1 2.5v12a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-12l1-2.5V2z" />
-      <path d="M9 12h6" />
+    <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M10 2h4a.5.5 0 0 1 .5.5v1.7c0 .35.13.62.35.85A4.3 4.3 0 0 1 16 11v8a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-8a4.3 4.3 0 0 1 1.15-2.95c.22-.23.35-.5.35-.85V2.5A.5.5 0 0 1 10 2Zm-1.4 10.8h6.8v1.2H8.6z"
+      />
     </svg>
   );
 }
