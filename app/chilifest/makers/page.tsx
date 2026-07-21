@@ -258,23 +258,14 @@ function PartnerBlock({ t, lang }: { t: (typeof COPY)["en"]; lang: Lang }) {
           <p className="mt-3 max-w-2xl leading-relaxed text-white/85">
             {t.partnerLine}
           </p>
+        </div>
+        <div className="shrink-0">
           <Link
             href={profileHref}
-            className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded bg-accent px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
           >
             {lang === "de" ? "Profil ansehen" : "View profile"} →
           </Link>
-        </div>
-        <div className="shrink-0 flex flex-col gap-2 sm:items-end">
-          <a
-            href="https://republicofheat.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded bg-accent px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-          >
-            {t.partnerCta} →
-          </a>
-          <span className="text-xs text-white/50">republicofheat.com</span>
         </div>
       </div>
     </section>
@@ -331,6 +322,15 @@ export default async function MakersPage({
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85">
             {t.makersIntro}
+          </p>
+          <p className="mt-5 flex flex-wrap items-center gap-2 text-sm text-white/70">
+            <span
+              className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.05em]"
+              style={{ background: "#f4c518", color: "#1a1a1a" }}
+            >
+              <span aria-hidden>★</span> EHSA
+            </span>
+            {t.ehsaLegend}
           </p>
         </div>
       </header>

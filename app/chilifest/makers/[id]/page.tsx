@@ -200,6 +200,17 @@ export default async function MakerDetailPage({
 
           <p className="mt-6 text-lg leading-relaxed text-foreground/90">{storyOf(m, lang)}</p>
 
+          {isRoh ? (
+            <a
+              href="https://republicofheat.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+            >
+              {lang === "de" ? "Zum Shop – republicofheat.com" : "Visit the shop – republicofheat.com"} →
+            </a>
+          ) : null}
+
           {/* Press-action bar: sample / info / interview, plus asset downloads */}
           <section className="mt-8 rounded-lg border border-rule bg-paper-green/40 p-5 sm:p-6 print:hidden">
             <p className="label text-muted">{t.pressActions}</p>

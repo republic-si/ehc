@@ -88,6 +88,7 @@ interface Copy {
   actSampleSet: string;
   actInfo: string;
   actInterview: string;
+  ehsaLegend: string;
 }
 
 export const COPY: Record<Lang, Copy> = {
@@ -169,6 +170,7 @@ export const COPY: Record<Lang, Copy> = {
     actSampleSet: "Request a sample set",
     actInfo: "Request more information",
     actInterview: "Request an interview",
+    ehsaLegend: "= a medal at the 2026 European Hot Sauce Awards.",
   },
   de: {
     langName: "Deutsch",
@@ -248,5 +250,6 @@ export const COPY: Record<Lang, Copy> = {
     actSampleSet: "Musterset anfragen",
     actInfo: "Weitere Informationen anfragen",
     actInterview: "Interview anfragen",
+    ehsaLegend: "= eine Medaille bei den European Hot Sauce Awards 2026.",
   },
 };
