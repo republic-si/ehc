@@ -11,6 +11,25 @@ import { COPY, asLang, type Lang } from "@/lib/chilifest/copy";
 import { MAKER_TEMPLATES, MAKER_IMAGES } from "@/lib/chilifest/templates";
 import { ChiliFestNav } from "../../ChiliFestNav";
 
+function BottleIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="15"
+      height="15"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M10 2h4v2.5l1 2.5v12a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-12l1-2.5V2z" />
+      <path d="M9 12h6" />
+    </svg>
+  );
+}
+
 // Republic of Heat rendered as a producer profile (festival vendor + press partner).
 const ROH_PROFILE: Maker = {
   id: "republic-of-heat",
@@ -196,7 +215,7 @@ export default async function MakerDetailPage({
                 href={sampleHref}
                 className="inline-flex items-center gap-1.5 rounded-full bg-accent text-white text-sm font-semibold px-4 py-2.5 hover:opacity-90 transition-opacity"
               >
-                <span aria-hidden>🌶</span> {isRoh ? t.actSampleSet : t.actSample}
+                <BottleIcon /> {isRoh ? t.actSampleSet : t.actSample}
               </Link>
               <Link
                 href={infoHref}
