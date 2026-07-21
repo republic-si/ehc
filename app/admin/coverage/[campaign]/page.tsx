@@ -146,13 +146,18 @@ export default async function CoveragePage({
     getCoverageRows(pageScope),
   ]);
 
-  if (stats.pickupCount === 0) {
+  if (rows.length === 0) {
     return (
       <>
         <PageTitle title={`${label} coverage`} />
         <p style={{ color: "#666", fontSize: 14, maxWidth: "60ch" }}>
-          No priced coverage for this project yet. Add pickups to the ledger and
-          refresh (<code>pnpm ingest:coverage</code>).
+          No pickups logged for this project yet.{" "}
+          <Link
+            href={`/admin/coverage/${campaign}/pickup`}
+            style={{ color: "#1d3a2a" }}
+          >
+            Add the first one →
+          </Link>
         </p>
       </>
     );
@@ -167,7 +172,7 @@ export default async function CoveragePage({
     <>
       <PageTitle
         title={`${label} coverage`}
-        subtitle={`${stats.pickupCount} priced pickups · ${eur(stats.totalEur)} press value`}
+        subtitle={`${rows.length} pickups · ${eur(stats.totalEur)} priced value`}
       />
 
       {/* Hero stats */}
@@ -184,7 +189,12 @@ export default async function CoveragePage({
         </div>
         <div style={card}>
           <div style={cardLabel}>Pickups</div>
-          <div style={cardValue}>{stats.pickupCount}</div>
+          <div style={cardValue}>{rows.length}</div>
+          {stats.pickupCount < rows.length ? (
+            <div style={{ fontSize: 12, color: "#888", marginTop: 2 }}>
+              {stats.pickupCount} priced
+            </div>
+          ) : null}
         </div>
         <div style={card}>
           <div style={cardLabel}>Makers</div>
@@ -373,7 +383,7 @@ export default async function CoveragePage({
                     fontWeight: 600,
                   }}
                 >
-                  {eur(r.eur)}
+                  {r.eur ? eur(r.eur) : <span style={{ color: "#bbb" }}>—</span>}
                 </td>
                 <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
                   <Link

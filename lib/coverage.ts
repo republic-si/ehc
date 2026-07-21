@@ -230,7 +230,11 @@ export interface CoverageRow {
 }
 
 export async function getCoverageRows(scope: Scope): Promise<CoverageRow[]> {
-  const where = [VALUED_P];
+  // The ledger table lists EVERY real pickup, priced or not — only the value
+  // aggregates (stats / by-maker / by-scope) exclude unpriced rows. A pickup
+  // with no traffic estimate has null press_value_eur; gating the table on
+  // press_value_eur > 0 made freshly-added pickups silently vanish.
+  const where = ["p.is_false_positive = false"];
   const params: unknown[] = [];
   pushScope(scope, where, params, "send", "p.campaign_slug");
   const rows = (await sql.query(
@@ -239,7 +243,7 @@ export async function getCoverageRows(scope: Scope): Promise<CoverageRow[]> {
             p.follow_link_to_roh, p.press_value_eur
        FROM pickups p LEFT JOIN producers pr ON pr.slug = p.maker_slug
       WHERE ${where.join(" AND ")}
-      ORDER BY p.press_value_eur DESC, p.date_spotted DESC NULLS LAST`,
+      ORDER BY p.press_value_eur DESC NULLS LAST, p.date_spotted DESC NULLS LAST`,
     params,
   )) as Record<string, unknown>[];
   return rows.map((r) => ({
