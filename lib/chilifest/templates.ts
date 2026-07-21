@@ -243,6 +243,12 @@ export const MAKER_TEMPLATES: Record<string, MakerTemplate> = {
     funFact:
       "Flavour over burn, no extracts. Three Golds at the 2026 European Hot Sauce Awards.",
   },
+  moja: {
+    sauceName: "Chunky Chili Oil",
+    story:
+      "Moja means 'delicious' and 'fun' in Bengali. Born from Maliha's Bengali roots and her life across continents, Moja blends the nostalgic flavours of home with bold flavours from abroad, creating a product that feels like home for those of us with many homes.",
+    storyLang: "en",
+  },
 };
 
 export const MAKER_IMAGES: Record<string, string[]> = {

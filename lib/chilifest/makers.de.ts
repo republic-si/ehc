@@ -73,10 +73,10 @@ export const MAKERS_DE: Record<string, MakerDe> = {
   },
   moja: {
     story:
-      "Ein Berliner Chiliöl, das bengalische Gewürze mit, in den Worten der Macherin, sierra-leonischer Seele verbindet, von Hand gemacht von einer Reisejournalistin, die sich durch mehr als hundert Länder gegessen hat.",
+      "Moja bedeutet auf Bengali „lecker“ und „Spaß“. Geboren aus Malihas bengalischen Wurzeln und ihrem Leben über Kontinente hinweg, verbindet dieses Berliner Chiliöl die nostalgischen Aromen der Heimat mit kräftigen Aromen aus der Ferne, gemacht für alle, die viele Zuhause haben.",
     angles: [
-      "Eine Reisejournalistin, die sich durch über 100 Länder gegessen hat und jetzt in Berlin abfüllt.",
-      "Knuspriges Chiliöl und Diaspora-Geschmack: bengalische Gewürze treffen sierra-leonischen Einfluss.",
+      "Eine Berliner Macherin, die ihre bengalischen Wurzeln mit Aromen aus einem Leben über Kontinente hinweg verbindet.",
+      "Stückiges Chiliöl und Diaspora-Geschmack: der Geschmack von Heimat, neu gedacht für Menschen mit vielen Zuhause.",
       "Ein veganes, stückiges Chiliöl in den Varianten Original, Hotter und Mango.",
     ],
   },

@@ -130,8 +130,8 @@ export const MAKERS: Maker[] = [
     flagship: "Chunky Chili Oil",
     heat: "",
     awards: "Bronze · 2026",
-    story: "A Berlin chilli oil that blends Bengali spice with, in the maker's own words, Sierra Leonean soul, made by hand by a travel writer who has eaten her way through more than a hundred countries.",
-    angles: ["A travel writer who has eaten through 100+ countries, now bottling in Berlin.", "Chunky chilli oil and diaspora flavour: Bengali spice meeting Sierra Leonean influence.", "A vegan chunky chilli oil, made in Original, Hotter and Mango."],
+    story: "Moja means 'delicious' and 'fun' in Bengali. Born from Maliha's Bengali roots and her life across continents, this Berlin chilli oil blends the nostalgic flavours of home with bold flavours from abroad, made for those of us with many homes.",
+    angles: ["A Berlin maker blending her Bengali roots with flavours picked up living across continents.", "Chunky chilli oil and diaspora flavour: the taste of home reimagined for people with many homes.", "A vegan chunky chilli oil, made in Original, Hotter and Mango."],
     photo: "/chilifest/makers/moja.jpg",
   },
   {
