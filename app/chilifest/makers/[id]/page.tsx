@@ -223,7 +223,13 @@ export default async function MakerDetailPage({
               </p>
               <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {makerImages.map((src, i) => (
-                  <div key={i} className="relative aspect-square overflow-hidden border border-rule">
+                  <a
+                    key={i}
+                    href={src}
+                    download={`${m.id}-${i + 1}.jpg`}
+                    aria-label={`${t.downloadImage}: ${m.name} ${i + 1}`}
+                    className="group relative block aspect-square overflow-hidden border border-rule"
+                  >
                     <Image
                       src={src}
                       alt={`${m.name} photo ${i + 1}`}
@@ -231,7 +237,10 @@ export default async function MakerDetailPage({
                       sizes="(max-width:640px) 50vw, 30vw"
                       className="object-cover"
                     />
-                  </div>
+                    <span className="absolute bottom-1.5 right-1.5 inline-flex items-center gap-1 rounded bg-ink/85 text-white text-[10px] font-semibold px-2 py-1 opacity-90 group-hover:bg-accent transition-colors">
+                      ↓ {t.downloadImage}
+                    </span>
+                  </a>
                 ))}
               </div>
             </section>

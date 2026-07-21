@@ -64,11 +64,11 @@ export const MAKERS_DE: Record<string, MakerDe> = {
   },
   "don-cabron": {
     story:
-      "Eine nordmexikanische Köchin füllt von den Niederlanden aus die regionalen Salsas ihrer Familie ab und bringt Salsa Macha, Mexikos knuspriges Chiliöl, nach Europa, genau zur richtigen Zeit.",
+      "Eine nordmexikanische Köchin füllt von den Niederlanden aus die regionalen Salsas ihrer Familie ab. Ihr Smoky-Sweet Chili Oil („Macha Ahumada Dulce“) ist eine traditionelle knusprige Macha, tief und rauchig von mexikanischen Chilis, mit Cranberries für die Süße und Saaten für den Crunch.",
     angles: [
       "Eine nordmexikanische Köchin, die von den Niederlanden aus die regionalen Salsas ihrer Familie abfüllt.",
-      "Salsa Macha, Mexikos knuspriges Chiliöl, das in Europa ankommt, während es gerade durchstartet.",
-      "Eine knusprige Salsa Macha als Bestseller, für die Knusperöl-Fraktion.",
+      "Smoky-Sweet Chili Oil, eine knusprige mexikanische Macha mit tiefem Rauch und Cranberry-Süße, im Knusperöl-Trend.",
+      "Ihre Salsa Macha holte Bronze bei den European Hot Sauce Awards 2026.",
     ],
   },
   moja: {
