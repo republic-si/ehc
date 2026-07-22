@@ -5,8 +5,8 @@ import { getAllReleases, getRelease } from "@/lib/releases";
 import {
   SITE_URL,
   SITE_NAME,
-  PUBLISHER_LOGO_PATH,
   DEFAULT_RELEASE_IMAGE,
+  newsPublisher,
   releaseIsoDateTime,
   releaseUrl,
 } from "@/lib/site";
@@ -72,15 +72,7 @@ export default async function ReleasePage({ params }: { params: Params }) {
       ? { datePublished: publishedTime, dateModified: publishedTime }
       : {}),
     author: [{ "@type": "Organization", name: SITE_NAME, url: SITE_URL }],
-    publisher: {
-      "@type": "Organization",
-      name: SITE_NAME,
-      url: SITE_URL,
-      logo: {
-        "@type": "ImageObject",
-        url: `${SITE_URL}${PUBLISHER_LOGO_PATH}`,
-      },
-    },
+    publisher: newsPublisher,
     image: [`${SITE_URL}${DEFAULT_RELEASE_IMAGE}`],
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
     ...(city && country

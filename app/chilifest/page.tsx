@@ -64,33 +64,35 @@ export async function generateMetadata({
   };
 }
 
-const eventJsonLd = {
+// This is the PRESS HUB, not the event's own page. It must NOT emit a top-level
+// Event node — that would compete with the real event site (chilifest.eu) for the
+// "Berlin Chili Fest" event rich result. Instead we describe the page as a
+// CollectionPage whose `about` references the event with url -> chilifest.eu, so
+// crawl authority for the event flows OUT to the canonical event page.
+const pageJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Event",
-  name: `${FEST.festival} — ${FEST.edition}`,
-  startDate: FEST.startDate,
-  endDate: FEST.endDate,
-  eventStatus: "https://schema.org/EventScheduled",
-  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-  location: {
-    "@type": "Place",
-    name: FEST.venue,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: FEST.street,
-      postalCode: FEST.postcode,
-      addressLocality: FEST.city,
-      addressCountry: FEST.country,
+  "@type": "CollectionPage",
+  name: "Berlin Chili Fest press hub",
+  url: CANONICAL,
+  isPartOf: { "@type": "WebSite", name: SITE_NAME, url: SITE_URL },
+  about: {
+    "@type": "Event",
+    name: `${FEST.festival} — ${FEST.edition}`,
+    startDate: FEST.startDate,
+    endDate: FEST.endDate,
+    // Canonical event page lives on the festival's own site, not here.
+    url: FEST.organiserUrl,
+    location: {
+      "@type": "Place",
+      name: FEST.venue,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: FEST.street,
+        postalCode: FEST.postcode,
+        addressLocality: FEST.city,
+        addressCountry: FEST.country,
+      },
     },
-  },
-  image: [OG_IMAGE],
-  organizer: { "@type": "Organization", name: FEST.festival, url: FEST.organiserUrl },
-  offers: {
-    "@type": "AggregateOffer",
-    lowPrice: "7",
-    highPrice: "12",
-    priceCurrency: "EUR",
-    url: FEST.ticketsUrl,
   },
 };
 
@@ -151,7 +153,7 @@ export default async function ChiliFestPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }}
       />
       <TopBar />
       <SiteHeader />

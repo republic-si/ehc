@@ -1,6 +1,34 @@
 import Image from "next/image";
 import Link from "next/link";
 import { TopBar, SiteHeader } from "@/app/_components/SiteChrome";
+import { SITE_URL, SITE_NAME, PUBLISHER_LOGO_PATH } from "@/lib/site";
+
+// Site-wide identity schema. Organization gives Google the entity + brand SERP;
+// WebSite (publisher -> Organization) settles the official site name. No
+// SearchAction — there's no on-site search to wire it to. Add `sameAs` with the
+// EHC social profile URLs once they exist.
+const ORG_ID = `${SITE_URL}/#organization`;
+const identityJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": ORG_ID,
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}${PUBLISHER_LOGO_PATH}`,
+      description:
+        "Convening body for the European hot sauce industry. Growing Europe's heat makers.",
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      publisher: { "@id": ORG_ID },
+    },
+  ],
+};
 
 const stories = [
   {
@@ -637,6 +665,10 @@ function Footer() {
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(identityJsonLd) }}
+      />
       <TopBar />
       <SiteHeader />
       <Hero />
