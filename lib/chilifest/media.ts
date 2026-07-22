@@ -81,8 +81,8 @@ export const PRESS_EVENING = {
     de: "Berliner Berg Brauerei, Berlin",
   },
   blurb: {
-    en: "A dedicated preview for accredited press: taste the sauces and meet the makers before the public doors open.",
-    de: "Ein exklusiver Vorabend für akkreditierte Presse: die Saucen verkosten und die Macher treffen, bevor die Publikumstage beginnen.",
+    en: "An industry preview for press, influencers and trade: taste the sauces and meet the makers before the public doors open.",
+    de: "Eine Fachvorschau für Presse, Influencer und Handel: die Saucen verkosten und die Macher treffen, bevor die Publikumstage beginnen.",
   },
   capacityNote: {
     en: "Places are limited and allocated on review.",

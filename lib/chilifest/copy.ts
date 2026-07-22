@@ -106,7 +106,7 @@ export const COPY: Record<Lang, Copy> = {
     btnReleases: "Read the releases",
     btnMedia: "Download media",
     btnMeet: "Meet the makers",
-    btnRequest: "Samples & press pass",
+    btnRequest: "Samples & preview pass",
     photoCredit: "Photo: Berlin Chili Fest",
     navReleases: "Releases",
     navMakers: "Makers",
@@ -121,7 +121,7 @@ export const COPY: Record<Lang, Copy> = {
     lblOrganiser: "Organiser",
     hoursValue: "Fri 6–10pm, Sat & Sun 12–10pm",
     pressPreviewWhen:
-      "Exclusive press preview: Fri 4 September, 16:30 — accredited press only",
+      "Industry preview: Fri 4 September, 16:30 — for press, influencers & trade",
     ticketsValue: "€7 day / €12 weekend",
     ticketsVia: "via chilifest.eu",
     organiserSub: "Press handled by the European Heat Council",
@@ -147,10 +147,10 @@ export const COPY: Record<Lang, Copy> = {
     mediaCtaLogos: "Download logos",
     mediaCtaRequest: "Request the full image pack",
     creditLabel: "Credit: Berlin Chili Fest",
-    requestHeading: "Request samples or a press pass",
+    requestHeading: "Request samples or an industry-preview pass",
     requestIntro:
-      "Two things you can ask for, tick either or both. Samples: a curated Chili Fest sample pack, posted within the EU. Press preview:",
-    lblPressPreview: "Press preview",
+      "Tell us who you are, then ask for what you need. Samples: a curated Chili Fest sample pack, posted within the EU (press & influencers). Industry preview:",
+    lblPressPreview: "Industry preview",
     lblPlaces: "Places",
     aboutHeading: "About Berlin Chili Fest",
     aboutText:
@@ -192,7 +192,7 @@ export const COPY: Record<Lang, Copy> = {
     btnReleases: "Mitteilungen lesen",
     btnMedia: "Bildmaterial",
     btnMeet: "Die Macher",
-    btnRequest: "Muster & Presseakkreditierung",
+    btnRequest: "Muster & Fachvorschau",
     photoCredit: "Foto: Berlin Chili Fest",
     navReleases: "Mitteilungen",
     navMakers: "Die Macher",
@@ -207,7 +207,7 @@ export const COPY: Record<Lang, Copy> = {
     lblOrganiser: "Veranstalter",
     hoursValue: "Fr 18–22 Uhr, Sa & So 12–22 Uhr",
     pressPreviewWhen:
-      "Exklusive Pressevorschau: Fr. 4. September, 16:30 Uhr — nur akkreditierte Presse",
+      "Fachvorschau: Fr. 4. September, 16:30 Uhr — für Presse, Influencer & Handel",
     ticketsValue: "7 € Tag / 12 € Wochenende",
     ticketsVia: "über chilifest.eu",
     organiserSub: "Presse über den European Heat Council",
@@ -233,10 +233,10 @@ export const COPY: Record<Lang, Copy> = {
     mediaCtaLogos: "Logos herunterladen",
     mediaCtaRequest: "Das vollständige Bildpaket anfragen",
     creditLabel: "Bildnachweis: Berlin Chili Fest",
-    requestHeading: "Muster oder Presseakkreditierung anfragen",
+    requestHeading: "Muster oder Zugang zur Fachvorschau anfragen",
     requestIntro:
-      "Zwei Dinge, die Sie anfragen können, kreuzen Sie eines oder beide an. Muster: ein kuratiertes Chili-Fest-Musterpaket, Versand innerhalb der EU. Presse-Vorabend:",
-    lblPressPreview: "Presse-Vorabend",
+      "Sagen Sie uns, wer Sie sind, und fragen Sie an, was Sie brauchen. Muster: ein kuratiertes Chili-Fest-Musterpaket, Versand innerhalb der EU (Presse & Influencer). Fachvorschau:",
+    lblPressPreview: "Fachvorschau",
     lblPlaces: "Plätze",
     aboutHeading: "Über Berlin Chili Fest",
     aboutText:

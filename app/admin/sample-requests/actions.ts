@@ -6,6 +6,7 @@ import {
   createSampleRequest,
   setSampleRequestStatus,
   setSampleRequestAttended,
+  asRequestRole,
   SAMPLE_REQUEST_STATUSES,
   type SampleRequestStatus,
 } from "@/lib/sample-requests";
@@ -59,6 +60,7 @@ export async function createManualRequest(formData: FormData): Promise<void> {
     addrCountry: get("addr_country"),
     note: get("note"),
     source: "email-reply",
+    role: asRequestRole(get("role")),
     wantsSamples: on("wants_samples"),
     wantsPressEvening: on("wants_press_evening"),
     status: "approved",

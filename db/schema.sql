@@ -199,3 +199,7 @@ ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS attended BOOLEAN NOT NULL D
 -- Direct journalist->producer contact form (source='producer-contact'): which
 -- maker the message was addressed to. Empty for samples / press-evening rows.
 ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS maker TEXT NOT NULL DEFAULT '';
+
+-- Who is asking: 'press', 'influencer' or 'trade'. The industry preview is open
+-- to all three; samples only to press + influencer. Empty for legacy rows.
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT '';

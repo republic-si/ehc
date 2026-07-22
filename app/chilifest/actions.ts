@@ -1,6 +1,10 @@
 "use server";
 
-import { createSampleRequest } from "@/lib/sample-requests";
+import {
+  createSampleRequest,
+  asRequestRole,
+  REQUEST_ROLE_LABELS,
+} from "@/lib/sample-requests";
 import { sendMail } from "@/lib/mailer";
 import { SITE_URL } from "@/lib/site";
 import { makerContactEmail, PRESS_CC } from "@/lib/chilifest/maker-contacts";
@@ -29,7 +33,9 @@ export async function submitPressRequest(
   const organisation = get("organisation");
   const webOrInstagram = get("web_or_instagram");
   const note = get("note");
-  const wantsSamples = on("wants_samples");
+  const role = asRequestRole(get("role"));
+  // Trade never receive posted sample packs — enforce server-side too.
+  const wantsSamples = on("wants_samples") && role !== "trade";
   const wantsPressEvening = on("wants_press_evening");
 
   const addrStreet = get("addr_street");
@@ -72,6 +78,7 @@ export async function submitPressRequest(
       addrCity: wantsSamples ? addrCity : "",
       addrCountry: wantsSamples ? addrCountry : "",
       note,
+      role,
       wantsSamples,
       wantsPressEvening,
     });
@@ -84,18 +91,20 @@ export async function submitPressRequest(
   }
 
   const wants =
-    [wantsSamples ? "samples" : null, wantsPressEvening ? "press evening" : null]
+    [wantsSamples ? "samples" : null, wantsPressEvening ? "industry preview" : null]
       .filter(Boolean)
       .join(" + ") || "enquiry";
+  const roleLabel = role ? REQUEST_ROLE_LABELS[role] : "—";
 
   try {
     await sendMail({
       to: "simon@republicofheat.com",
       replyTo: email,
-      subject: `[Chili Fest] Press request (${wants}) from ${name} (${organisation})`,
+      subject: `[Chili Fest] ${roleLabel} request (${wants}) from ${name} (${organisation})`,
       text: [
-        "New journalist request via the Chili Fest press hub.",
+        "New request via the Chili Fest press hub.",
         "",
+        `Role:         ${roleLabel}`,
         `Wants:        ${wants}`,
         `Name:         ${name}`,
         `Email:        ${email}`,
@@ -137,6 +146,8 @@ export async function contactProducer(
   const organisation = get("organisation");
   const webOrInstagram = get("web_or_instagram");
   const message = get("message");
+  const role = asRequestRole(get("role"));
+  const roleLabel = role ? REQUEST_ROLE_LABELS[role] : "—";
 
   const producerEmail = makerContactEmail(makerId);
   if (!producerEmail) {
@@ -170,6 +181,7 @@ export async function contactProducer(
       note: message,
       source: "producer-contact",
       maker: makerName,
+      role,
     });
   } catch (err) {
     console.error("[producer-contact] insert failed", err);
@@ -184,11 +196,12 @@ export async function contactProducer(
       to: producerEmail,
       cc: PRESS_CC,
       replyTo: email,
-      subject: `URGENT PRESS CONTACT: ${organisation} re ${makerName} — Berlin Chili Fest`,
+      subject: `URGENT PRESS CONTACT: ${organisation} (${roleLabel}) re ${makerName} — Berlin Chili Fest`,
       text: [
-        `A journalist has contacted you directly via your Berlin Chili Fest producer profile.`,
+        `A ${roleLabel.toLowerCase()} contact has reached you directly via your Berlin Chili Fest producer profile.`,
         `Reply straight to this email to reach them. Simon (Republic of Heat) and Neil (Berlin Chili Fest) are copied.`,
         "",
+        `Role:          ${roleLabel}`,
         `Name:          ${name}`,
         `Email:         ${email}`,
         `Organisation:  ${organisation}`,

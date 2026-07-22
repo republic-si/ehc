@@ -16,6 +16,23 @@ export const SAMPLE_REQUEST_STATUS_LABELS: Record<SampleRequestStatus, string> =
     declined: "Declined",
   };
 
+// Who the requester is. The industry preview is open to all three; samples are
+// offered to press + influencer only. "" is a legacy row with no role captured.
+export const REQUEST_ROLES = ["press", "influencer", "trade"] as const;
+export type RequestRole = (typeof REQUEST_ROLES)[number];
+
+export const REQUEST_ROLE_LABELS: Record<RequestRole, string> = {
+  press: "Press",
+  influencer: "Influencer",
+  trade: "Trade",
+};
+
+export function asRequestRole(v: unknown): RequestRole | "" {
+  return (REQUEST_ROLES as readonly string[]).includes(v as string)
+    ? (v as RequestRole)
+    : "";
+}
+
 export interface SampleRequestRow {
   id: string;
   created_at: string;
@@ -30,6 +47,7 @@ export interface SampleRequestRow {
   note: string;
   source: string;
   maker: string;
+  role: string;
   wants_samples: boolean;
   wants_press_evening: boolean;
   attended: boolean;
@@ -51,6 +69,7 @@ export interface SampleRequest {
   note: string;
   source: string;
   maker: string;
+  role: RequestRole | "";
   wantsSamples: boolean;
   wantsPressEvening: boolean;
   attended: boolean;
@@ -73,6 +92,7 @@ function toSampleRequest(row: SampleRequestRow): SampleRequest {
     note: row.note,
     source: row.source,
     maker: row.maker,
+    role: asRequestRole(row.role),
     wantsSamples: row.wants_samples,
     wantsPressEvening: row.wants_press_evening,
     attended: row.attended,
@@ -93,6 +113,7 @@ export interface NewSampleRequest {
   note?: string;
   source?: string;
   maker?: string;
+  role?: RequestRole | "";
   wantsSamples?: boolean;
   wantsPressEvening?: boolean;
   /** Manual admin entries land straight in an approved state; the public
@@ -107,17 +128,17 @@ export async function createSampleRequest(
     INSERT INTO sample_requests
       (name, email, organisation, web_or_instagram,
        addr_street, addr_postcode, addr_city, addr_country, note, source, maker,
-       wants_samples, wants_press_evening, status)
+       role, wants_samples, wants_press_evening, status)
     VALUES
       (${input.name}, ${input.email}, ${input.organisation}, ${input.webOrInstagram},
        ${input.addrStreet}, ${input.addrPostcode}, ${input.addrCity},
        ${input.addrCountry}, ${input.note ?? ""}, ${input.source ?? "chilifest"},
-       ${input.maker ?? ""},
+       ${input.maker ?? ""}, ${input.role ?? ""},
        ${input.wantsSamples ?? false}, ${input.wantsPressEvening ?? false},
        ${input.status ?? "new"})
     RETURNING id, created_at::text AS created_at, name, email, organisation,
               web_or_instagram, addr_street, addr_postcode, addr_city,
-              addr_country, note, source, maker, wants_samples, wants_press_evening,
+              addr_country, note, source, maker, role, wants_samples, wants_press_evening,
               attended, status, reviewed_at::text AS reviewed_at
   `) as SampleRequestRow[];
   return toSampleRequest(rows[0]);
@@ -159,7 +180,7 @@ export async function getSampleRequests(
   const text = `
     SELECT id, created_at::text AS created_at, name, email, organisation,
            web_or_instagram, addr_street, addr_postcode, addr_city,
-           addr_country, note, source, maker, wants_samples, wants_press_evening,
+           addr_country, note, source, maker, role, wants_samples, wants_press_evening,
            attended, status, reviewed_at::text AS reviewed_at
     FROM sample_requests
     ${where}

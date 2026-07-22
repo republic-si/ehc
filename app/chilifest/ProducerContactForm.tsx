@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { contactProducer } from "./actions";
 import type { Lang } from "@/lib/chilifest/copy";
+import type { RequestRole } from "@/lib/sample-requests";
 
 const INPUT =
   "w-full border border-rule px-3 py-2 text-sm bg-white text-ink focus:outline-none focus:border-ink";
@@ -16,6 +17,10 @@ const F: Record<
     email: string;
     org: string;
     web: string;
+    roleLegend: string;
+    rolePress: string;
+    roleInfluencer: string;
+    roleTrade: string;
     message: string;
     messagePlaceholder: (m: string) => string;
     send: (m: string) => string;
@@ -34,6 +39,10 @@ const F: Record<
     email: "Email",
     org: "Organisation or outlet",
     web: "Website or Instagram handle (optional)",
+    roleLegend: "I am…",
+    rolePress: "Press",
+    roleInfluencer: "Influencer",
+    roleTrade: "Trade",
     message: "Your message",
     messagePlaceholder: (m) =>
       `Introduce yourself and what you're working on, and what you'd like from ${m}.`,
@@ -54,6 +63,10 @@ const F: Record<
     email: "E-Mail",
     org: "Organisation oder Redaktion",
     web: "Website oder Instagram-Handle (optional)",
+    roleLegend: "Ich bin…",
+    rolePress: "Presse",
+    roleInfluencer: "Influencer",
+    roleTrade: "Handel",
     message: "Ihre Nachricht",
     messagePlaceholder: (m) =>
       `Stellen Sie sich kurz vor, woran Sie arbeiten und was Sie von ${m} möchten.`,
@@ -82,6 +95,7 @@ export function ProducerContactForm({
   const [email, setEmail] = useState("");
   const [organisation, setOrganisation] = useState("");
   const [webOrInstagram, setWebOrInstagram] = useState("");
+  const [role, setRole] = useState<RequestRole>("press");
   const [message, setMessage] = useState("");
   const [trap, setTrap] = useState("");
 
@@ -100,6 +114,7 @@ export function ProducerContactForm({
     fd.set("email", email);
     fd.set("organisation", organisation);
     fd.set("web_or_instagram", webOrInstagram);
+    fd.set("role", role);
     fd.set("message", message);
     fd.set("company_website", trap);
 
@@ -184,6 +199,33 @@ export function ProducerContactForm({
           />
         </label>
       </div>
+
+      <fieldset>
+        <legend className="label text-muted block mb-2">{f.roleLegend}</legend>
+        <div className="inline-flex flex-wrap gap-2" role="group">
+          {(
+            [
+              ["press", f.rolePress],
+              ["influencer", f.roleInfluencer],
+              ["trade", f.roleTrade],
+            ] as [RequestRole, string][]
+          ).map(([value, labelText]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setRole(value)}
+              aria-pressed={role === value}
+              className={`px-5 py-2.5 border-2 text-sm font-semibold transition-colors ${
+                role === value
+                  ? "border-accent bg-accent text-white"
+                  : "border-accent/50 bg-accent/5 text-ink hover:border-accent hover:bg-accent/10"
+              }`}
+            >
+              {labelText}
+            </button>
+          ))}
+        </div>
+      </fieldset>
 
       <label className="block">
         <span className="label text-muted block mb-2">{f.message}</span>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { submitPressRequest } from "./actions";
 import type { Lang } from "@/lib/chilifest/copy";
+import type { RequestRole } from "@/lib/sample-requests";
 
 const INPUT =
   "w-full border border-rule px-3 py-2 text-sm bg-white text-ink focus:outline-none focus:border-ink";
@@ -14,6 +15,11 @@ const F: Record<
     email: string;
     org: string;
     web: string;
+    roleLegend: string;
+    rolePress: string;
+    roleInfluencer: string;
+    roleTrade: string;
+    tradeSamplesNote: string;
     like: string;
     samplesTitle: string;
     samplesHint: string;
@@ -46,11 +52,17 @@ const F: Record<
     email: "Email",
     org: "Organisation or outlet",
     web: "Website or Instagram handle (optional)",
+    roleLegend: "I am…",
+    rolePress: "Press",
+    roleInfluencer: "Influencer",
+    roleTrade: "Trade",
+    tradeSamplesNote:
+      "Sample packs are offered to press and influencers. As trade, request an industry-preview pass below.",
     like: "What would you like? (pick one or both)",
     samplesTitle: "Send me samples",
     samplesHint: "A curated Chili Fest sample pack, posted within the EU.",
-    pressTitle: "Attend the press preview",
-    pressHint: "A place at the press evening before the public days.",
+    pressTitle: "Attend the industry preview",
+    pressHint: "A place at the industry preview, before the public doors.",
     addr: "Where should we post the samples? (EU)",
     street: "Street and number",
     postcode: "Postcode",
@@ -62,13 +74,13 @@ const F: Record<
     privacy:
       "Your details go to the European Heat Council for review. We use them only to assess and fulfil your request.",
     needOne:
-      "Tick samples or the press preview, or tell us what you'd like below.",
+      "Tick samples or the industry preview, or tell us what you'd like below.",
     genErr: "Something went wrong. Please try again.",
     received: "Request received",
     thanks: (w) =>
       `Thank you. You asked for ${w}. The Council reviews requests individually and will be in touch by email. Places and packs are limited, so allow a few days.`,
     samplePack: "a sample pack",
-    pressPlace: "a press-preview place",
+    pressPlace: "an industry-preview place",
     and: " and ",
     ctx: (m) => `Regarding ${m}`,
     noteSample: (m, s) => `I'd like a sample of ${m}${s ? ` (${s})` : ""}.`,
@@ -80,12 +92,18 @@ const F: Record<
     email: "E-Mail",
     org: "Organisation oder Redaktion",
     web: "Website oder Instagram-Handle (optional)",
+    roleLegend: "Ich bin…",
+    rolePress: "Presse",
+    roleInfluencer: "Influencer",
+    roleTrade: "Handel",
+    tradeSamplesNote:
+      "Musterpakete gibt es für Presse und Influencer. Als Handel fragen Sie unten einen Zugang zur Fachvorschau an.",
     like: "Was möchten Sie? (eines oder beides)",
     samplesTitle: "Muster zusenden",
     samplesHint:
       "Ein kuratiertes Chili-Fest-Musterpaket, Versand innerhalb der EU.",
-    pressTitle: "Am Presse-Vorabend teilnehmen",
-    pressHint: "Ein Platz am Presseabend vor den Publikumstagen.",
+    pressTitle: "An der Fachvorschau teilnehmen",
+    pressHint: "Ein Platz bei der Fachvorschau, vor dem Publikumseinlass.",
     addr: "Wohin sollen wir die Muster senden? (EU)",
     street: "Straße und Hausnummer",
     postcode: "PLZ",
@@ -97,13 +115,13 @@ const F: Record<
     privacy:
       "Ihre Angaben gehen zur Prüfung an den European Heat Council. Wir nutzen sie ausschließlich, um Ihre Anfrage zu bewerten und zu erfüllen.",
     needOne:
-      "Muster oder Presse-Vorabend ankreuzen, oder unten kurz beschreiben, was Sie möchten.",
+      "Muster oder Fachvorschau ankreuzen, oder unten kurz beschreiben, was Sie möchten.",
     genErr: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     received: "Anfrage erhalten",
     thanks: (w) =>
       `Vielen Dank. Sie haben ${w} angefragt. Der Council prüft Anfragen individuell und meldet sich per E-Mail. Plätze und Pakete sind begrenzt, bitte rechnen Sie mit einigen Tagen.`,
     samplePack: "ein Musterpaket",
-    pressPlace: "einen Platz beim Presse-Vorabend",
+    pressPlace: "einen Platz bei der Fachvorschau",
     and: " und ",
     ctx: (m) => `Betrifft ${m}`,
     noteSample: (m, s) => `Ich hätte gern ein Muster von ${m}${s ? ` (${s})` : ""}.`,
@@ -167,8 +185,17 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
   const [note, setNote] = useState("");
   const [trap, setTrap] = useState("");
 
+  const [role, setRole] = useState<RequestRole>("press");
+  const isTrade = role === "trade";
+
   const [wantsSamples, setWantsSamples] = useState(false);
   const [wantsPressEvening, setWantsPressEvening] = useState(false);
+
+  // Trade don't get sample packs — clear any prior tick when switching to it.
+  function chooseRole(next: RequestRole) {
+    setRole(next);
+    if (next === "trade") setWantsSamples(false);
+  }
 
   const [street, setStreet] = useState("");
   const [postcode, setPostcode] = useState("");
@@ -213,7 +240,8 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
     fd.set("web_or_instagram", webOrInstagram);
     fd.set("note", note);
     fd.set("company_website", trap);
-    fd.set("wants_samples", wantsSamples ? "on" : "");
+    fd.set("role", role);
+    fd.set("wants_samples", wantsSamples && !isTrade ? "on" : "");
     fd.set("wants_press_evening", wantsPressEvening ? "on" : "");
     if (wantsSamples) {
       fd.set("addr_street", street);
@@ -311,14 +339,50 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
       </div>
 
       <fieldset>
+        <legend className="label text-muted mb-3">{f.roleLegend}</legend>
+        <div className="inline-flex flex-wrap gap-2" role="group">
+          {(
+            [
+              ["press", f.rolePress],
+              ["influencer", f.roleInfluencer],
+              ["trade", f.roleTrade],
+            ] as [RequestRole, string][]
+          ).map(([value, labelText]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => chooseRole(value)}
+              aria-pressed={role === value}
+              className={`px-5 py-2.5 border-2 text-sm font-semibold transition-colors ${
+                role === value
+                  ? "border-accent bg-accent text-white"
+                  : "border-accent/50 bg-accent/5 text-ink hover:border-accent hover:bg-accent/10"
+              }`}
+            >
+              {labelText}
+            </button>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset>
         <legend className="label text-muted mb-3">{f.like}</legend>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Toggle
-            checked={wantsSamples}
-            onChange={setWantsSamples}
-            title={f.samplesTitle}
-            hint={f.samplesHint}
-          />
+        {isTrade ? (
+          <p className="mb-3 text-sm text-muted leading-relaxed">
+            {f.tradeSamplesNote}
+          </p>
+        ) : null}
+        <div
+          className={`grid grid-cols-1 gap-3 ${isTrade ? "" : "sm:grid-cols-2"}`}
+        >
+          {isTrade ? null : (
+            <Toggle
+              checked={wantsSamples}
+              onChange={setWantsSamples}
+              title={f.samplesTitle}
+              hint={f.samplesHint}
+            />
+          )}
           <Toggle
             checked={wantsPressEvening}
             onChange={setWantsPressEvening}

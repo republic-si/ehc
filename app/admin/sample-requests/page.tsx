@@ -5,6 +5,8 @@ import {
   getSampleRequestCounts,
   SAMPLE_REQUEST_STATUSES,
   SAMPLE_REQUEST_STATUS_LABELS,
+  REQUEST_ROLES,
+  REQUEST_ROLE_LABELS,
   type SampleRequestStatus,
 } from "@/lib/sample-requests";
 import {
@@ -160,6 +162,17 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
             Web / Instagram
             <input name="web_or_instagram" style={addInput} />
           </label>
+          <label style={addLabel}>
+            Role
+            <select name="role" style={addInput} defaultValue="">
+              <option value="">—</option>
+              {REQUEST_ROLES.map((rk) => (
+                <option key={rk} value={rk}>
+                  {REQUEST_ROLE_LABELS[rk]}
+                </option>
+              ))}
+            </select>
+          </label>
           <label style={{ ...addLabel, gridColumn: "1 / -1" }}>
             Street
             <input name="addr_street" style={addInput} />
@@ -282,6 +295,7 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                 <th style={thStyle}>Producer</th>
               )}
               <th style={thStyle}>Journalist</th>
+              <th style={thStyle}>Role</th>
               <th style={thStyle}>Outlet / handle</th>
               <th style={thStyle}>Wants</th>
               <th style={thStyle}>Ship to</th>
@@ -311,6 +325,9 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                       {r.email}
                     </a>
                   </div>
+                </td>
+                <td style={{ ...tdStyle, fontSize: 12 }}>
+                  {r.role ? REQUEST_ROLE_LABELS[r.role] : "—"}
                 </td>
                 <td style={tdStyle}>
                   <div>{r.organisation || "—"}</div>
