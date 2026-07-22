@@ -100,10 +100,10 @@ export const MAKERS: Maker[] = [
     location: "Berlin, DE",
     track: "Flavour",
     flagship: "Hot Honey",
-    heat: "",
+    heat: "1/10",
     awards: "",
-    story: "A Berlin maker wants to lead here with something gentler than a sauce: a hot honey.",
-    angles: ["A Berlin maker spanning citrus-mild to Carolina Reaper, leading with a gentler idea.", "Hot honey, the crossover condiment breaking out of the chilli aisle.", "A hot honey to open with, and a roasted lemon-habanero for the heat desk."],
+    story: "Chiliwerk is handmade, small-batch chilli from a Berlin native, no artificial preservatives or thickeners, and by its own account a Silver medallist at the 2025 European Hot Sauce Awards. Kai Kolipost leads here with the crossover of the year: a Hot Honey built on Aji Amarillo chillies and Brandenburg beekeeper honey, drizzled the way US pizzerias now do it.",
+    angles: ["A Berlin native making handmade, small-batch chilli with no artificial preservatives, from regional suppliers.", "Hot honey, the US crossover condiment breaking out of the chilli aisle: onto pizza, grilled cheese, even yogurt with granola and berries.", "His Hot Honey pairs Aji Amarillo with Brandenburg beekeeper honey, a gentle 1/10 that wins over the heat-avoiders."],
     photo: "/chilifest/makers/chiliwerk.jpg",
   },
   {

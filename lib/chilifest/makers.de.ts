@@ -64,11 +64,11 @@ export const MAKERS_DE: Record<string, MakerDe> = {
   },
   chiliwerk: {
     story:
-      "Ein Berliner Macher will hier mit etwas Sanfterem vorangehen als einer Sauce: einem Hot Honey.",
+      "Chiliwerk steht für handgemachte Chilikreationen in kleinen Chargen von einem gebürtigen Berliner, ohne künstliche Konservierungs- oder Verdickungsmittel, und nach eigenen Angaben Silbermedaillengewinner bei den European Hot Sauce Awards 2025. Kai Kolipost führt hier mit dem Crossover des Jahres: einem Hot Honey aus Aji-Amarillo-Chilis und Brandenburger Imkerhonig, geträufelt wie in US-Pizzerien.",
     angles: [
-      "Ein Berliner Macher, der von zitrusmild bis Carolina Reaper reicht und mit der sanfteren Idee führt.",
-      "Hot Honey, das Crossover-Condiment, das aus dem Chili-Regal ausbricht.",
-      "Ein Hot Honey zum Einstieg und eine geröstete Zitronen-Habanero fürs Schärfe-Ressort.",
+      "Ein gebürtiger Berliner, der handgemachte Chilis in kleinen Chargen herstellt, ohne künstliche Konservierungsmittel, mit regionalen Zutaten.",
+      "Hot Honey, das US-Crossover-Condiment, das aus dem Chili-Regal ausbricht: auf Pizza, Grillkäse, sogar Joghurt mit Granola und Beeren.",
+      "Sein Hot Honey verbindet Aji Amarillo mit Brandenburger Imkerhonig, sanfte 1/10, die auch Schärfe-Muffel überzeugen.",
     ],
   },
   "don-cabron": {
