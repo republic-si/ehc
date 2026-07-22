@@ -209,6 +209,42 @@ export default async function ChiliFestPage({
         </div>
       </section>
 
+      {/* Neil pull-quote — photo beside the founder's line on judging by heat alone */}
+      <section className="bg-white border-b border-rule">
+        <div className="max-w-5xl mx-auto px-6 py-14 sm:py-20">
+          <div className="grid md:grid-cols-5 gap-8 sm:gap-12 items-center">
+            <div className="md:col-span-2">
+              <div className="relative aspect-[4/5] overflow-hidden">
+                <Image
+                  src={IMAGES.neil.src}
+                  alt={IMAGES.neil.alt}
+                  fill
+                  sizes="(min-width:768px) 40vw, 100vw"
+                  className="object-cover grayscale"
+                />
+              </div>
+            </div>
+            <figure className="md:col-span-3">
+              <span
+                aria-hidden
+                className="block text-6xl leading-none text-accent font-semibold"
+              >
+                &ldquo;
+              </span>
+              <blockquote className="-mt-4 text-2xl sm:text-3xl font-semibold leading-snug tracking-tight text-foreground">
+                {t.quoteText}
+              </blockquote>
+              <figcaption className="mt-6">
+                <span className="block font-semibold text-foreground">
+                  {t.quoteAttrib}
+                </span>
+                <span className="block text-sm text-muted">{t.quoteRole}</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
       {/* What / when / where */}
       <section className="bg-white border-b border-rule">
         <div className="max-w-5xl mx-auto px-6 py-14 sm:py-16">
