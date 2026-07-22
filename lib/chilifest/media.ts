@@ -48,6 +48,10 @@ export const IMAGES: Record<string, FestImage> = {
     src: "/chilifest/roh-box.jpg",
     alt: "Republic of Heat sample boxes and a tasting board of sauces at a Berlin Chili Fest stall.",
   },
+  neil: {
+    src: "/chilifest/neil.jpg",
+    alt: "Neil Numb, founder and organiser of Berlin Chili Fest, singing into a microphone on stage.",
+  },
 };
 
 // Order for the downloadable media-kit preview grid.

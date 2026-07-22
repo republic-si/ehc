@@ -35,6 +35,10 @@ interface Copy {
   ticketsValue: string;
   ticketsVia: string;
   organiserSub: string;
+  // Neil pull-quote
+  quoteText: string;
+  quoteAttrib: string;
+  quoteRole: string;
   // producers
   producersHeading: string;
   producersIntro: string;
@@ -121,6 +125,10 @@ export const COPY: Record<Lang, Copy> = {
     ticketsValue: "€7 day / €12 weekend",
     ticketsVia: "via chilifest.eu",
     organiserSub: "Press handled by the European Heat Council",
+    quoteText:
+      "Judging a hot sauce purely by its heat is like judging a wine purely by its alcohol, or a coffee purely by its caffeine. Berlin Chili Fest is built on everything that number leaves out.",
+    quoteAttrib: "Neil Numb",
+    quoteRole: "Founder & Organiser, Berlin Chili Fest",
     producersHeading: "Meet the producers",
     producersIntro:
       "Berlin Chili Fest brings together more than 50 independent makers. These {n} have offered samples and interviews to press, gathered here one maker a page.",
@@ -203,6 +211,10 @@ export const COPY: Record<Lang, Copy> = {
     ticketsValue: "7 € Tag / 12 € Wochenende",
     ticketsVia: "über chilifest.eu",
     organiserSub: "Presse über den European Heat Council",
+    quoteText:
+      "Eine Hot Sauce nur nach ihrer Schärfe zu beurteilen, ist wie einen Wein nur nach seinem Alkohol zu beurteilen oder einen Kaffee nur nach seinem Koffein. Das Berlin Chili Fest lebt von allem, was diese eine Zahl weglässt.",
+    quoteAttrib: "Neil Numb",
+    quoteRole: "Gründer & Organisator, Berlin Chili Fest",
     producersHeading: "Die Produzenten",
     producersIntro:
       "Das Berlin Chili Fest bringt mehr als 50 unabhängige Macher zusammen. Diese {n} haben der Presse Muster und Interviews angeboten, hier versammelt, ein Macher pro Seite.",
