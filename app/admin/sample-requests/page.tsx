@@ -7,7 +7,10 @@ import {
   SAMPLE_REQUEST_STATUS_LABELS,
   REQUEST_ROLES,
   REQUEST_ROLE_LABELS,
+  AUDIENCES,
+  AUDIENCE_LABELS,
   type SampleRequestStatus,
+  type Audience,
 } from "@/lib/sample-requests";
 import {
   updateSampleRequestStatus,
@@ -91,8 +94,15 @@ const VIEWS = [
   },
 ] as const;
 
+// Door-list filter, orthogonal to the source/flag views above: a trade buyer is
+// also a press-evening attendee, so audience is its own axis. "" = both.
+const AUDIENCE_VIEWS = [
+  { key: "", label: "All" },
+  ...AUDIENCES.map((a) => ({ key: a, label: AUDIENCE_LABELS[a] })),
+] as const;
+
 interface Props {
-  searchParams: Promise<{ status?: string; source?: string }>;
+  searchParams: Promise<{ status?: string; source?: string; audience?: string }>;
 }
 
 export default async function SampleRequestsPage({ searchParams }: Props) {
@@ -106,11 +116,18 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
   const view =
     VIEWS.find((v) => v.key === sp.source) ??
     VIEWS.find((v) => v.key === "samples")!;
+  const audience = (AUDIENCES as readonly string[]).includes(sp.audience ?? "")
+    ? (sp.audience as Audience)
+    : undefined;
 
+  const reqFilter = { ...view.filter, ...(audience ? { audience } : {}) };
   const [requests, counts] = await Promise.all([
-    getSampleRequests(filter, 500, view.filter),
-    getSampleRequestCounts(view.filter),
+    getSampleRequests(filter, 500, reqFilter),
+    getSampleRequestCounts(reqFilter),
   ]);
+
+  // Preserve the active audience filter across the source/status links.
+  const audParam = audience ? `&audience=${audience}` : "";
 
   return (
     <>
@@ -169,6 +186,16 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
               {REQUEST_ROLES.map((rk) => (
                 <option key={rk} value={rk}>
                   {REQUEST_ROLE_LABELS[rk]}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label style={addLabel}>
+            Audience
+            <select name="audience" style={addInput} defaultValue="press">
+              {AUDIENCES.map((a) => (
+                <option key={a} value={a}>
+                  {AUDIENCE_LABELS[a]}
                 </option>
               ))}
             </select>
@@ -240,7 +267,7 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
           return (
             <Link
               key={s.key}
-              href={`/admin/sample-requests?source=${s.key}&status=${filter}`}
+              href={`/admin/sample-requests?source=${s.key}&status=${filter}${audParam}`}
               style={{
                 fontSize: 12,
                 fontWeight: 700,
@@ -257,13 +284,57 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
         })}
       </div>
 
+      <div
+        style={{
+          display: "flex",
+          gap: 6,
+          marginBottom: 12,
+          alignItems: "center",
+        }}
+      >
+        <span
+          style={{
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            color: "#777",
+            marginRight: 4,
+          }}
+        >
+          Audience
+        </span>
+        {AUDIENCE_VIEWS.map((a) => {
+          const active = a.key === (audience ?? "");
+          return (
+            <Link
+              key={a.key || "all"}
+              href={`/admin/sample-requests?source=${view.key}&status=${filter}${
+                a.key ? `&audience=${a.key}` : ""
+              }`}
+              style={{
+                fontSize: 12,
+                fontWeight: 700,
+                padding: "6px 14px",
+                background: active ? "#1a56c4" : "#fff",
+                color: active ? "#fff" : "#111",
+                border: "1px solid #1a56c4",
+                textDecoration: "none",
+              }}
+            >
+              {a.label}
+            </Link>
+          );
+        })}
+      </div>
+
       <div style={{ display: "flex", gap: 6, marginBottom: 18 }}>
         {SAMPLE_REQUEST_STATUSES.map((s) => {
           const active = s === filter;
           return (
             <Link
               key={s}
-              href={`/admin/sample-requests?status=${s}&source=${view.key}`}
+              href={`/admin/sample-requests?status=${s}&source=${view.key}${audParam}`}
               style={{
                 fontSize: 11,
                 letterSpacing: "0.08em",
@@ -296,6 +367,7 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
               )}
               <th style={thStyle}>Journalist</th>
               <th style={thStyle}>Role</th>
+              <th style={thStyle}>Audience</th>
               <th style={thStyle}>Outlet / handle</th>
               <th style={thStyle}>Wants</th>
               <th style={thStyle}>Ship to</th>
@@ -328,6 +400,22 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                 </td>
                 <td style={{ ...tdStyle, fontSize: 12 }}>
                   {r.role ? REQUEST_ROLE_LABELS[r.role] : "—"}
+                </td>
+                <td style={tdStyle}>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      letterSpacing: "0.04em",
+                      textTransform: "uppercase",
+                      padding: "2px 8px",
+                      borderRadius: 4,
+                      background: r.audience === "trade" ? "#1a56c4" : "#eee",
+                      color: r.audience === "trade" ? "#fff" : "#555",
+                    }}
+                  >
+                    {AUDIENCE_LABELS[r.audience]}
+                  </span>
                 </td>
                 <td style={tdStyle}>
                   <div>{r.organisation || "—"}</div>

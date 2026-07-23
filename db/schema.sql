@@ -203,3 +203,12 @@ ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS maker TEXT NOT NULL DEFAULT
 -- Who is asking: 'press', 'influencer' or 'trade'. The industry preview is open
 -- to all three; samples only to press + influencer. Empty for legacy rows.
 ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT '';
+
+-- Which door list a row belongs to for the BCF Press + Trade Preview: 'press'
+-- (sample box POSTED in advance) or 'trade' (buyers, sample box ON-THE-DOOR
+-- only, never posted). Orthogonal to `role`/`wants_*`: press is the default so
+-- every existing row stays press; trade rows are created from confirmed
+-- outbound buyer invites. Toggled via the admin press/trade filter.
+ALTER TABLE sample_requests
+  ADD COLUMN IF NOT EXISTS audience TEXT NOT NULL DEFAULT 'press'
+  CHECK (audience IN ('press','trade'));

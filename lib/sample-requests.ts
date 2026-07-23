@@ -33,6 +33,23 @@ export function asRequestRole(v: unknown): RequestRole | "" {
     : "";
 }
 
+// Which door list a row belongs to for the BCF Press + Trade Preview. Distinct
+// from `role`: press = sample box posted in advance; trade = buyer, box on the
+// door only. Every row has one; legacy rows default to 'press'.
+export const AUDIENCES = ["press", "trade"] as const;
+export type Audience = (typeof AUDIENCES)[number];
+
+export const AUDIENCE_LABELS: Record<Audience, string> = {
+  press: "Press",
+  trade: "Trade",
+};
+
+export function asAudience(v: unknown): Audience {
+  return (AUDIENCES as readonly string[]).includes(v as string)
+    ? (v as Audience)
+    : "press";
+}
+
 export interface SampleRequestRow {
   id: string;
   created_at: string;
@@ -48,6 +65,7 @@ export interface SampleRequestRow {
   source: string;
   maker: string;
   role: string;
+  audience: string;
   wants_samples: boolean;
   wants_press_evening: boolean;
   attended: boolean;
@@ -70,6 +88,7 @@ export interface SampleRequest {
   source: string;
   maker: string;
   role: RequestRole | "";
+  audience: Audience;
   wantsSamples: boolean;
   wantsPressEvening: boolean;
   attended: boolean;
@@ -93,6 +112,7 @@ function toSampleRequest(row: SampleRequestRow): SampleRequest {
     source: row.source,
     maker: row.maker,
     role: asRequestRole(row.role),
+    audience: asAudience(row.audience),
     wantsSamples: row.wants_samples,
     wantsPressEvening: row.wants_press_evening,
     attended: row.attended,
@@ -114,6 +134,8 @@ export interface NewSampleRequest {
   source?: string;
   maker?: string;
   role?: RequestRole | "";
+  /** Door list. Defaults to 'press'; set 'trade' for confirmed buyers. */
+  audience?: Audience;
   wantsSamples?: boolean;
   wantsPressEvening?: boolean;
   /** Manual admin entries land straight in an approved state; the public
@@ -128,17 +150,17 @@ export async function createSampleRequest(
     INSERT INTO sample_requests
       (name, email, organisation, web_or_instagram,
        addr_street, addr_postcode, addr_city, addr_country, note, source, maker,
-       role, wants_samples, wants_press_evening, status)
+       role, audience, wants_samples, wants_press_evening, status)
     VALUES
       (${input.name}, ${input.email}, ${input.organisation}, ${input.webOrInstagram},
        ${input.addrStreet}, ${input.addrPostcode}, ${input.addrCity},
        ${input.addrCountry}, ${input.note ?? ""}, ${input.source ?? "chilifest"},
-       ${input.maker ?? ""}, ${input.role ?? ""},
+       ${input.maker ?? ""}, ${input.role ?? ""}, ${input.audience ?? "press"},
        ${input.wantsSamples ?? false}, ${input.wantsPressEvening ?? false},
        ${input.status ?? "new"})
     RETURNING id, created_at::text AS created_at, name, email, organisation,
               web_or_instagram, addr_street, addr_postcode, addr_city,
-              addr_country, note, source, maker, role, wants_samples, wants_press_evening,
+              addr_country, note, source, maker, role, audience, wants_samples, wants_press_evening,
               attended, status, reviewed_at::text AS reviewed_at
   `) as SampleRequestRow[];
   return toSampleRequest(rows[0]);
@@ -149,6 +171,8 @@ export interface RequestFilter {
   wantsPressEvening?: boolean;
   /** Exact match on the `source` column, e.g. 'producer-contact'. */
   source?: string;
+  /** Door list: 'press' or 'trade'. Omit for both. */
+  audience?: Audience;
 }
 
 export async function getSampleRequests(
@@ -175,12 +199,16 @@ export async function getSampleRequests(
     clauses.push(`source = $${i++}`);
     params.push(filter.source);
   }
+  if (filter.audience) {
+    clauses.push(`audience = $${i++}`);
+    params.push(filter.audience);
+  }
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
   params.push(limit);
   const text = `
     SELECT id, created_at::text AS created_at, name, email, organisation,
            web_or_instagram, addr_street, addr_postcode, addr_city,
-           addr_country, note, source, maker, role, wants_samples, wants_press_evening,
+           addr_country, note, source, maker, role, audience, wants_samples, wants_press_evening,
            attended, status, reviewed_at::text AS reviewed_at
     FROM sample_requests
     ${where}
@@ -208,6 +236,10 @@ export async function getSampleRequestCounts(
   if (filter.source) {
     clauses.push(`source = $${i++}`);
     params.push(filter.source);
+  }
+  if (filter.audience) {
+    clauses.push(`audience = $${i++}`);
+    params.push(filter.audience);
   }
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
   const rows = (await sql.query(

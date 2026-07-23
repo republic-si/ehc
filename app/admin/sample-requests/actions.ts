@@ -7,6 +7,7 @@ import {
   setSampleRequestStatus,
   setSampleRequestAttended,
   asRequestRole,
+  asAudience,
   SAMPLE_REQUEST_STATUSES,
   type SampleRequestStatus,
 } from "@/lib/sample-requests";
@@ -49,6 +50,11 @@ export async function createManualRequest(formData: FormData): Promise<void> {
   const email = get("email");
   if (!name || !email) return;
 
+  // Trade buyers are a distinct outbound channel (confirmed invites, box on the
+  // door). Tag their source so they read apart from press email-reply leads.
+  const audience = asAudience(get("audience"));
+  const source = audience === "trade" ? "trade" : "email-reply";
+
   await createSampleRequest({
     name,
     email,
@@ -59,8 +65,9 @@ export async function createManualRequest(formData: FormData): Promise<void> {
     addrCity: get("addr_city"),
     addrCountry: get("addr_country"),
     note: get("note"),
-    source: "email-reply",
+    source,
     role: asRequestRole(get("role")),
+    audience,
     wantsSamples: on("wants_samples"),
     wantsPressEvening: on("wants_press_evening"),
     status: "approved",
