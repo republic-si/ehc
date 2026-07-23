@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
-import { TopBar, SiteHeader, SiteFooter } from "@/app/_components/SiteChrome";
+import { TopBar, SiteFooter } from "@/app/_components/SiteChrome";
 import { PHOTO_CREDIT, IMAGES } from "@/lib/chilifest/media";
 import { MAKERS, type Maker } from "@/lib/chilifest/makers";
 import { MAKERS_DE } from "@/lib/chilifest/makers.de";
@@ -305,7 +305,6 @@ export default async function MakersPage({
       />
       <div className="print:hidden">
         <TopBar />
-        <SiteHeader />
       </div>
       <ChiliFestNav lang={lang} current="makers" langBase="/chilifest/makers" />
 

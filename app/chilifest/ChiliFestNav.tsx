@@ -57,6 +57,20 @@ export function ChiliFestNav({
                 </li>
               );
             }
+            // The sign-up is the microsite's primary action: render it as a
+            // filled habanero pill that stays on screen the whole scroll.
+            if (it.key === "request") {
+              return (
+                <li key={it.key}>
+                  <Link
+                    href={it.href}
+                    className="inline-flex items-center rounded-full bg-accent px-4 py-1.5 font-semibold text-white hover:bg-accent/90 transition-colors"
+                  >
+                    {it.label}
+                  </Link>
+                </li>
+              );
+            }
             const cls = active
               ? "font-semibold underline underline-offset-[10px] decoration-2 decoration-white"
               : "text-white/80 hover:text-white transition-colors";
