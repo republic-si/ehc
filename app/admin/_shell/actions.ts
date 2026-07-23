@@ -12,12 +12,13 @@ import {
 // Persist the selected project. The token is re-validated against the user's
 // allowed set via scopeFromToken (out-of-scope / unknown tokens fall back to
 // their default), and we store the resulting CANONICAL token — so a crafted
-// cookie can never widen access. Wired into the switcher's <form action>.
-export async function setProjectAction(formData: FormData): Promise<void> {
-  const requested = String(formData.get("token") ?? "all");
+// cookie can never widen access. Returns the canonical token so the client can
+// stay in sync even when the request resolved to a different scope (e.g. a
+// single-org user picking "all" canonicalises to org:<slug>).
+export async function setProject(token: string): Promise<{ token: string }> {
   const { user } = await requireSession();
   const projects = await getUserProjects(user);
-  const scope = scopeFromToken(requested, user, projects);
+  const scope = scopeFromToken(token, user, projects);
 
   const store = await cookies();
   store.set(PROJECT_COOKIE, scope.token, {
@@ -29,4 +30,5 @@ export async function setProjectAction(formData: FormData): Promise<void> {
 
   // Re-render every /admin page under the new scope.
   revalidatePath("/admin", "layout");
+  return { token: scope.token };
 }
