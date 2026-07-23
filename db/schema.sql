@@ -212,3 +212,24 @@ ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 
 ALTER TABLE sample_requests
   ADD COLUMN IF NOT EXISTS audience TEXT NOT NULL DEFAULT 'press'
   CHECK (audience IN ('press','trade'));
+
+-- Progressive-save request flow (Typeform-style). The public form captures
+-- name+email first and INSERTs immediately, then patches role/offer/address as
+-- the visitor moves through the steps, so partial leads are never lost.
+--   edit_token  - opaque per-row secret handed to the submitter's browser; every
+--                 post-insert patch must match it, so a guessable bigint id can
+--                 never let one visitor edit another's row. Never shown in admin.
+--   extra_emails- up to 5 colleague/attendee emails added for an industry pass.
+--   completed_at- NULL while the row is a partial lead (name+email only); set
+--                 when the visitor finishes the flow. Keeps the status enum as-is.
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS edit_token   UUID NOT NULL DEFAULT gen_random_uuid();
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS extra_emails TEXT[] NOT NULL DEFAULT '{}';
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS completed_at TIMESTAMPTZ;
+
+-- Industry-pass guests: each colleague email a requester adds becomes its own
+-- row on the door list, linked back to the main requester via guest_of. Deleting
+-- the parent removes its guests. Parent rows keep the flat extra_emails[] as a
+-- quick at-a-glance summary; the child rows are what appears on the pass list.
+ALTER TABLE sample_requests
+  ADD COLUMN IF NOT EXISTS guest_of BIGINT REFERENCES sample_requests(id) ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS sample_requests_guest_of_idx ON sample_requests (guest_of);

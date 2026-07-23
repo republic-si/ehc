@@ -246,6 +246,47 @@ export default async function ChiliFestPage({
         </div>
       </section>
 
+      {/* Get your industry pass — full-bleed forest-green standout, lifted up
+          directly under Neil's quote so the pass is the first call to action */}
+      <section id="request" className="scroll-mt-24 bg-ink text-white">
+        <div className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
+          <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight">
+                {t.requestHeading}
+              </h2>
+              <span className="mt-4 block h-1 w-16 bg-accent" />
+              <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-white/85">
+                {t.requestIntro} {PRESS_EVENING.blurb[lang]}
+              </p>
+              <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-4 text-sm">
+                <div>
+                  <dt className="label text-accent">{t.lblPressPreview}</dt>
+                  <dd className="mt-1 text-white/90">
+                    {PRESS_EVENING.dateDisplay[lang]}, {PRESS_EVENING.time[lang]}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="label text-accent">{t.lblWhere}</dt>
+                  <dd className="mt-1 text-white/90">
+                    {PRESS_EVENING.location[lang]}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="label text-accent">{t.lblPlaces}</dt>
+                  <dd className="mt-1 text-white/90">
+                    {PRESS_EVENING.capacityNote[lang]}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+            <div className="rounded-2xl bg-white p-6 text-ink shadow-xl sm:p-8">
+              <RequestForm lang={lang} />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* What / when / where */}
       <section className="bg-white border-b border-rule">
         <div className="max-w-5xl mx-auto px-6 py-14 sm:py-16">
@@ -454,35 +495,6 @@ export default async function ChiliFestPage({
               ) : null}
               <p className="text-xs text-muted-soft">{t.creditLabel}</p>
             </div>
-          </section>
-
-          {/* Request: samples and/or press preview */}
-          <section className="py-14">
-            <LaneHeading kicker="04" title={t.requestHeading} id="request" />
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/90">
-              {t.requestIntro} {PRESS_EVENING.blurb[lang]}
-            </p>
-            <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-3 text-sm">
-              <div>
-                <dt className="label text-muted">{t.lblPressPreview}</dt>
-                <dd className="mt-1 text-foreground/90">
-                  {PRESS_EVENING.dateDisplay[lang]}, {PRESS_EVENING.time[lang]}
-                </dd>
-              </div>
-              <div>
-                <dt className="label text-muted">{t.lblWhere}</dt>
-                <dd className="mt-1 text-foreground/90">
-                  {PRESS_EVENING.location[lang]}
-                </dd>
-              </div>
-              <div>
-                <dt className="label text-muted">{t.lblPlaces}</dt>
-                <dd className="mt-1 text-foreground/90">
-                  {PRESS_EVENING.capacityNote[lang]}
-                </dd>
-              </div>
-            </dl>
-            <RequestForm lang={lang} />
           </section>
 
           {/* Boilerplate + contact */}
