@@ -84,8 +84,13 @@ const VIEWS = [
   { key: "samples", label: "Samples", filter: { wantsSamples: true } },
   {
     key: "press-evening",
-    label: "Press evening",
+    label: "Industry pass",
     filter: { wantsPressEvening: true },
+  },
+  {
+    key: "leads",
+    label: "Leads (incomplete)",
+    filter: { completed: false },
   },
   {
     key: "producer-contact",
@@ -384,6 +389,20 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
               <tr key={r.id}>
                 <td style={{ ...tdStyle, ...codeStyle, whiteSpace: "nowrap" }}>
                   {r.createdAt.slice(0, 16)}
+                  {!r.completedAt && r.source === "chilifest" ? (
+                    <div
+                      style={{
+                        marginTop: 3,
+                        fontSize: 10,
+                        fontWeight: 700,
+                        letterSpacing: "0.06em",
+                        textTransform: "uppercase",
+                        color: "#b06000",
+                      }}
+                    >
+                      Partial · chase
+                    </div>
+                  ) : null}
                 </td>
                 {view.key === "producer-contact" && (
                   <td style={{ ...tdStyle, fontWeight: 700 }}>
@@ -434,7 +453,16 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                     )}
                     {r.wantsPressEvening && (
                       <span style={{ color: "#1a56c4", fontWeight: 700 }}>
-                        ✓ Press
+                        ✓ Pass
+                      </span>
+                    )}
+                    {r.extraEmails.length > 0 && (
+                      <span
+                        style={{ color: "#137333", fontWeight: 700 }}
+                        title={r.extraEmails.join(", ")}
+                      >
+                        +{r.extraEmails.length} guest
+                        {r.extraEmails.length === 1 ? "" : "s"}
                       </span>
                     )}
                     {!r.wantsSamples && !r.wantsPressEvening && "—"}

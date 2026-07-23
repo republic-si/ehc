@@ -212,3 +212,16 @@ ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 
 ALTER TABLE sample_requests
   ADD COLUMN IF NOT EXISTS audience TEXT NOT NULL DEFAULT 'press'
   CHECK (audience IN ('press','trade'));
+
+-- Progressive-save request flow (Typeform-style). The public form captures
+-- name+email first and INSERTs immediately, then patches role/offer/address as
+-- the visitor moves through the steps, so partial leads are never lost.
+--   edit_token  - opaque per-row secret handed to the submitter's browser; every
+--                 post-insert patch must match it, so a guessable bigint id can
+--                 never let one visitor edit another's row. Never shown in admin.
+--   extra_emails- up to 5 colleague/attendee emails added for an industry pass.
+--   completed_at- NULL while the row is a partial lead (name+email only); set
+--                 when the visitor finishes the flow. Keeps the status enum as-is.
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS edit_token   UUID NOT NULL DEFAULT gen_random_uuid();
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS extra_emails TEXT[] NOT NULL DEFAULT '{}';
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS completed_at TIMESTAMPTZ;

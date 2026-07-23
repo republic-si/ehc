@@ -2,118 +2,150 @@
 
 import {
   createSampleRequest,
+  startSampleRequest,
+  patchSampleRequest,
+  completeSampleRequest,
   asRequestRole,
   REQUEST_ROLE_LABELS,
+  type RequestPatch,
 } from "@/lib/sample-requests";
 import { sendMail } from "@/lib/mailer";
 import { SITE_URL } from "@/lib/site";
 import { makerContactEmail, PRESS_CC } from "@/lib/chilifest/maker-contacts";
 
 export type SampleRequestResult = { ok: true } | { ok: false; error: string };
+export type StartResult =
+  | { ok: true; id: string; editToken: string }
+  | { ok: false; error: string };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Unified public request: one submission can want samples and/or the press
-// evening. No session required; the gate is manual review in
-// /admin/sample-requests. Bots are dropped via a honeypot field.
-export async function submitPressRequest(
-  formData: FormData,
-): Promise<SampleRequestResult> {
+// --- Progressive-save public request flow -----------------------------------
+// The Chili Fest form saves as the visitor advances. startRequest captures the
+// lead the moment we have a name + email (no admin email yet); updateRequest
+// applies each later step gated on the edit_token; completeRequest stamps the
+// row done and notifies Simon. All bot traffic is dropped via the honeypot.
+
+// Step 1: name + email -> partial row. Returns the id + edit_token the browser
+// must present on every later patch.
+export async function startRequest(formData: FormData): Promise<StartResult> {
   const trap = String(formData.get("company_website") ?? "").trim();
-  if (trap) return { ok: true };
+  if (trap) return { ok: true, id: "0", editToken: "" };
 
   const get = (k: string) => String(formData.get(k) ?? "").trim();
-  const on = (k: string) => {
-    const v = String(formData.get(k) ?? "").toLowerCase();
-    return v === "on" || v === "true" || v === "1";
-  };
-
   const name = get("name");
   const email = get("email");
-  const organisation = get("organisation");
-  const webOrInstagram = get("web_or_instagram");
-  const note = get("note");
-  const role = asRequestRole(get("role"));
-  // Trade never receive posted sample packs — enforce server-side too.
-  const wantsSamples = on("wants_samples") && role !== "trade";
-  const wantsPressEvening = on("wants_press_evening");
-
-  const addrStreet = get("addr_street");
-  const addrPostcode = get("addr_postcode");
-  const addrCity = get("addr_city");
-  const addrCountry = get("addr_country");
-
-  if (!wantsSamples && !wantsPressEvening && !note) {
-    return {
-      ok: false,
-      error:
-        "Tick samples or the press preview, or tell us what you'd like in the note.",
-    };
-  }
+  const maker = get("maker");
 
   const missing: string[] = [];
   if (!name) missing.push("your name");
   if (!EMAIL_RE.test(email)) missing.push("a valid email");
-  if (!organisation) missing.push("your organisation or outlet");
-  // Address is only required when samples are requested.
-  if (wantsSamples) {
-    if (!addrStreet) missing.push("a street address");
-    if (!addrPostcode) missing.push("a postcode");
-    if (!addrCity) missing.push("a city");
-    if (!addrCountry) missing.push("a country");
-  }
   if (missing.length > 0) {
     return { ok: false, error: `Please add ${missing.join(", ")}.` };
   }
 
-  let request;
   try {
-    request = await createSampleRequest({
-      name,
-      email,
-      organisation,
-      webOrInstagram,
-      addrStreet: wantsSamples ? addrStreet : "",
-      addrPostcode: wantsSamples ? addrPostcode : "",
-      addrCity: wantsSamples ? addrCity : "",
-      addrCountry: wantsSamples ? addrCountry : "",
-      note,
-      role,
-      wantsSamples,
-      wantsPressEvening,
-    });
+    const { id, editToken } = await startSampleRequest({ name, email, maker });
+    return { ok: true, id, editToken };
   } catch (err) {
-    console.error("[press-request] insert failed", err);
+    console.error("[chilifest-request] start failed", err);
     return {
       ok: false,
-      error: "Something went wrong saving your request. Please try again.",
+      error: "Something went wrong saving your details. Please try again.",
     };
   }
+}
 
+// Any later step: patch whichever whitelisted fields are present, gated on the
+// (id, edit_token) pair. Wrong/absent token -> 0 rows -> rejected.
+export async function updateRequest(
+  formData: FormData,
+): Promise<SampleRequestResult> {
+  const get = (k: string) => String(formData.get(k) ?? "").trim();
+  const has = (k: string) => formData.get(k) !== null;
+  const on = (k: string) => {
+    const v = String(formData.get(k) ?? "").toLowerCase();
+    return v === "on" || v === "true" || v === "1";
+  };
+  const id = get("id");
+  const editToken = get("edit_token");
+  if (!id || !editToken) return { ok: false, error: "Session expired." };
+
+  const patch: RequestPatch = {};
+  if (has("role")) patch.role = asRequestRole(get("role"));
+  if (has("wants_samples")) patch.wantsSamples = on("wants_samples");
+  if (has("wants_press_evening")) patch.wantsPressEvening = on("wants_press_evening");
+  if (has("addr_street")) patch.addrStreet = get("addr_street");
+  if (has("addr_postcode")) patch.addrPostcode = get("addr_postcode");
+  if (has("addr_city")) patch.addrCity = get("addr_city");
+  if (has("addr_country")) patch.addrCountry = get("addr_country");
+  if (has("extra_emails")) {
+    // JSON array of strings from the client; keep only valid, unique, max 5.
+    let list: string[] = [];
+    try {
+      const raw = JSON.parse(get("extra_emails"));
+      if (Array.isArray(raw)) list = raw.map((s) => String(s).trim());
+    } catch {
+      list = [];
+    }
+    patch.extraEmails = [...new Set(list.filter((e) => EMAIL_RE.test(e)))].slice(0, 5);
+  }
+
+  try {
+    const n = await patchSampleRequest(id, editToken, patch);
+    if (n === 0) return { ok: false, error: "Session expired." };
+    return { ok: true };
+  } catch (err) {
+    console.error("[chilifest-request] update failed", err, "id=", id);
+    return { ok: false, error: "Something went wrong. Please try again." };
+  }
+}
+
+// Final step: mark complete + notify. Idempotent on completed_at.
+export async function completeRequest(
+  formData: FormData,
+): Promise<SampleRequestResult> {
+  const get = (k: string) => String(formData.get(k) ?? "").trim();
+  const id = get("id");
+  const editToken = get("edit_token");
+  if (!id || !editToken) return { ok: false, error: "Session expired." };
+
+  let request;
+  try {
+    request = await completeSampleRequest(id, editToken);
+  } catch (err) {
+    console.error("[chilifest-request] complete failed", err, "id=", id);
+    return { ok: false, error: "Something went wrong. Please try again." };
+  }
+  if (!request) return { ok: false, error: "Session expired." };
+
+  const roleLabel = request.role ? REQUEST_ROLE_LABELS[request.role] : "—";
   const wants =
-    [wantsSamples ? "samples" : null, wantsPressEvening ? "industry preview" : null]
+    [
+      request.wantsPressEvening ? "industry pass" : null,
+      request.wantsSamples ? "samples" : null,
+    ]
       .filter(Boolean)
-      .join(" + ") || "enquiry";
-  const roleLabel = role ? REQUEST_ROLE_LABELS[role] : "—";
+      .join(" + ") || "pass";
 
   try {
     await sendMail({
       to: "simon@republicofheat.com",
-      replyTo: email,
-      subject: `[Chili Fest] ${roleLabel} request (${wants}) from ${name} (${organisation})`,
+      replyTo: request.email,
+      subject: `[Chili Fest] ${roleLabel} request (${wants}) from ${request.name}`,
       text: [
         "New request via the Chili Fest press hub.",
         "",
-        `Role:         ${roleLabel}`,
-        `Wants:        ${wants}`,
-        `Name:         ${name}`,
-        `Email:        ${email}`,
-        `Organisation: ${organisation}`,
-        `Web/Instagram: ${webOrInstagram}`,
-        wantsSamples
-          ? `Ship to:      ${addrStreet}, ${addrPostcode} ${addrCity}, ${addrCountry}`
+        `Role:          ${roleLabel}`,
+        `Wants:         ${wants}`,
+        `Name:          ${request.name}`,
+        `Email:         ${request.email}`,
+        request.wantsSamples
+          ? `Ship to:       ${request.addrStreet}, ${request.addrPostcode} ${request.addrCity}, ${request.addrCountry}`
           : null,
-        note ? `Note:         ${note}` : null,
+        request.extraEmails.length
+          ? `Guest emails:  ${request.extraEmails.join(", ")}`
+          : null,
         "",
         `Review: ${SITE_URL}/admin/sample-requests`,
       ]
@@ -121,7 +153,7 @@ export async function submitPressRequest(
         .join("\n"),
     });
   } catch (err) {
-    console.error("[press-request] notify failed", err, "id=", request.id);
+    console.error("[chilifest-request] notify failed", err, "id=", request.id);
   }
 
   return { ok: true };
