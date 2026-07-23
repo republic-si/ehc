@@ -1,80 +1,100 @@
-import { getRecentSends } from "@/lib/admin";
-import { resolveScope } from "@/lib/scope";
-import {
-  PageTitle,
-  codeStyle,
-  tableStyle,
-  tdStyle,
-  thStyle,
-} from "../_layout/Table";
+import Link from "next/link";
+import { getSendCampaignRollup } from "@/lib/admin";
+import { resolveScope, campaignToReportKey } from "@/lib/scope";
+import { PageTitle } from "../_layout/Table";
 
-export default async function SendsPage() {
+const INK = "#1d3a2a";
+const RULE = "#d9dcd7";
+const MUTED = "#5a6b5f";
+
+function span(first: string | null, last: string | null): string {
+  const f = first?.slice(0, 10);
+  const l = last?.slice(0, 10);
+  if (!f && !l) return "—";
+  if (f === l) return f ?? "—";
+  return `${f} → ${l}`;
+}
+
+export default async function SendsIndex() {
   const { scope } = await resolveScope();
-  const rows = await getRecentSends(scope, 72, 500);
+  const campaigns = await getSendCampaignRollup(scope);
+  const totalSends = campaigns.reduce((a, c) => a + c.sends, 0);
+
   return (
     <>
       <PageTitle
-        title="Recent sends"
-        subtitle={`${rows.length} outlet_sends row${rows.length === 1 ? "" : "s"} in the last 72 hours.`}
+        title="Sends"
+        subtitle={`${totalSends} sends across ${campaigns.length} campaign${campaigns.length === 1 ? "" : "s"} · ${scope.label}`}
       />
 
-      {rows.length === 0 && (
-        <p style={{ color: "#666" }}>
-          No sends recorded yet. Senders write to outlet_sends after Phase 2.3 wiring;
-          older sends only show up via the SENT.log → state_bootstrap.py pass.
+      {campaigns.length === 0 && (
+        <p style={{ color: MUTED }}>
+          No sends recorded for {scope.label} yet. Senders write to outlet_sends;
+          older sends surface via the SENT.log → state_bootstrap.py pass.
         </p>
       )}
 
-      <table style={tableStyle}>
-        <thead>
-          <tr>
-            <th style={thStyle}>Sent</th>
-            <th style={thStyle}>Maker</th>
-            <th style={thStyle}>Outlet</th>
-            <th style={thStyle}>Batch</th>
-            <th style={thStyle}>Transport</th>
-            <th style={thStyle}>Bounced</th>
-            <th style={thStyle}>Subject</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={`${r.outletId}-${r.sentAt}-${r.makerSlug}`}>
-              <td style={{ ...tdStyle, ...codeStyle }}>
-                {r.sentAt.slice(0, 16)}
-              </td>
-              <td style={{ ...tdStyle, ...codeStyle }}>{r.makerSlug}</td>
-              <td style={tdStyle}>
-                <div>{r.outletName || "—"}</div>
-                <div style={{ ...codeStyle, color: "#999" }}>{r.outletId}</div>
-              </td>
-              <td style={{ ...tdStyle, ...codeStyle }}>{r.batch || "—"}</td>
-              <td style={{ ...tdStyle, ...codeStyle }}>
-                {r.transport || "—"}
-              </td>
-              <td style={tdStyle}>
-                {r.bounced ? (
+      <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 12 }}>
+        {campaigns.map((c) => (
+          <li key={c.campaignSlug}>
+            <Link
+              href={`/admin/sends/${campaignToReportKey(c.campaignSlug)}`}
+              style={{
+                display: "block",
+                padding: "16px 20px",
+                border: `1px solid ${RULE}`,
+                borderRadius: 8,
+                background: "#fff",
+                color: INK,
+                textDecoration: "none",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "baseline",
+                  gap: 12,
+                  flexWrap: "wrap",
+                }}
+              >
+                <div style={{ fontWeight: 600, fontSize: 16 }}>
+                  {c.campaignName ?? c.campaignSlug}
                   <span
                     style={{
-                      color: "#c5221f",
-                      fontWeight: 700,
-                      fontSize: 11,
-                      textTransform: "uppercase",
+                      fontFamily: "'JetBrains Mono', ui-monospace, monospace",
+                      fontSize: 12,
+                      color: MUTED,
+                      marginLeft: 8,
                     }}
                   >
-                    Bounced
+                    {c.campaignSlug}
                   </span>
-                ) : (
-                  ""
-                )}
-              </td>
-              <td style={{ ...tdStyle, fontSize: 12, color: "#444" }}>
-                {(r.subject || "").slice(0, 90)}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                </div>
+                <div
+                  style={{
+                    fontFamily: "'Archivo Black', 'Inter', sans-serif",
+                    fontSize: 24,
+                    color: INK,
+                  }}
+                >
+                  {c.sends}
+                  <span style={{ fontSize: 12, color: MUTED, fontWeight: 400 }}>
+                    {" "}
+                    sends
+                  </span>
+                </div>
+              </div>
+              <div style={{ fontSize: 13, color: MUTED, marginTop: 6 }}>
+                {c.batches} wave{c.batches === 1 ? "" : "s"}
+                {c.makers ? ` · ${c.makers} makers` : ""}
+                {c.bounced ? ` · ${c.bounced} bounced` : ""} ·{" "}
+                {span(c.firstAt, c.lastAt)}
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
