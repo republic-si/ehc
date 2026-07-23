@@ -71,6 +71,7 @@ export interface SampleRequestRow {
   attended: boolean;
   extra_emails: string[];
   completed_at: string | null;
+  guest_of: string | null;
   status: string;
   reviewed_at: string | null;
 }
@@ -96,6 +97,8 @@ export interface SampleRequest {
   attended: boolean;
   extraEmails: string[];
   completedAt: string | null;
+  /** For a guest row, the id of the requester who added them. Null otherwise. */
+  guestOf: string | null;
   status: SampleRequestStatus;
   reviewedAt: string | null;
 }
@@ -122,6 +125,7 @@ function toSampleRequest(row: SampleRequestRow): SampleRequest {
     attended: row.attended,
     extraEmails: row.extra_emails ?? [],
     completedAt: row.completed_at,
+    guestOf: row.guest_of ? String(row.guest_of) : null,
     status: (row.status as SampleRequestStatus) ?? "new",
     reviewedAt: row.reviewed_at,
   };
@@ -167,7 +171,7 @@ export async function createSampleRequest(
     RETURNING id, created_at::text AS created_at, name, email, organisation,
               web_or_instagram, addr_street, addr_postcode, addr_city,
               addr_country, note, source, maker, role, audience, wants_samples, wants_press_evening,
-              attended, extra_emails, completed_at::text AS completed_at,
+              attended, extra_emails, completed_at::text AS completed_at, guest_of,
               status, reviewed_at::text AS reviewed_at
   `) as SampleRequestRow[];
   return toSampleRequest(rows[0]);
@@ -262,7 +266,76 @@ export async function completeSampleRequest(
               web_or_instagram, addr_street, addr_postcode, addr_city,
               addr_country, note, source, maker, role, audience, wants_samples,
               wants_press_evening, attended, extra_emails,
-              completed_at::text AS completed_at, status,
+              completed_at::text AS completed_at, guest_of, status,
+              reviewed_at::text AS reviewed_at
+  `) as SampleRequestRow[];
+  return rows.length ? toSampleRequest(rows[0]) : null;
+}
+
+export interface GuestResult {
+  parent: SampleRequest;
+  emails: string[];
+}
+
+// Industry-pass guests. Stores the emails on the parent (quick summary) AND
+// materialises one linked door-list row per guest, inheriting the requester's
+// role/audience. Gated on the parent's edit_token. Idempotent: replaces any
+// prior guest rows. Returns null when the (id, token) pair is invalid.
+export async function addPassGuests(
+  parentId: string,
+  editToken: string,
+  emails: string[],
+): Promise<GuestResult | null> {
+  const clean = [
+    ...new Set(emails.map((e) => e.trim().toLowerCase()).filter(Boolean)),
+  ].slice(0, 5);
+
+  const parents = (await sql`
+    UPDATE sample_requests SET extra_emails = ${clean}
+     WHERE id = ${parentId}::bigint AND edit_token = ${editToken}::uuid
+    RETURNING id, created_at::text AS created_at, name, email, organisation,
+              web_or_instagram, addr_street, addr_postcode, addr_city,
+              addr_country, note, source, maker, role, audience, wants_samples,
+              wants_press_evening, attended, extra_emails,
+              completed_at::text AS completed_at, guest_of, status,
+              reviewed_at::text AS reviewed_at
+  `) as SampleRequestRow[];
+  if (!parents.length) return null;
+  const parent = toSampleRequest(parents[0]);
+
+  // Replace any prior guest rows for this parent, then insert the current set.
+  await sql`DELETE FROM sample_requests WHERE guest_of = ${parentId}::bigint`;
+  for (const email of clean) {
+    await sql`
+      INSERT INTO sample_requests
+        (name, email, source, maker, role, audience,
+         wants_press_evening, note, guest_of, completed_at, status)
+      VALUES ('', ${email}, ${parent.source}, ${parent.maker},
+              ${parent.role}, ${parent.audience}, true,
+              ${`Guest of ${parent.name}`}, ${parentId}::bigint, now(), 'new')
+    `;
+  }
+  return { parent, emails: clean };
+}
+
+// Shipping address added on the success screen (samples path). Patches the
+// addr_* fields gated on edit_token and returns the row so the caller can
+// notify — the completion email fired before the address existed.
+export async function setShippingAddress(
+  id: string,
+  editToken: string,
+  addr: { street: string; postcode: string; city: string; country: string },
+): Promise<SampleRequest | null> {
+  const rows = (await sql`
+    UPDATE sample_requests
+       SET addr_street = ${addr.street}, addr_postcode = ${addr.postcode},
+           addr_city = ${addr.city}, addr_country = ${addr.country}
+     WHERE id = ${id}::bigint AND edit_token = ${editToken}::uuid
+    RETURNING id, created_at::text AS created_at, name, email, organisation,
+              web_or_instagram, addr_street, addr_postcode, addr_city,
+              addr_country, note, source, maker, role, audience, wants_samples,
+              wants_press_evening, attended, extra_emails,
+              completed_at::text AS completed_at, guest_of, status,
               reviewed_at::text AS reviewed_at
   `) as SampleRequestRow[];
   return rows.length ? toSampleRequest(rows[0]) : null;
@@ -331,7 +404,7 @@ export async function getSampleRequests(
     SELECT id, created_at::text AS created_at, name, email, organisation,
            web_or_instagram, addr_street, addr_postcode, addr_city,
            addr_country, note, source, maker, role, audience, wants_samples, wants_press_evening,
-           attended, extra_emails, completed_at::text AS completed_at,
+           attended, extra_emails, completed_at::text AS completed_at, guest_of,
            status, reviewed_at::text AS reviewed_at
     FROM sample_requests
     ${where}

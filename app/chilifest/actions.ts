@@ -5,6 +5,8 @@ import {
   startSampleRequest,
   patchSampleRequest,
   completeSampleRequest,
+  addPassGuests,
+  setShippingAddress,
   asRequestRole,
   REQUEST_ROLE_LABELS,
   type RequestPatch,
@@ -154,6 +156,107 @@ export async function completeRequest(
     });
   } catch (err) {
     console.error("[chilifest-request] notify failed", err, "id=", request.id);
+  }
+
+  return { ok: true };
+}
+
+// Industry-pass guests, added on the success screen AFTER the row is already
+// complete. Materialises the linked door-list rows and sends Simon a follow-up
+// notification, since the completion email fired before these were entered.
+export async function addGuests(
+  formData: FormData,
+): Promise<SampleRequestResult> {
+  const get = (k: string) => String(formData.get(k) ?? "").trim();
+  const id = get("id");
+  const editToken = get("edit_token");
+  if (!id || !editToken) return { ok: false, error: "Session expired." };
+
+  let emails: string[] = [];
+  try {
+    const raw = JSON.parse(get("extra_emails"));
+    if (Array.isArray(raw)) emails = raw.map((s) => String(s).trim());
+  } catch {
+    emails = [];
+  }
+  emails = emails.filter((e) => EMAIL_RE.test(e));
+
+  let result;
+  try {
+    result = await addPassGuests(id, editToken, emails);
+  } catch (err) {
+    console.error("[chilifest-request] guests failed", err, "id=", id);
+    return { ok: false, error: "Something went wrong. Please try again." };
+  }
+  if (!result) return { ok: false, error: "Session expired." };
+
+  if (result.emails.length) {
+    try {
+      await sendMail({
+        to: "simon@republicofheat.com",
+        replyTo: result.parent.email,
+        subject: `[Chili Fest] ${result.parent.name} added ${result.emails.length} pass guest${result.emails.length === 1 ? "" : "s"}`,
+        text: [
+          `${result.parent.name} (${result.parent.email}) added colleagues to their industry pass.`,
+          "",
+          "Guests (each now on the door list):",
+          ...result.emails.map((e) => `  - ${e}`),
+          "",
+          `Review: ${SITE_URL}/admin/sample-requests`,
+        ].join("\n"),
+      });
+    } catch (err) {
+      console.error("[chilifest-request] guest notify failed", err, "id=", id);
+    }
+  }
+
+  return { ok: true };
+}
+
+// Shipping address added on the success screen (samples path), AFTER the row is
+// complete. Patches the address and sends Simon a follow-up notification, since
+// the completion email fired before the address was entered.
+export async function addAddress(
+  formData: FormData,
+): Promise<SampleRequestResult> {
+  const get = (k: string) => String(formData.get(k) ?? "").trim();
+  const id = get("id");
+  const editToken = get("edit_token");
+  if (!id || !editToken) return { ok: false, error: "Session expired." };
+
+  let request;
+  try {
+    request = await setShippingAddress(id, editToken, {
+      street: get("addr_street"),
+      postcode: get("addr_postcode"),
+      city: get("addr_city"),
+      country: get("addr_country"),
+    });
+  } catch (err) {
+    console.error("[chilifest-request] address failed", err, "id=", id);
+    return { ok: false, error: "Something went wrong. Please try again." };
+  }
+  if (!request) return { ok: false, error: "Session expired." };
+
+  const hasAddr =
+    request.addrStreet || request.addrPostcode || request.addrCity || request.addrCountry;
+  if (hasAddr) {
+    try {
+      await sendMail({
+        to: "simon@republicofheat.com",
+        replyTo: request.email,
+        subject: `[Chili Fest] ${request.name} added a shipping address`,
+        text: [
+          `${request.name} (${request.email}) added where to post their sample box.`,
+          "",
+          `Ship to: ${request.addrStreet}, ${request.addrPostcode} ${request.addrCity}, ${request.addrCountry}`,
+          "",
+          `Review: ${SITE_URL}/admin/sample-requests`,
+        ].join("\n"),
+      });
+    } catch (err) {
+      console.error("[chilifest-request] address notify failed", err, "id=", id);
+    }
   }
 
   return { ok: true };

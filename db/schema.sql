@@ -225,3 +225,11 @@ ALTER TABLE sample_requests
 ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS edit_token   UUID NOT NULL DEFAULT gen_random_uuid();
 ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS extra_emails TEXT[] NOT NULL DEFAULT '{}';
 ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS completed_at TIMESTAMPTZ;
+
+-- Industry-pass guests: each colleague email a requester adds becomes its own
+-- row on the door list, linked back to the main requester via guest_of. Deleting
+-- the parent removes its guests. Parent rows keep the flat extra_emails[] as a
+-- quick at-a-glance summary; the child rows are what appears on the pass list.
+ALTER TABLE sample_requests
+  ADD COLUMN IF NOT EXISTS guest_of BIGINT REFERENCES sample_requests(id) ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS sample_requests_guest_of_idx ON sample_requests (guest_of);

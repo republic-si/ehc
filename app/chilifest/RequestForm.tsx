@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { startRequest, updateRequest, completeRequest } from "./actions";
+import {
+  startRequest,
+  updateRequest,
+  completeRequest,
+  addGuests,
+  addAddress,
+} from "./actions";
 import type { Lang } from "@/lib/chilifest/copy";
 import type { RequestRole } from "@/lib/sample-requests";
 
@@ -345,18 +351,32 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
     setBusy(true);
     setError(null);
     try {
-      const entries: Record<string, string> = { id, edit_token: editToken };
-      if (wantsSamples) {
-        entries.addr_street = street.trim();
-        entries.addr_postcode = postcode.trim();
-        entries.addr_city = city.trim();
-        entries.addr_country = country.trim();
-      } else {
-        entries.extra_emails = JSON.stringify(
-          guests.map((g) => g.trim()).filter(Boolean),
-        );
-      }
-      const res = await callWithRetry(() => updateRequest(fd(entries)));
+      // Samples -> patch the shipping address. Pass -> addGuests, which also
+      // materialises a door-list row per colleague and notifies us.
+      const res = wantsSamples
+        ? await callWithRetry(() =>
+            addAddress(
+              fd({
+                id,
+                edit_token: editToken,
+                addr_street: street.trim(),
+                addr_postcode: postcode.trim(),
+                addr_city: city.trim(),
+                addr_country: country.trim(),
+              }),
+            ),
+          )
+        : await callWithRetry(() =>
+            addGuests(
+              fd({
+                id,
+                edit_token: editToken,
+                extra_emails: JSON.stringify(
+                  guests.map((g) => g.trim()).filter(Boolean),
+                ),
+              }),
+            ),
+          );
       if (!res.ok) setError(res.error);
       else setSavedExtra(true);
     } catch {
@@ -383,7 +403,7 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
   ) : null;
 
   return (
-    <div ref={topRef} className="mt-8 w-full max-w-xl">
+    <div ref={topRef} className="w-full">
       {/* progress */}
       {step !== "done" ? (
         <div className="mb-5 flex items-center gap-2">
@@ -407,12 +427,7 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
       {/* STEP 1 — name + email */}
       {step === "contact" ? (
         <form onSubmit={submitContact} className="space-y-5" noValidate>
-          <div>
-            <h3 className="text-2xl font-semibold tracking-tight text-ink">
-              {f.s1Title}
-            </h3>
-            <p className="mt-1 text-sm text-muted">{f.s1Sub}</p>
-          </div>
+          <p className="text-sm text-muted">{f.s1Sub}</p>
           <label className="block">
             <span className="label mb-2 block text-muted">{f.name}</span>
             <input

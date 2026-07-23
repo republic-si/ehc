@@ -410,7 +410,26 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                   </td>
                 )}
                 <td style={tdStyle}>
-                  <div style={{ fontWeight: 600 }}>{r.name}</div>
+                  {r.guestOf ? (
+                    <span
+                      style={{
+                        display: "inline-block",
+                        marginBottom: 3,
+                        fontSize: 10,
+                        fontWeight: 700,
+                        letterSpacing: "0.06em",
+                        textTransform: "uppercase",
+                        color: "#fff",
+                        background: "#c8612e",
+                        padding: "1px 6px",
+                        borderRadius: 4,
+                      }}
+                    >
+                      Pass guest
+                    </span>
+                  ) : (
+                    <div style={{ fontWeight: 600 }}>{r.name}</div>
+                  )}
                   <div style={{ ...codeStyle, color: "#666" }}>
                     <a href={`mailto:${r.email}`} style={{ color: "#1a56c4" }}>
                       {r.email}
