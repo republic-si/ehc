@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
-import { TopBar, SiteHeader, SiteFooter } from "@/app/_components/SiteChrome";
+import { TopBar, SiteFooter } from "@/app/_components/SiteChrome";
 import { RequestForm } from "./RequestForm";
 import { ChiliFestNav } from "./ChiliFestNav";
 import {
@@ -143,10 +143,10 @@ export default async function ChiliFestPage({
   const makersHref = lang === "de" ? "/chilifest/makers?lang=de" : "/chilifest/makers";
 
   const actions = [
+    { href: "#request", label: t.btnRequest, solid: true },
+    { href: makersHref, label: t.btnMeet, solid: false },
     { href: "#releases", label: t.btnReleases, solid: false },
     { href: "#media", label: t.btnMedia, solid: false },
-    { href: makersHref, label: t.btnMeet, solid: true },
-    { href: "#request", label: t.btnRequest, solid: true },
   ];
 
   return (
@@ -156,7 +156,6 @@ export default async function ChiliFestPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }}
       />
       <TopBar />
-      <SiteHeader />
       <ChiliFestNav lang={lang} current="home" langBase="/chilifest" />
 
       {/* Hero */}

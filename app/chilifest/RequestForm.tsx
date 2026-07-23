@@ -477,7 +477,7 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="inline-flex items-center px-6 py-3 rounded-full bg-ink text-white text-sm font-medium tracking-wide hover:bg-ink-deep transition-colors disabled:opacity-60"
+          className="inline-flex items-center px-6 py-3 rounded-full bg-accent text-white text-sm font-semibold tracking-wide hover:bg-accent/90 transition-colors disabled:opacity-60"
         >
           {status === "submitting" ? f.sending : f.send}
         </button>
