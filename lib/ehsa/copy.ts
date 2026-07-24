@@ -29,6 +29,9 @@ interface Copy {
   registerHeading: string;
   registerIntro: string;
   registerNote: string;
+  // coverage ("as seen in")
+  coverageEyebrow: string;
+  coverageLine: string;
   // about + contact
   aboutHeading: string;
   aboutText: string;
@@ -63,6 +66,9 @@ export const COPY: Record<Lang, Copy> = {
     registerIntro:
       "Judges, journalists and editors: tell us you want in. We will come back to you as the 2027 dates, venue and programme are confirmed.",
     registerNote: "For press and trade only. No spam, one update at a time.",
+    coverageEyebrow: "As seen in",
+    coverageLine:
+      "Covered across broadcast TV, national and regional press in {countries} countries.",
     aboutHeading: "About EHSA",
     aboutText:
       "The European Hot Sauce Awards is the European Heat Council's juried award for hot sauce, spotlighting the small-batch makers defining the category across Europe.",
@@ -95,6 +101,9 @@ export const COPY: Record<Lang, Copy> = {
     registerIntro:
       "Jury, Journalistinnen und Redakteure: sagt uns, dass ihr dabei sein wollt. Wir melden uns, sobald Termine, Ort und Programm 2027 feststehen.",
     registerNote: "Nur für Presse und Handel. Kein Spam, ein Update nach dem anderen.",
+    coverageEyebrow: "Bekannt aus",
+    coverageLine:
+      "Berichterstattung von TV über überregionale bis regionale Presse in {countries} Ländern.",
     aboutHeading: "Über EHSA",
     aboutText:
       "Die European Hot Sauce Awards sind die jurierte Auszeichnung des European Heat Council für Hot Sauce und rücken die Small-Batch-Macher ins Licht, die die Kategorie in ganz Europa prägen.",
