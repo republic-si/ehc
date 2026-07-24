@@ -6,6 +6,7 @@ import { SITE_URL, SITE_NAME } from "@/lib/site";
 import { TopBar, SiteFooter } from "@/app/_components/SiteChrome";
 import { COPY, asLang } from "@/lib/ehsa/copy";
 import { RegisterInterestForm } from "./RegisterInterestForm";
+import { getCoverageWall } from "@/lib/ehsa/coverage";
 
 // EHSA display face: heavy condensed grotesque, the deck's signature. Single
 // weight. Scoped to /ehsa via anton.className on the display headings only.
@@ -87,6 +88,7 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
   const t = COPY[lang];
   const otherLang = lang === "de" ? "en" : "de";
   const otherHref = otherLang === "de" ? "/ehsa?lang=de" : "/ehsa";
+  const coverage = await getCoverageWall();
 
   return (
     <>
@@ -171,6 +173,41 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
           </div>
         </div>
       </section>
+
+      {/* As seen in — real 2026 coverage from Neon. No euro value, ever (press rule). */}
+      {coverage && coverage.outlets.length > 0 ? (
+        <section style={{ background: YELLOW, color: INK }} className="border-b border-black/10">
+          <div className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
+            <h2 className={`${anton.className} text-3xl sm:text-5xl uppercase tracking-tight`}>
+              {t.coverageEyebrow}
+            </h2>
+            <span className="mt-4 block h-1.5 w-24" style={{ background: INK }} />
+            <p className="mt-6 max-w-2xl text-base sm:text-lg leading-relaxed">
+              {t.coverageLine.replace("{countries}", String(coverage.countryCount))}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-2.5">
+              {coverage.outlets.map((o) => (
+                <span
+                  key={o.name}
+                  className="inline-flex items-center rounded-full px-3.5 py-1.5 text-sm font-semibold"
+                  style={
+                    o.isTv
+                      ? { background: INK, color: YELLOW }
+                      : { border: `1px solid ${INK}33`, color: INK }
+                  }
+                >
+                  {o.name}
+                  {o.isTv ? (
+                    <span className="ml-1.5 text-[10px] font-bold uppercase tracking-wide opacity-80">
+                      TV
+                    </span>
+                  ) : null}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* Register interest — Neon-backed typeform, scoped campaign ehsa_2027 */}
       <section id="register" className="scroll-mt-24" style={{ background: INK, color: "#fff" }}>
