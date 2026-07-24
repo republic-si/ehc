@@ -63,6 +63,7 @@ interface Copy {
   requestIntro: string;
   lblPressPreview: string;
   lblPlaces: string;
+  addToCalendar: string;
   // about + contact
   aboutHeading: string;
   aboutText: string;
@@ -152,6 +153,7 @@ export const COPY: Record<Lang, Copy> = {
       "A pass to the industry preview, before the public doors, for press, creators and trade. Press and creators can add a sample box too. Name and email to start. Industry preview:",
     lblPressPreview: "Industry preview",
     lblPlaces: "Places",
+    addToCalendar: "Add to calendar",
     aboutHeading: "About Berlin Chili Fest",
     aboutText:
       "Established in 2020, Berlin Chili Fest has grown into one of Europe's premier hot sauce celebrations. The festival combines professional competitions with grassroots community spirit, proving that you don't need corporate backing to build something meaningful. It attracts thousands of attendees, partners with industry leaders like Clifton Chili Club and Republic of Heat, and maintains its commitment to supporting independent, artisan hot sauce makers.",
@@ -238,6 +240,7 @@ export const COPY: Record<Lang, Copy> = {
       "Ein Pass zur Fachvorschau, vor dem Publikumseinlass, für Presse, Creator und Handel. Presse und Creator können zusätzlich ein Musterpaket erhalten. Name und E-Mail genügen zum Start. Fachvorschau:",
     lblPressPreview: "Fachvorschau",
     lblPlaces: "Plätze",
+    addToCalendar: "Zum Kalender hinzufügen",
     aboutHeading: "Über Berlin Chili Fest",
     aboutText:
       "Das 2020 gegründete Berlin Chili Fest hat sich zu einer der bedeutendsten Hot-Sauce-Feiern Europas entwickelt. Das Festival verbindet professionelle Wettbewerbe mit basisnahem Gemeinschaftsgeist und zeigt, dass es keine Konzernförderung braucht, um etwas Bedeutsames aufzubauen. Es zieht Tausende Besucher an, arbeitet mit Branchengrößen wie dem Clifton Chili Club und Republic of Heat zusammen und bleibt seinem Engagement für unabhängige, handwerkliche Hot-Sauce-Macher verpflichtet.",
