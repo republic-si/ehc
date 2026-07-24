@@ -38,6 +38,43 @@ const OG_IMAGE = `${SITE_URL}/chilifest/og.jpg`;
 // Habanero orange (--accent, #c8612e) — the EHC accent, used sparingly on the forest-green makers band below.
 type SP = Promise<{ lang?: string }>;
 
+// Three producers featured large in the makers band; every other maker sits in
+// the thumbnail strip beneath. Images are the makers' own submissions (Drive /
+// email). Hooks are a one-line native EN/DE, distinct from the longer profile
+// story; the rest of each card (name, location, flagship, awards) comes from
+// the shared MAKERS record so it stays in sync.
+const HERO_MAKERS: {
+  id: string;
+  img: string;
+  hook: { en: string; de: string };
+}[] = [
+  {
+    id: "ti-dodo-epice",
+    img: "/chilifest/makers/heroes/ti-dodo-vaanee.jpg",
+    hook: {
+      en: "A taste of Mauritius in the Netherlands — her tamarind compote began as leftovers from her mum's kitchen.",
+      de: "Ein Stück Mauritius in den Niederlanden — ihre Tamarinden-Compote begann als Rest aus der Küche ihrer Mutter.",
+    },
+  },
+  {
+    id: "qudo-tjes",
+    img: "/chilifest/makers/heroes/qudo-tjes.jpg",
+    hook: {
+      en: "A software developer who quit the screen to make hot sauce by hand — now with two 2026 Silvers.",
+      de: "Ein Softwareentwickler, der den Bildschirm gegen handgemachte Hot Sauce tauschte — jetzt mit zwei Silber-Medaillen 2026.",
+    },
+  },
+  {
+    id: "teig-fullung",
+    img: "/chilifest/makers/heroes/teig-fullung.jpg",
+    hook: {
+      en: "A Swabian chef staged across Taiwan and Hong Kong, then built his own crispy chili oil back home.",
+      de: "Ein schwäbischer Koch lernte in Taiwan und Hongkong und baute daheim sein eigenes knuspriges Chiliöl.",
+    },
+  },
+];
+const HERO_IDS = new Set(HERO_MAKERS.map((h) => h.id));
+
 export async function generateMetadata({
   searchParams,
 }: {
@@ -279,6 +316,26 @@ export default async function ChiliFestPage({
                   </dd>
                 </div>
               </dl>
+              <a
+                href="/chilifest-industry-preview.ics"
+                download
+                className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/30 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-accent hover:text-accent"
+              >
+                <svg
+                  aria-hidden
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>
+                {t.addToCalendar}
+              </a>
             </div>
             <div className="rounded-2xl bg-white p-6 text-ink shadow-xl sm:p-8">
               <RequestForm lang={lang} />
@@ -375,25 +432,87 @@ export default async function ChiliFestPage({
           <p className="mt-6 max-w-2xl text-base sm:text-lg leading-relaxed text-white/85">
             {t.producersIntro.replace("{n}", String(n))}
           </p>
-          <div className="mt-8 flex flex-wrap gap-2">
-            {MAKERS.filter((m) => m.photo)
-              .slice(0, 8)
-              .map((m) => (
-                <div
-                  key={m.id}
-                  className="relative h-20 w-20 overflow-hidden border border-white/20"
-                  title={m.name}
-                >
-                  <Image
-                    src={m.photo as string}
-                    alt={m.name}
-                    fill
-                    sizes="80px"
-                    className="object-cover"
-                  />
-                </div>
-              ))}
+
+          {/* Featured producers */}
+          <div className="mt-10 grid gap-8 sm:grid-cols-3">
+            {HERO_MAKERS.map((h) => {
+              const m = MAKERS.find((x) => x.id === h.id);
+              if (!m) return null;
+              const href =
+                lang === "de"
+                  ? `/chilifest/makers/${h.id}?lang=de`
+                  : `/chilifest/makers/${h.id}`;
+              return (
+                <Link key={h.id} href={href} className="group block">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-xl">
+                    <Image
+                      src={h.img}
+                      alt={m.name}
+                      fill
+                      priority
+                      sizes="(min-width:640px) 30vw, 90vw"
+                      className="object-cover object-[center_25%] transition-transform duration-500 group-hover:scale-[1.04]"
+                    />
+                    {m.awards ? (
+                      <span
+                        className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.05em]"
+                        style={{ background: "#f4c518", color: "#1a1a1a" }}
+                      >
+                        <Image
+                          src="/chilifest/ehsa-mark.png"
+                          alt="EHSA"
+                          width={5}
+                          height={16}
+                          className="h-4 w-auto"
+                        />
+                        EHSA · {m.awards}
+                      </span>
+                    ) : null}
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold">{m.name}</h3>
+                  <p className="text-sm text-white/55">{m.location}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-white/80">
+                    {h.hook[lang]}
+                  </p>
+                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-accent transition-all group-hover:gap-2">
+                    {lang === "de" ? "Ihre Geschichte" : "Read their story"} →
+                  </span>
+                </Link>
+              );
+            })}
           </div>
+
+          {/* Everyone else — thumbnail strip into the full lineup */}
+          <div className="mt-12 border-t border-white/15 pt-8">
+            <p className="label mb-3 text-white/50">
+              {lang === "de" ? "Und viele mehr" : "Plus many more"}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {MAKERS.filter((m) => m.photo && !HERO_IDS.has(m.id)).map((m) => {
+                const href =
+                  lang === "de"
+                    ? `/chilifest/makers/${m.id}?lang=de`
+                    : `/chilifest/makers/${m.id}`;
+                return (
+                  <Link
+                    key={m.id}
+                    href={href}
+                    title={m.name}
+                    className="relative h-14 w-14 overflow-hidden rounded-md border border-white/15 transition-colors hover:border-accent"
+                  >
+                    <Image
+                      src={m.photo as string}
+                      alt={m.name}
+                      fill
+                      sizes="56px"
+                      className="object-cover"
+                    />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
           <Link
             href={makersHref}
             className="mt-9 inline-flex items-center px-6 py-3 rounded-full bg-accent text-white text-sm font-semibold tracking-wide hover:bg-accent/90 transition-colors"
