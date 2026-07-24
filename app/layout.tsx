@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import "./globals.css";
-import { ChiliFestBanner } from "@/app/_components/SiteChrome";
+import { BannerGate } from "@/app/_components/BannerGate";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,7 +29,7 @@ export default function RootLayout({
       className={`${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ChiliFestBanner />
+        <BannerGate />
         {children}
         {/* Umami — self-hosted, cookieless analytics (no consent banner). Source counts via ?utm_source= tags on press links. */}
         <Script
