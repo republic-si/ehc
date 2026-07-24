@@ -30,7 +30,7 @@ export const ADMIN_NAV: NavArea[] = [
     projectScoped: true,
     sections: [
       { label: "Dashboard", href: "/admin" },
-      { label: "Press DB", href: "/admin/outlets" },
+      { label: "Contacts", href: "/admin/outlets" },
       { label: "Sends", href: "/admin/sends" },
       { label: "Sign-offs", href: "/admin/signoffs" },
       { label: "Bounces", href: "/admin/bounces" },

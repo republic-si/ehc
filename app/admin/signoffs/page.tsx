@@ -11,6 +11,8 @@ import {
 export default async function SignoffsPage() {
   const { scope } = await resolveScope();
   const rows = await getPendingSignoffs(scope);
+  // When viewing across projects, show which campaign each signoff belongs to.
+  const showCampaign = scope.isAll || scope.campaignSlugs.length > 1;
 
   const buckets = new Map<string, typeof rows>();
   for (const r of rows) {
@@ -26,12 +28,14 @@ export default async function SignoffsPage() {
   return (
     <>
       <PageTitle
-        title="Signoffs"
-        subtitle={`${rows.length} pending signoff${rows.length === 1 ? "" : "s"} across makers.`}
+        title="Sign-offs"
+        subtitle={`${rows.length} pending across makers · ${scope.label}`}
       />
 
       {sections.length === 0 && (
-        <p style={{ color: "#666" }}>No pending signoffs.</p>
+        <p style={{ color: "#5a6b5f" }}>
+          No pending sign-offs for {scope.label}.
+        </p>
       )}
 
       {sections.map(({ key, rows }) => (
@@ -42,7 +46,7 @@ export default async function SignoffsPage() {
               fontWeight: 700,
               letterSpacing: "0.06em",
               textTransform: "uppercase",
-              color: "#111",
+              color: "#1d3a2a",
               marginBottom: 8,
             }}
           >
@@ -52,6 +56,7 @@ export default async function SignoffsPage() {
             <thead>
               <tr>
                 <th style={thStyle}>Maker</th>
+                {showCampaign && <th style={thStyle}>Campaign</th>}
                 <th style={thStyle}>Email</th>
                 <th style={thStyle}>Sent</th>
                 <th style={thStyle}>Due</th>
@@ -63,10 +68,15 @@ export default async function SignoffsPage() {
                 <tr key={r.producerSlug + r.sentAt}>
                   <td style={tdStyle}>
                     <div style={{ fontWeight: 600 }}>{r.brand}</div>
-                    <div style={{ ...codeStyle, color: "#999" }}>
+                    <div style={{ ...codeStyle, color: "#8a958e" }}>
                       {r.producerSlug}
                     </div>
                   </td>
+                  {showCampaign && (
+                    <td style={{ ...tdStyle, ...codeStyle }}>
+                      {r.campaignSlug || "—"}
+                    </td>
+                  )}
                   <td style={{ ...tdStyle, ...codeStyle }}>
                     {r.email || "—"}
                   </td>
@@ -76,7 +86,7 @@ export default async function SignoffsPage() {
                   <td style={{ ...tdStyle, ...codeStyle }}>
                     {r.dueAt?.slice(0, 10) || "—"}
                   </td>
-                  <td style={{ ...tdStyle, fontSize: 12, color: "#444" }}>
+                  <td style={{ ...tdStyle, fontSize: 12, color: "#5a6b5f" }}>
                     {(r.subject || "").slice(0, 90)}
                   </td>
                 </tr>
