@@ -8,6 +8,7 @@ import { COPY, asLang } from "@/lib/ehsa/copy";
 import { RegisterInterestForm } from "./RegisterInterestForm";
 import { getCoverageWall } from "@/lib/ehsa/coverage";
 import { WINNERS } from "@/lib/ehsa/winners";
+import { PROFILE_SLUGS } from "@/lib/ehsa/winner-profiles";
 
 // EHSA display face: heavy condensed grotesque, the deck's signature. Single
 // weight. Scoped to /ehsa via anton.className on the display headings only.
@@ -191,37 +192,66 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
             {t.winnersSub}
           </p>
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            {WINNERS.map((w) => (
-              <div key={w.slug} className="flex flex-col rounded-2xl bg-white p-3 text-[#0c0c0c]">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-[#faf8ef]">
-                  <Image
-                    src={w.photo}
-                    alt={`${w.brand} ${w.sauce}`}
-                    fill
-                    sizes="(min-width:1024px) 18vw, (min-width:640px) 30vw, 45vw"
-                    className="object-contain p-2"
-                  />
-                </div>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  <span
-                    className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
-                    style={{ background: YELLOW, color: INK }}
-                  >
-                    Gold
-                  </span>
-                  {w.bestInCategory ? (
-                    <span className="inline-flex items-center rounded-full border border-black/25 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
-                      {t.badgeBest}
+            {WINNERS.map((w) => {
+              const hasProfile = PROFILE_SLUGS.includes(w.slug);
+              const cardHref =
+                lang === "de" ? `/ehsa/winners/${w.slug}?lang=de` : `/ehsa/winners/${w.slug}`;
+              const body = (
+                <>
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-[#faf8ef]">
+                    <Image
+                      src={w.photo}
+                      alt={`${w.brand} ${w.sauce}`}
+                      fill
+                      sizes="(min-width:1024px) 18vw, (min-width:640px) 30vw, 45vw"
+                      className="object-contain p-2"
+                    />
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    <span
+                      className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+                      style={{ background: YELLOW, color: INK }}
+                    >
+                      Gold
+                    </span>
+                    {w.bestInCategory ? (
+                      <span className="inline-flex items-center rounded-full border border-black/25 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                        {t.badgeBest}
+                      </span>
+                    ) : null}
+                  </div>
+                  <h3 className="mt-2 text-sm font-bold leading-tight">{w.brand}</h3>
+                  <p className="mt-0.5 text-xs font-medium text-black/70">{w.sauce}</p>
+                  <p className="mt-1 text-[11px] text-black/50">
+                    {w.category} &middot; {w.town}, {w.country}
+                  </p>
+                  {hasProfile ? (
+                    <span
+                      className="mt-2 text-[11px] font-bold uppercase tracking-wide"
+                      style={{ color: "#8a7a10" }}
+                    >
+                      {lang === "de" ? "Zur Geschichte" : "Read the story"} →
                     </span>
                   ) : null}
+                </>
+              );
+              return hasProfile ? (
+                <Link
+                  key={w.slug}
+                  href={cardHref}
+                  className="group flex flex-col rounded-2xl bg-white p-3 text-[#0c0c0c] transition-transform hover:-translate-y-1"
+                >
+                  {body}
+                </Link>
+              ) : (
+                <div
+                  key={w.slug}
+                  className="flex flex-col rounded-2xl bg-white p-3 text-[#0c0c0c]"
+                >
+                  {body}
                 </div>
-                <h3 className="mt-2 text-sm font-bold leading-tight">{w.brand}</h3>
-                <p className="mt-0.5 text-xs font-medium text-black/70">{w.sauce}</p>
-                <p className="mt-1 text-[11px] text-black/50">
-                  {w.category} &middot; {w.town}, {w.country}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
