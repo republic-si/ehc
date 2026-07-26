@@ -7,6 +7,7 @@ import { TopBar, SiteFooter } from "@/app/_components/SiteChrome";
 import { COPY, asLang } from "@/lib/ehsa/copy";
 import { RegisterInterestForm } from "./RegisterInterestForm";
 import { getCoverageWall } from "@/lib/ehsa/coverage";
+import { WINNERS } from "@/lib/ehsa/winners";
 
 // EHSA display face: heavy condensed grotesque, the deck's signature. Single
 // weight. Scoped to /ehsa via anton.className on the display headings only.
@@ -170,6 +171,57 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
             <Feature title={t.feat1Title} text={t.feat1Text} />
             <Feature title={t.feat2Title} text={t.feat2Text} />
             <Feature title={t.feat3Title} text={t.feat3Text} />
+          </div>
+        </div>
+      </section>
+
+      {/* 2026 winners — curated sample from the press kit. All Gold medals;
+          "Best in Category" marks the rank-1 category winners (Ornitodrinko is a
+          Gold that did not top BBQ, labelled honestly). */}
+      <section id="winners" className="scroll-mt-24" style={{ background: INK, color: "#fff" }}>
+        <div className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
+          <h2
+            className={`${anton.className} text-3xl sm:text-5xl uppercase tracking-tight`}
+            style={{ color: YELLOW }}
+          >
+            {t.winnersEyebrow}
+          </h2>
+          <span className="mt-4 block h-1.5 w-24" style={{ background: YELLOW }} />
+          <p className="mt-6 max-w-2xl text-base sm:text-lg leading-relaxed text-white/85">
+            {t.winnersSub}
+          </p>
+          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {WINNERS.map((w) => (
+              <div key={w.slug} className="flex flex-col rounded-2xl bg-white p-3 text-[#0c0c0c]">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-[#faf8ef]">
+                  <Image
+                    src={w.photo}
+                    alt={`${w.brand} ${w.sauce}`}
+                    fill
+                    sizes="(min-width:1024px) 18vw, (min-width:640px) 30vw, 45vw"
+                    className="object-contain p-2"
+                  />
+                </div>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  <span
+                    className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+                    style={{ background: YELLOW, color: INK }}
+                  >
+                    Gold
+                  </span>
+                  {w.bestInCategory ? (
+                    <span className="inline-flex items-center rounded-full border border-black/25 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                      {t.badgeBest}
+                    </span>
+                  ) : null}
+                </div>
+                <h3 className="mt-2 text-sm font-bold leading-tight">{w.brand}</h3>
+                <p className="mt-0.5 text-xs font-medium text-black/70">{w.sauce}</p>
+                <p className="mt-1 text-[11px] text-black/50">
+                  {w.category} &middot; {w.town}, {w.country}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

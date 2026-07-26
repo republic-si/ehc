@@ -32,6 +32,10 @@ interface Copy {
   // coverage ("as seen in")
   coverageEyebrow: string;
   coverageLine: string;
+  // winners
+  winnersEyebrow: string;
+  winnersSub: string;
+  badgeBest: string;
   // about + contact
   aboutHeading: string;
   aboutText: string;
@@ -69,6 +73,9 @@ export const COPY: Record<Lang, Copy> = {
     coverageEyebrow: "As seen in",
     coverageLine:
       "Covered across broadcast TV, national and regional press in {countries} countries.",
+    winnersEyebrow: "2026 winners",
+    winnersSub: "A sample of the small-batch makers behind the 2026 medals.",
+    badgeBest: "Best in Category",
     aboutHeading: "About EHSA",
     aboutText:
       "The European Hot Sauce Awards is the European Heat Council's juried award for hot sauce, spotlighting the small-batch makers defining the category across Europe.",
@@ -104,6 +111,9 @@ export const COPY: Record<Lang, Copy> = {
     coverageEyebrow: "Bekannt aus",
     coverageLine:
       "Berichterstattung von TV über überregionale bis regionale Presse in {countries} Ländern.",
+    winnersEyebrow: "Gewinner 2026",
+    winnersSub: "Eine Auswahl der Small-Batch-Macher hinter den Medaillen 2026.",
+    badgeBest: "Kategoriesieger",
     aboutHeading: "Über EHSA",
     aboutText:
       "Die European Hot Sauce Awards sind die jurierte Auszeichnung des European Heat Council für Hot Sauce und rücken die Small-Batch-Macher ins Licht, die die Kategorie in ganz Europa prägen.",
