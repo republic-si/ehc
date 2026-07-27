@@ -152,6 +152,36 @@ export default async function WinnerProfilePage({
         </div>
       </section>
 
+      {/* Featured in — per-maker EHSA coverage, live from Neon. No euro, ever. */}
+      {coverage.length > 0 ? (
+        <section style={{ background: YELLOW, color: INK }} className="border-b border-black/10">
+          <div className="max-w-5xl mx-auto px-6 py-14 sm:py-18">
+            <h2 className={`${anton.className} text-3xl sm:text-4xl uppercase tracking-tight`}>
+              {t("Featured in", "Berichtet in")}
+            </h2>
+            <span className="mt-4 block h-1.5 w-20" style={{ background: INK }} />
+            <div className="mt-8 flex flex-wrap gap-3">
+              {coverage.map((c) => (
+                <a
+                  key={c.url || c.name}
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border-2 border-black/25 bg-white/40 px-5 py-2.5 text-base font-semibold text-[#0c0c0c] transition-colors hover:border-[#0c0c0c] hover:bg-white"
+                >
+                  {c.name}
+                  {c.isTv ? (
+                    <span className="rounded-sm bg-[#0c0c0c] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#f5c518]">
+                      TV
+                    </span>
+                  ) : null}
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {/* The maker */}
       <section style={{ background: INK, color: "#fff" }}>
         <div className="max-w-5xl mx-auto px-6 py-14 sm:py-20">
@@ -215,33 +245,7 @@ export default async function WinnerProfilePage({
             </div>
           </div>
 
-          {coverage.length > 0 ? (
-            <div className="mt-12 border-t border-white/15 pt-8">
-              <p className="text-xs font-bold uppercase tracking-[0.15em] text-white/50">
-                {t("Featured in", "Berichtet in")}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2.5">
-                {coverage.map((c) => (
-                  <a
-                    key={c.url || c.name}
-                    href={c.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/25 px-3.5 py-1.5 text-sm font-semibold transition-colors hover:border-[#f5c518] hover:text-[#f5c518]"
-                  >
-                    {c.name}
-                    {c.isTv ? (
-                      <span className="text-[10px] font-bold uppercase tracking-wide opacity-70">
-                        TV
-                      </span>
-                    ) : null}
-                  </a>
-                ))}
-              </div>
-            </div>
-          ) : null}
-
-          <div className="mt-10">
+          <div className="mt-12 border-t border-white/15 pt-8">
             <Link href={winnersHref} className="text-sm font-bold uppercase tracking-wide text-white/80 hover:text-[#f5c518]">
               ← {backLabel}
             </Link>
