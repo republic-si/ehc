@@ -62,3 +62,52 @@ export async function getCoverageWall(limit = 42): Promise<CoverageWall | null> 
     return null;
   }
 }
+
+// Per-maker "featured in" coverage for the winner profile pages. Same source
+// (pickups), filtered to one maker, false-positives excluded, outlet-name
+// variants deduped (web + TV of the same outlet collapse to one, TV flagged).
+// No euro / EMV value is ever selected.
+export interface MakerCoverageItem {
+  name: string;
+  url: string;
+  isTv: boolean;
+}
+
+export async function getMakerCoverage(
+  makerSlug: string,
+): Promise<MakerCoverageItem[]> {
+  try {
+    const rows = await sql`
+      SELECT outlet_name,
+             coalesce(nullif(article_url, ''), outlet_url) AS url,
+             MAX(est_reach) AS reach,
+             bool_or(medium ILIKE '%tv%') AS is_tv
+      FROM pickups
+      WHERE campaign_slug = ${CAMPAIGN}
+        AND is_false_positive IS NOT TRUE
+        AND maker_slug = ${makerSlug}
+      GROUP BY outlet_name, coalesce(nullif(article_url, ''), outlet_url)
+      ORDER BY reach DESC NULLS LAST
+    `;
+    const seen = new Map<string, MakerCoverageItem>();
+    for (const row of rows) {
+      const name = cleanOutlet(String(row.outlet_name));
+      if (!name) continue;
+      const key = name.toLowerCase();
+      const existing = seen.get(key);
+      if (existing) {
+        if (row.is_tv) existing.isTv = true;
+      } else {
+        seen.set(key, {
+          name,
+          url: String(row.url ?? ""),
+          isTv: Boolean(row.is_tv),
+        });
+      }
+    }
+    return [...seen.values()];
+  } catch (err) {
+    console.error("[ehsa-coverage] maker query failed", err);
+    return [];
+  }
+}

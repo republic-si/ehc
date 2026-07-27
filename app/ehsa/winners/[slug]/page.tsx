@@ -8,6 +8,7 @@ import { TopBar, SiteFooter } from "@/app/_components/SiteChrome";
 import { asLang, type Lang } from "@/lib/ehsa/copy";
 import { WINNERS } from "@/lib/ehsa/winners";
 import { getProfile, PROFILE_SLUGS, type ProfileT } from "@/lib/ehsa/winner-profiles";
+import { getMakerCoverage } from "@/lib/ehsa/coverage";
 
 const anton = Anton({ subsets: ["latin"], weight: "400", display: "swap" });
 
@@ -68,6 +69,7 @@ export default async function WinnerProfilePage({
   const winner = WINNERS.find((w) => w.slug === slug);
   if (!profile || !winner) notFound();
 
+  const coverage = await getMakerCoverage(profile.coverageSlug ?? slug);
   const otherLang = lang === "de" ? "en" : "de";
   const base = `/ehsa/winners/${slug}`;
   const otherHref = otherLang === "de" ? `${base}?lang=de` : base;
@@ -213,7 +215,33 @@ export default async function WinnerProfilePage({
             </div>
           </div>
 
-          <div className="mt-12 border-t border-white/15 pt-8">
+          {coverage.length > 0 ? (
+            <div className="mt-12 border-t border-white/15 pt-8">
+              <p className="text-xs font-bold uppercase tracking-[0.15em] text-white/50">
+                {t("Featured in", "Berichtet in")}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                {coverage.map((c) => (
+                  <a
+                    key={c.url || c.name}
+                    href={c.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/25 px-3.5 py-1.5 text-sm font-semibold transition-colors hover:border-[#f5c518] hover:text-[#f5c518]"
+                  >
+                    {c.name}
+                    {c.isTv ? (
+                      <span className="text-[10px] font-bold uppercase tracking-wide opacity-70">
+                        TV
+                      </span>
+                    ) : null}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          <div className="mt-10">
             <Link href={winnersHref} className="text-sm font-bold uppercase tracking-wide text-white/80 hover:text-[#f5c518]">
               ← {backLabel}
             </Link>
