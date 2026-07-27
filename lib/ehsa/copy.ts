@@ -36,6 +36,10 @@ interface Copy {
   winnersEyebrow: string;
   winnersSub: string;
   badgeBest: string;
+  // map
+  mapHeading: string;
+  mapLine: string;
+  mapLegend: string;
   // about + contact
   aboutHeading: string;
   aboutText: string;
@@ -76,6 +80,10 @@ export const COPY: Record<Lang, Copy> = {
     winnersEyebrow: "2026 winners",
     winnersSub: "A sample of the small-batch makers behind the 2026 medals.",
     badgeBest: "Best in Category",
+    mapHeading: "Producers across Europe",
+    mapLine:
+      "{producers} producers from {countries} countries entered in 2026, from Malta to Finland, Ireland to Croatia.",
+    mapLegend: "Dot size = producers per country. Hover a country for detail.",
     aboutHeading: "About EHSA",
     aboutText:
       "The European Hot Sauce Awards is the European Heat Council's juried award for hot sauce, spotlighting the small-batch makers defining the category across Europe.",
@@ -114,6 +122,10 @@ export const COPY: Record<Lang, Copy> = {
     winnersEyebrow: "Gewinner 2026",
     winnersSub: "Eine Auswahl der Small-Batch-Macher hinter den Medaillen 2026.",
     badgeBest: "Kategoriesieger",
+    mapHeading: "Hersteller in ganz Europa",
+    mapLine:
+      "{producers} Hersteller aus {countries} Ländern nahmen 2026 teil, von Malta bis Finnland, von Irland bis Kroatien.",
+    mapLegend: "Punktgröße = Hersteller pro Land. Für Details ein Land ansteuern.",
     aboutHeading: "Über EHSA",
     aboutText:
       "Die European Hot Sauce Awards sind die jurierte Auszeichnung des European Heat Council für Hot Sauce und rücken die Small-Batch-Macher ins Licht, die die Kategorie in ganz Europa prägen.",
