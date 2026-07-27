@@ -9,6 +9,8 @@ import { RegisterInterestForm } from "./RegisterInterestForm";
 import { getCoverageWall } from "@/lib/ehsa/coverage";
 import { WINNERS } from "@/lib/ehsa/winners";
 import { PROFILE_SLUGS } from "@/lib/ehsa/winner-profiles";
+import { getProducerMap, mapTotals } from "@/lib/ehsa/map-data";
+import { EhsaMap } from "./EhsaMap";
 
 // EHSA display face: heavy condensed grotesque, the deck's signature. Single
 // weight. Scoped to /ehsa via anton.className on the display headings only.
@@ -91,6 +93,8 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
   const otherLang = lang === "de" ? "en" : "de";
   const otherHref = otherLang === "de" ? "/ehsa?lang=de" : "/ehsa";
   const coverage = await getCoverageWall();
+  const producerMap = await getProducerMap();
+  const mapStats = mapTotals(producerMap);
 
   return (
     <>
@@ -175,6 +179,29 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
           </div>
         </div>
       </section>
+
+      {/* Producers across Europe — data-driven bubble map, live from Neon */}
+      {mapStats.countries > 0 ? (
+        <section style={{ background: CREAM, color: INK }} className="border-b border-black/10">
+          <div className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
+            <h2 className={`${anton.className} text-3xl sm:text-5xl uppercase tracking-tight`}>
+              {t.mapHeading}
+            </h2>
+            <span className="mt-4 block h-1.5 w-24" style={{ background: INK }} />
+            <p className="mt-6 max-w-2xl text-base sm:text-lg leading-relaxed">
+              {t.mapLine
+                .replace("{producers}", String(mapStats.producers))
+                .replace("{countries}", String(mapStats.countries))}
+            </p>
+            <div className="mt-10 border border-black/15">
+              <EhsaMap data={producerMap} lang={lang} />
+            </div>
+            <p className="mt-4 text-xs font-semibold uppercase tracking-wide" style={{ color: "#8a7a10" }}>
+              {t.mapLegend}
+            </p>
+          </div>
+        </section>
+      ) : null}
 
       {/* 2026 winners — curated sample from the press kit. All Gold medals;
           "Best in Category" marks the rank-1 category winners (Ornitodrinko is a
