@@ -90,7 +90,7 @@ export default async function WinnerProfilePage({
             </Link>
             <Link
               href={otherHref}
-              className="rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide transition-colors hover:bg-[#0c0c0c] hover:text-[#f5c518]"
+              className="rounded-none border px-3 py-1 text-xs font-bold uppercase tracking-wide transition-colors hover:bg-[#0c0c0c] hover:text-[#f5c518]"
               style={{ borderColor: INK }}
             >
               {otherLang.toUpperCase()}
@@ -107,18 +107,18 @@ export default async function WinnerProfilePage({
               </h1>
               <p className="mt-2 text-xl sm:text-2xl font-semibold">{winner.sauce}</p>
               <div className="mt-5 flex flex-wrap gap-2">
-                <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide" style={{ background: INK, color: YELLOW }}>
+                <span className="inline-flex items-center rounded-none px-3 py-1 text-xs font-bold uppercase tracking-wide" style={{ background: INK, color: YELLOW }}>
                   Gold
                 </span>
                 {winner.bestInCategory ? (
-                  <span className="inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide" style={{ borderColor: INK }}>
+                  <span className="inline-flex items-center rounded-none border px-3 py-1 text-xs font-bold uppercase tracking-wide" style={{ borderColor: INK }}>
                     {t("Best in Category", "Kategoriesieger")}
                   </span>
                 ) : null}
               </div>
               <p className="mt-6 max-w-md text-base sm:text-lg leading-relaxed">{L(profile.intro, lang)}</p>
             </div>
-            <div className="relative mx-auto aspect-[4/5] w-full max-w-xs overflow-hidden rounded-2xl bg-white">
+            <div className="relative mx-auto aspect-[4/5] w-full max-w-xs overflow-hidden rounded-none bg-white">
               <Image src={winner.photo} alt={`${winner.brand} ${winner.sauce}`} fill priority sizes="(min-width:768px) 40vw, 90vw" className="object-contain p-4" />
             </div>
           </div>
@@ -167,11 +167,11 @@ export default async function WinnerProfilePage({
                   href={c.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-black/25 bg-white/40 px-5 py-2.5 text-base font-semibold text-[#0c0c0c] transition-colors hover:border-[#0c0c0c] hover:bg-white"
+                  className="inline-flex items-center gap-2 rounded-none border-2 border-black/25 bg-white/40 px-5 py-2.5 text-base font-semibold text-[#0c0c0c] transition-colors hover:border-[#0c0c0c] hover:bg-white"
                 >
                   {c.name}
                   {c.isTv ? (
-                    <span className="rounded-sm bg-[#0c0c0c] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#f5c518]">
+                    <span className="rounded-none bg-[#0c0c0c] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#f5c518]">
                       TV
                     </span>
                   ) : null}
@@ -192,7 +192,7 @@ export default async function WinnerProfilePage({
           <div className={`mt-8 grid gap-10 md:gap-12 ${profile.portrait ? "md:grid-cols-5" : ""}`}>
             {profile.portrait ? (
               <div className="md:col-span-2">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-none">
                   <Image
                     src={profile.portrait}
                     alt={profile.maker}
@@ -235,7 +235,7 @@ export default async function WinnerProfilePage({
                       href={f.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center rounded-full border border-white/30 px-4 py-2 text-sm font-semibold transition-colors hover:border-[#f5c518] hover:text-[#f5c518]"
+                      className="inline-flex items-center rounded-none border border-white/30 px-4 py-2 text-sm font-semibold transition-colors hover:border-[#f5c518] hover:text-[#f5c518]"
                     >
                       {f.label}
                     </a>
