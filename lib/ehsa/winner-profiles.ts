@@ -286,6 +286,122 @@ export const PROFILES: Record<string, WinnerProfile> = {
     portrait: "/ehsa/winners/hotzeg/portrait.jpg",
     portraitPos: "25% center",
   },
+
+  svilis: {
+    slug: "svilis",
+    maker: "Jānis Svilis",
+    regionLong: { en: "Augšligatne, Cēsis, Latvia", de: "Augšligatne, Cēsis, Lettland" },
+    intro: {
+      en: "One of Latvia's largest chili farms, growing everything it bottles.",
+      de: "Einer der größten Chilihöfe Lettlands, der alles selbst anbaut, was er abfüllt.",
+    },
+    story: {
+      en: [
+        "Svilis Pepper Farm is one of Latvia's largest chili farms, founded by Jānis Svilis after he realised Latvia needed wider availability of chili peppers. From a home kitchen in Riga's Andrejsala, it scaled to a full farm in the Līgatne area where visitors can tour the production and taste the range.",
+        "Latvian-grown chillies processed into sauces, spicy jams and pickles, the produce at the centre of the operation. Garlic Chilli took Gold and Best in Category, with two further placings from the same farm.",
+      ],
+      de: [
+        "Svilis Pepper Farm ist einer der größten Chilihöfe Lettlands, gegründet von Jānis Svilis, nachdem er erkannte, dass Lettland Chili breiter verfügbar machen musste. Aus einer Heimküche in Rigas Andrejsala wuchs er zu einem Hof im Līgatne-Gebiet, wo Besucher die Produktion sehen und die Range verkosten können.",
+        "In Lettland angebaute Chilis, verarbeitet zu Saucen, scharfen Konfitüren und Pickles, das eigene Erzeugnis im Zentrum. Garlic Chilli holte Gold und Kategoriesieg, dazu zwei weitere Platzierungen vom selben Hof.",
+      ],
+    },
+    sauce: {
+      en: "Garlic Chilli is a four-chili flavour bouquet built around a heavy garlic content, around 50% of the sauce is garlic, including Espelette and other hot varieties. Mild-to-medium heat.",
+      de: "Garlic Chilli ist ein Aromabouquet aus vier Chilis rund um einen hohen Knoblauchanteil, etwa 50% der Sauce sind Knoblauch, darunter Espelette und weitere scharfe Sorten. Milde bis mittlere Schärfe.",
+    },
+    peppers: {
+      en: "Espelette and other hot varieties, with around 50% garlic.",
+      de: "Espelette und weitere scharfe Sorten, mit rund 50% Knoblauch.",
+    },
+    pairing: {
+      en: "Pairs with pasta, garlic bread, pizza, roasted potatoes, grilled meat and eggs.",
+      de: "Passt zu Pasta, Knoblauchbrot, Pizza, Röstkartoffeln, Gegrilltem und Eiern.",
+    },
+    quote: {
+      text: "Happy to hear our sauce won European Hot Sauce Awards in the garlic chili type sauce category. The award means to us that we are doing something right, and it motivates us to grow forward and make more delicious products. Also, it's nice to become recognisable in the European chili world. Stay Spicy!",
+      attrib: "Jānis Svilis, Svilis Pepper Farm",
+    },
+    find: [],
+  },
+
+  filfla: {
+    slug: "filfla",
+    maker: "Malcolm Ricci",
+    regionLong: { en: "Malta", de: "Malta" },
+    intro: {
+      en: "A Maltese kitchen that reads its chili paste as an olive tapenade, and topped the category.",
+      de: "Eine maltesische Küche, die ihre Chilipaste als Oliventapenade liest, und die Kategorie anführte.",
+    },
+    story: {
+      en: [
+        "Filfla Chilli Co. is a craft Maltese kitchen run by Malcolm Ricci, built around Mediterranean and Maltese ingredients: sun-dried tomatoes, olives, oranges, carob syrup and extra virgin olive oil. It is named after the small island south of Malta.",
+        "Three placements in 2026: Gold and Best in Category in Chili Paste with BUWĠI, plus silver and bronze in Sambal, Chutney and Pickles.",
+      ],
+      de: [
+        "Filfla Chilli Co. ist eine handwerkliche maltesische Küche von Malcolm Ricci, gebaut auf mediterrane und maltesische Zutaten: sonnengetrocknete Tomaten, Oliven, Orangen, Johannisbrotsirup und natives Olivenöl extra. Benannt nach der kleinen Insel südlich von Malta.",
+        "Drei Platzierungen 2026: Gold und Kategoriesieg bei Chili Paste mit BUWĠI, dazu Silber und Bronze bei Sambal, Chutney und Pickles.",
+      ],
+    },
+    sauce: {
+      en: "BUWĠI is a Maltese chili paste built off green and kalamata olives, sultanas, green chillies and extra virgin olive oil, gently heated and blended by hand. An olive-tapenade backbone with the chili layered through.",
+      de: "BUWĠI ist eine maltesische Chilipaste aus grünen und Kalamata-Oliven, Sultaninen, grünen Chilis und nativem Olivenöl extra, sanft erhitzt und von Hand gemixt. Ein Oliven-Tapenade-Rückgrat mit durchgezogenem Chili.",
+    },
+    peppers: {
+      en: "Green chillies, layered through an olive-tapenade base.",
+      de: "Grüne Chilis, durch eine Oliven-Tapenade-Basis gezogen.",
+    },
+    pairing: {
+      en: "Works on bruschetta, grilled fish, lamb plates and the Maltese ftira platter.",
+      de: "Passt zu Bruschetta, gegrilltem Fisch, Lamm und der maltesischen Ftira-Platte.",
+    },
+    quote: {
+      text: "We are incredibly proud of this. BUWĠI is a Maltese chili paste, with green and kalamata olives, sultanas, green chillies and extra virgin olive oil. I wanted to create my own version of an olive tapenade, with the sultanas added to bring in a sweet element.",
+      attrib: "Malcolm Ricci, Filfla Chilli Co.",
+    },
+    find: [],
+    portrait: "/ehsa/winners/filfla/portrait.jpg",
+  },
+
+  "de-vergulde-tong": {
+    slug: "de-vergulde-tong",
+    maker: "Albert",
+    regionLong: {
+      en: "Volendam, North Holland, Netherlands",
+      de: "Volendam, Nordholland, Niederlande",
+    },
+    intro: {
+      en: "A one-person sambal kitchen with a recipe traced back to 1960s Indonesian sailors.",
+      de: "Eine Ein-Personen-Sambal-Küche mit einem Rezept, das auf indonesische Seeleute der 1960er zurückgeht.",
+    },
+    story: {
+      en: [
+        "De Vergulde Tong, Dutch for The Gilded Tongue, is a one-person sambal kitchen run by Albert in Volendam. Production is deliberately small, sixty jars made by hand over four hours per batch, no shortcuts on ingredients.",
+        "Milde sambal van koksmaat Kees took Gold and Best in Category. The recipe came from Albert's old colleague Kees, now 84, who learned to make sambal in the 1960s from Indonesian colleagues on board ship. The jar honours Kees on the label.",
+      ],
+      de: [
+        "De Vergulde Tong, niederländisch für Die Vergoldete Zunge, ist eine Ein-Personen-Sambal-Küche von Albert in Volendam. Die Produktion ist bewusst klein, sechzig Gläser von Hand in rund vier Stunden pro Charge, keine Kompromisse bei den Zutaten.",
+        "Milde sambal van koksmaat Kees holte Gold und Kategoriesieg. Das Rezept stammt von Alberts altem Kollegen Kees, heute 84, der das Sambal-Machen in den 1960ern von indonesischen Kollegen an Bord lernte. Das Etikett ehrt Kees.",
+      ],
+    },
+    sauce: {
+      en: "Milde sambal van koksmaat Kees is a mild sambal built on fresh Spanish peppers from the Westland greenhouse region. It leads with the pepper itself, the heat dialled back so it sits comfortably on rice, satay or eggs without taking over.",
+      de: "Milde sambal van koksmaat Kees ist ein mildes Sambal aus frischen spanischen Paprika aus dem Westland-Gewächshausgebiet. Es führt mit der Paprika selbst, die Schärfe zurückgenommen, damit es auf Reis, Satay oder Eiern sitzt, ohne zu übernehmen.",
+    },
+    peppers: {
+      en: "Fresh Spanish peppers, sourced through Westlandpeppers.",
+      de: "Frische spanische Paprika, bezogen über Westlandpeppers.",
+    },
+    pairing: {
+      en: "Sits comfortably on rice, satay or eggs.",
+      de: "Passt zu Reis, Satay oder Eiern.",
+    },
+    quote: {
+      text: "I am really proud and honored that, in a blind tasting competition, expert European judges and makers within the European hot sauce community have rated my mild sambal as overall winner in the category sambal, chutney and pickles. Thank you so much!",
+      attrib: "Albert, De Vergulde Tong",
+    },
+    find: [{ label: "deverguldetong.nl", url: "https://deverguldetong.nl" }],
+    portrait: "/ehsa/winners/de-vergulde-tong/portrait.jpg",
+  },
 };
 
 export function getProfile(slug: string): WinnerProfile | null {
