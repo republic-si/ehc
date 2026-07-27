@@ -1,6 +1,9 @@
 # ehc-site — status
 
-> Last updated: 2026-07-24
+> Last updated: 2026-07-27
+
+> **2026-07-27 — EHSA 2027 press hub shipped (`/ehsa`), map redesign merged (PR #23).**
+> Press-only microsite on the EHC site, hard-separated from producer-facing flows (BCF `/chilifest` pattern). Sells the story — sauces/makers/craft — never coverage metrics; **no euro/EMV values and no scores are ever exposed to journalists.** Pieces: hero + story, 10 winner sample (category Gold winners, chosen for diversity) each with a deep evidence-only profile at `/ehsa/winners/[slug]` (sourced from signed-off releases + maker feedback), an "As seen in" coverage wall (live from Neon) with per-maker "Featured in" lists, a register-interest form (Typeform-style, writes to Neon `interest_registrations`), an OG share image, and an **interactive Europe producer map** — a composed graphic (Anton headline + named ranked leaderboard + framed map on brand yellow, hover tooltips). Map outline/dots are a static offline-projected d3-geo asset (`lib/ehsa/europe-geo.json`); no map library ships at runtime. Square/blocky styling to match the deck. `ehsa_2027` wired as a campaign in **both** places (campaigns.json block + Neon `campaigns`/`organizations` rows). Map redesign = PR #23, merged to main; typecheck clean. **Still pending (not code): sign off draft hub copy + paste the press-kit URL.**
 
 > **2026-07-24 — big shipping day: admin refresh + Typeform request form + producers-band redesign (PRs #10, #12, #13, all merged to main).**
 > Three chunks, each its own branch/PR, all live on main.
