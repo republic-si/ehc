@@ -16,10 +16,11 @@ export interface WinnerProfile {
   story: { en: string[]; de: string[] };
   sauce: ProfileT;
   peppers: ProfileT; // ingredient/pepper note, evidence-based
-  pairing: ProfileT;
+  pairing?: ProfileT;
   quote?: { text: string; attrib: string }; // verbatim; omit if not maker-approved
   find: { label: string; url: string }[];
   portrait?: string; // omit if no real maker photo available
+  portraitPos?: string; // object-position for the portrait crop; default "center"
 }
 
 export const PROFILES: Record<string, WinnerProfile> = {
@@ -174,6 +175,116 @@ export const PROFILES: Record<string, WinnerProfile> = {
     },
     find: [{ label: "spicepunk.ch", url: "https://spicepunk.ch" }],
     portrait: "/ehsa/winners/spicepunk/portrait.png",
+  },
+
+  pohorc: {
+    slug: "pohorc",
+    maker: "Denis Ledinek",
+    regionLong: {
+      en: "Šentjanža hills near Dravograd, Koroška, Slovenia",
+      de: "Šentjanža-Hügel bei Dravograd, Koroška, Slowenien",
+    },
+    intro: {
+      en: "The only certified-organic Slovenian hot honey on the market, from a family farm certified organic for over twenty years.",
+      de: "Der einzige zertifiziert biologische slowenische Hot Honey am Markt, von einem seit über zwanzig Jahren biozertifizierten Familienhof.",
+    },
+    story: {
+      en: [
+        "POHORC BIO CHILI is a certified-organic family farm in the Šentjanža hills near Dravograd, run by Denis Ledinek. The chili work started with twelve pepper seedlings, a birthday gift from Denis's brother, and now runs to roughly five hundred plants a season in the greenhouse.",
+        "Hand-bottled and small-batch, every plant named from germination to fruit. Hot Honey is built on the village apiary's organic honey and Denis's grandfather's hazelnut vinegar from the family land, the only certified-organic Slovenian hot honey on the market.",
+      ],
+      de: [
+        "POHORC BIO CHILI ist ein biozertifizierter Familienhof in den Šentjanža-Hügeln bei Dravograd, geführt von Denis Ledinek. Die Chili-Arbeit begann mit zwölf Pflänzchen, einem Geburtstagsgeschenk von Denis' Bruder, und umfasst heute rund fünfhundert Pflanzen pro Saison im Gewächshaus.",
+        "Von Hand abgefüllt, in kleinen Chargen, jede Pflanze von der Keimung bis zur Frucht benannt. Hot Honey basiert auf dem Bio-Honig der Dorfimkerei und dem Haselnussessig von Denis' Großvater vom eigenen Land, der einzige zertifiziert biologische slowenische Hot Honey am Markt.",
+      ],
+    },
+    sauce: {
+      en: "Hot Honey is organic Slovenian honey from the village beehives, apple cider vinegar drawn from Denis's grandfather's old wild hazelnut tree, chili and spices stirred through and infused for several days. Floral and runny on the pour, gentle sweetness up front with the heat building through the back.",
+      de: "Hot Honey ist biologischer slowenischer Honig aus den Dorfbienenstöcken, Apfelessig vom alten wilden Haselnussbaum von Denis' Großvater, Chili und Gewürze eingerührt und mehrere Tage infundiert. Blumig und flüssig beim Ausgießen, sanfte Süße vorn, die Schärfe baut sich nach hinten auf.",
+    },
+    peppers: {
+      en: "Chili and spices infused into organic Slovenian honey; the chili variety is not named.",
+      de: "Chili und Gewürze, infundiert in biologischen slowenischen Honig; die Chilisorte wird nicht genannt.",
+    },
+    pairing: {
+      en: "Runny and pourable, made to go on everything.",
+      de: "Flüssig und gießbar, für alles gemacht.",
+    },
+    quote: {
+      text: "We've put Slovenia firmly on the European chili map. What started in a small boutique kitchen on our family organic farm Ržen, driven by passion, bold ideas, and our own handcrafted recipes, grew into something far bigger. This victory belongs to the entire team that poured its energy, talent, and heart into every jar.",
+      attrib: "Denis Ledinek, Pohorc Bio Chili",
+    },
+    find: [{ label: "cilipohorc.com", url: "https://cilipohorc.com" }],
+    portrait: "/ehsa/winners/pohorc/portrait.jpg",
+  },
+
+  gaston: {
+    slug: "gaston",
+    maker: "Radovan Fron",
+    regionLong: { en: "Ostrava, Czech Republic", de: "Ostrava, Tschechien" },
+    intro: {
+      en: "Four medals across four categories from a husband-and-wife kitchen, led by a Depeche Mode tribute in cuttlefish ink.",
+      de: "Vier Medaillen in vier Kategorien aus einer Küche von zweien, angeführt von einer Depeche-Mode-Hommage in Tintenfischtinte.",
+    },
+    story: {
+      en: [
+        "Gaston Chilli is a craft kitchen in Ostrava run by Radovan Fron and his wife, every bottle passing through Radovan's hands. The chillies are grown for the kitchen by a family-run nursery on the city's outskirts.",
+        "Four placements across Freestyle, Extra Hot, Asian Style and Mild, from one kitchen reading four very different briefs. DEAD MORUGA took Best in Category in Freestyle.",
+      ],
+      de: [
+        "Gaston Chilli ist eine Handwerksküche in Ostrava, geführt von Radovan Fron und seiner Frau, jede Flasche geht durch Radovans Hände. Die Chilis werden von einer Familiengärtnerei am Stadtrand exklusiv für die Küche angebaut.",
+        "Vier Platzierungen in Freestyle, Extra Hot, Asian Style und Mild, aus einer Küche, die vier sehr unterschiedliche Aufgaben liest. DEAD MORUGA holte den Kategoriesieg im Freestyle.",
+      ],
+    },
+    sauce: {
+      en: "DEAD MORUGA is Radovan's tribute to Depeche Mode, built to be black like a proper DM record: blueberries and cuttlefish ink darken the base, with Moruga peppers carrying the heat. Marine umami and dark fruit under the Moruga, a profile you do not see on the shelf.",
+      de: "DEAD MORUGA ist Radovans Hommage an Depeche Mode, schwarz gebaut wie eine echte DM-Platte: Blaubeeren und Tintenfischtinte färben die Basis dunkel, Moruga-Chilis tragen die Schärfe. Maritimes Umami und dunkle Frucht unter dem Moruga, ein Profil, das man im Regal nicht sieht.",
+    },
+    peppers: {
+      en: "Trinidad Moruga Scorpion, with blueberries and cuttlefish ink.",
+      de: "Trinidad Moruga Scorpion, mit Blaubeeren und Tintenfischtinte.",
+    },
+    quote: {
+      text: "We are thrilled that a small producer from Ostrava like us has succeeded against competitors from all over the continent. Handmade production, quality ingredients, and our own original recipes have helped us win four awards.",
+      attrib: "Radovan Fron, Gaston Chilli",
+    },
+    find: [{ label: "gastonchilli.cz", url: "https://gastonchilli.cz" }],
+    portrait: "/ehsa/winners/gaston/portrait.jpg",
+  },
+
+  hotzeg: {
+    slug: "hotzeg",
+    maker: "Vlad Rojnik & family",
+    regionLong: { en: "Uccle, Brussels, Belgium", de: "Uccle, Brüssel, Belgien" },
+    intro: {
+      en: "Two Golds and a Bronze across three categories, from a family kitchen growing its own chilies in the city.",
+      de: "Zwei Gold und eine Bronze in drei Kategorien, aus einer Familienküche, die ihre Chilis mitten in der Stadt anbaut.",
+    },
+    story: {
+      en: [
+        "HotZeg is a small-batch family kitchen in Uccle, Brussels, run by Vlad Rojnik and his family, growing its own chilies in-house and sourcing the rest from Belgian organic farms.",
+        "Three sauces, three medals: CHEE-LY took Best in Category in Asian Style, ADIXION took Gold in Sweet and #6 in Europe's Top 10 overall, and KIKEBICHE a Bronze in Mild, all built without leaving the city.",
+      ],
+      de: [
+        "HotZeg ist eine Small-Batch-Familienküche in Uccle, Brüssel, geführt von Vlad Rojnik und seiner Familie, mit eigenen Chilis aus dem Anbau im Haus und dem Rest von belgischen Biohöfen.",
+        "Drei Saucen, drei Medaillen: CHEE-LY holte den Kategoriesieg bei Asian Style, ADIXION Gold bei Sweet und Platz 6 in Europas Top 10, KIKEBICHE Bronze bei Mild, alles gebaut, ohne die Stadt zu verlassen.",
+      ],
+    },
+    sauce: {
+      en: "CHEE-LY is lychee folded into chili with a build of Asian aromatics, umami carrying through floral notes. Designed to cross multiple Asian cuisines rather than sit in one.",
+      de: "CHEE-LY ist Litschi, in Chili eingefaltet, mit einem Aufbau asiatischer Aromatik, Umami trägt durch florale Noten. Gemacht, um mehrere asiatische Küchen zu überspannen, statt in einer zu sitzen.",
+    },
+    peppers: {
+      en: "Habanero, single-variety, with lychee (23%), ginger and miso.",
+      de: "Habanero, sortenrein, mit Litschi (23%), Ingwer und Miso.",
+    },
+    quote: {
+      text: "We started HotZeg with one goal, prove to ourselves that we could make tasty hot sauces with natural ingredients only and keep the pleasure hand in hand with spiciness.",
+      attrib: "Vlad, HotZeg",
+    },
+    find: [{ label: "Instagram @hotzeg.bxl", url: "https://instagram.com/hotzeg.bxl" }],
+    portrait: "/ehsa/winners/hotzeg/portrait.jpg",
+    portraitPos: "25% center",
   },
 };
 

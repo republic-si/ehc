@@ -136,10 +136,12 @@ export default async function WinnerProfilePage({
               <dt className="text-xs font-bold uppercase tracking-wide text-black/45">{t("Chili", "Chili")}</dt>
               <dd className="mt-2 text-sm leading-relaxed">{L(profile.peppers, lang)}</dd>
             </div>
-            <div>
-              <dt className="text-xs font-bold uppercase tracking-wide text-black/45">{t("Pairing", "Passt zu")}</dt>
-              <dd className="mt-2 text-sm leading-relaxed">{L(profile.pairing, lang)}</dd>
-            </div>
+            {profile.pairing ? (
+              <div>
+                <dt className="text-xs font-bold uppercase tracking-wide text-black/45">{t("Pairing", "Passt zu")}</dt>
+                <dd className="mt-2 text-sm leading-relaxed">{L(profile.pairing, lang)}</dd>
+              </div>
+            ) : null}
             <div>
               <dt className="text-xs font-bold uppercase tracking-wide text-black/45">{t("Category", "Kategorie")}</dt>
               <dd className="mt-2 text-sm leading-relaxed">{winner.category} · Gold</dd>
@@ -165,6 +167,7 @@ export default async function WinnerProfilePage({
                     fill
                     sizes="(min-width:768px) 40vw, 90vw"
                     className="object-cover"
+                    style={{ objectPosition: profile.portraitPos ?? "center" }}
                   />
                 </div>
                 <p className="mt-3 text-sm font-semibold">{profile.maker}</p>
