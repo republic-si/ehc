@@ -116,7 +116,7 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
             </span>
             <Link
               href={otherHref}
-              className="mt-1 rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wide transition-colors hover:bg-[#0c0c0c] hover:text-[#f5c518]"
+              className="mt-1 rounded-none border px-3 py-1 text-xs font-bold uppercase tracking-wide transition-colors hover:bg-[#0c0c0c] hover:text-[#f5c518]"
               style={{ borderColor: INK }}
               aria-label={`Switch language to ${COPY[otherLang].langName}`}
             >
@@ -140,14 +140,14 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
           <div className="mt-9 flex flex-wrap gap-3">
             <Link
               href="#register"
-              className="inline-flex items-center rounded-full px-6 py-3 text-sm font-bold uppercase tracking-wide transition-transform hover:-translate-y-0.5"
+              className="inline-flex items-center rounded-none px-6 py-3 text-sm font-bold uppercase tracking-wide transition-transform hover:-translate-y-0.5"
               style={{ background: INK, color: YELLOW }}
             >
               {t.btnRegister}
             </Link>
             <a
               href="mailto:press@republicofheat.com"
-              className="inline-flex items-center rounded-full border px-6 py-3 text-sm font-bold uppercase tracking-wide transition-colors hover:bg-[#0c0c0c] hover:text-[#f5c518]"
+              className="inline-flex items-center rounded-none border px-6 py-3 text-sm font-bold uppercase tracking-wide transition-colors hover:bg-[#0c0c0c] hover:text-[#f5c518]"
               style={{ borderColor: INK }}
             >
               {t.btnContact}
@@ -198,7 +198,7 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
                 lang === "de" ? `/ehsa/winners/${w.slug}?lang=de` : `/ehsa/winners/${w.slug}`;
               const body = (
                 <>
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-[#faf8ef]">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-none bg-[#faf8ef]">
                     <Image
                       src={w.photo}
                       alt={`${w.brand} ${w.sauce}`}
@@ -209,13 +209,13 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
                   </div>
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     <span
-                      className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+                      className="inline-flex items-center rounded-none px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
                       style={{ background: YELLOW, color: INK }}
                     >
                       Gold
                     </span>
                     {w.bestInCategory ? (
-                      <span className="inline-flex items-center rounded-full border border-black/25 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                      <span className="inline-flex items-center rounded-none border border-black/25 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
                         {t.badgeBest}
                       </span>
                     ) : null}
@@ -239,14 +239,14 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
                 <Link
                   key={w.slug}
                   href={cardHref}
-                  className="group flex flex-col rounded-2xl bg-white p-3 text-[#0c0c0c] transition-transform hover:-translate-y-1"
+                  className="group flex flex-col rounded-none bg-white p-3 text-[#0c0c0c] transition-transform hover:-translate-y-1"
                 >
                   {body}
                 </Link>
               ) : (
                 <div
                   key={w.slug}
-                  className="flex flex-col rounded-2xl bg-white p-3 text-[#0c0c0c]"
+                  className="flex flex-col rounded-none bg-white p-3 text-[#0c0c0c]"
                 >
                   {body}
                 </div>
@@ -271,7 +271,7 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
               {coverage.outlets.map((o) => (
                 <span
                   key={o.name}
-                  className="inline-flex items-center rounded-full px-3.5 py-1.5 text-sm font-semibold"
+                  className="inline-flex items-center rounded-none px-3.5 py-1.5 text-sm font-semibold"
                   style={
                     o.isTv
                       ? { background: INK, color: YELLOW }
@@ -308,7 +308,7 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
               </p>
               <p className="mt-4 text-xs text-white/55">{t.registerNote}</p>
             </div>
-            <div className="rounded-2xl bg-white p-6 text-[#0c0c0c] shadow-xl sm:p-8">
+            <div className="rounded-none bg-white p-6 text-[#0c0c0c] shadow-xl sm:p-8">
               <RegisterInterestForm lang={lang} />
             </div>
           </div>

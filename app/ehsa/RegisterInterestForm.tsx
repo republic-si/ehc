@@ -13,10 +13,10 @@ import type { InterestRole } from "@/lib/ehsa/interest";
 type Step = "contact" | "role" | "note" | "done";
 
 const INPUT =
-  "w-full rounded-lg border border-black/15 bg-white px-4 py-3 text-base text-[#0c0c0c] " +
+  "w-full rounded-none border border-black/15 bg-white px-4 py-3 text-base text-[#0c0c0c] " +
   "focus:outline-none focus:border-[#0c0c0c] focus:ring-2 focus:ring-[#0c0c0c]/15";
 const BTN =
-  "inline-flex w-full items-center justify-center rounded-full bg-[#0c0c0c] px-6 py-3.5 " +
+  "inline-flex w-full items-center justify-center rounded-none bg-[#0c0c0c] px-6 py-3.5 " +
   "text-base font-semibold text-white transition-colors hover:bg-black disabled:opacity-60 sm:w-auto";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -172,7 +172,7 @@ export function RegisterInterestForm({ lang = "en" }: { lang?: Lang }) {
   }
 
   const errorBox = error ? (
-    <div className="mt-4 rounded-lg border border-red-300 bg-red-50 px-4 py-3">
+    <div className="mt-4 rounded-none border border-red-300 bg-red-50 px-4 py-3">
       <p className="text-sm text-red-700" role="alert">
         {error}
       </p>
@@ -186,7 +186,7 @@ export function RegisterInterestForm({ lang = "en" }: { lang?: Lang }) {
           {[1, 2, 3].map((n) => (
             <span
               key={n}
-              className="h-1.5 flex-1 rounded-full transition-colors"
+              className="h-1.5 flex-1 rounded-none transition-colors"
               style={{ background: n <= STEP_INDEX[step] ? "#0c0c0c" : "#e6e2d6" }}
             />
           ))}
@@ -277,7 +277,7 @@ export function RegisterInterestForm({ lang = "en" }: { lang?: Lang }) {
                 key={value}
                 type="button"
                 onClick={() => chooseRole(value)}
-                className="flex items-center justify-between rounded-lg border-2 border-black/15 bg-white px-5 py-4 text-left text-base font-semibold text-[#0c0c0c] transition-colors hover:border-[#0c0c0c]"
+                className="flex items-center justify-between rounded-none border-2 border-black/15 bg-white px-5 py-4 text-left text-base font-semibold text-[#0c0c0c] transition-colors hover:border-[#0c0c0c]"
               >
                 {labelText}
                 <span aria-hidden>→</span>
@@ -336,7 +336,7 @@ export function RegisterInterestForm({ lang = "en" }: { lang?: Lang }) {
 
       {/* DONE */}
       {step === "done" ? (
-        <div className="rounded-lg border-2 border-[#0c0c0c] bg-[#f5c518] p-6">
+        <div className="rounded-none border-2 border-[#0c0c0c] bg-[#f5c518] p-6">
           <p className="text-lg font-bold text-[#0c0c0c]">{f.doneTitle}</p>
           <p className="mt-2 leading-relaxed text-[#0c0c0c]/85">{f.doneBody}</p>
         </div>
