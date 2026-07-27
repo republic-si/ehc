@@ -95,6 +95,9 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
   const coverage = await getCoverageWall();
   const producerMap = await getProducerMap();
   const mapStats = mapTotals(producerMap);
+  const rankedProducers = Object.values(producerMap).sort(
+    (a, b) => b.count - a.count || a.country.localeCompare(b.country),
+  );
 
   return (
     <>
@@ -180,23 +183,43 @@ export default async function EhsaPage({ searchParams }: { searchParams: SP }) {
         </div>
       </section>
 
-      {/* Producers across Europe — data-driven bubble map, live from Neon */}
+      {/* Producers across Europe — ranked list + data-driven map, live from Neon */}
       {mapStats.countries > 0 ? (
-        <section style={{ background: CREAM, color: INK }} className="border-b border-black/10">
-          <div className="max-w-5xl mx-auto px-6 py-16 sm:py-20">
-            <h2 className={`${anton.className} text-3xl sm:text-5xl uppercase tracking-tight`}>
+        <section style={{ background: YELLOW, color: INK }} className="border-b border-black/10">
+          <div className="max-w-6xl mx-auto px-6 py-16 sm:py-20">
+            <h2
+              className={`${anton.className} text-4xl sm:text-6xl uppercase leading-[0.95] tracking-tight`}
+            >
               {t.mapHeading}
             </h2>
-            <span className="mt-4 block h-1.5 w-24" style={{ background: INK }} />
-            <p className="mt-6 max-w-2xl text-base sm:text-lg leading-relaxed">
-              {t.mapLine
-                .replace("{producers}", String(mapStats.producers))
-                .replace("{countries}", String(mapStats.countries))}
+            <span className="mt-5 block h-2 w-40" style={{ background: INK }} />
+            <p className="mt-5 text-sm font-bold uppercase tracking-[0.12em]">
+              {mapStats.producers} {lang === "de" ? "Hersteller" : "producers"} ·{" "}
+              {mapStats.countries} {lang === "de" ? "Länder" : "countries"} · EHSA 2026
             </p>
-            <div className="mt-10 border border-black/15">
+            <div className="mt-10 grid items-start gap-10 lg:grid-cols-[280px_1fr] lg:gap-14">
+              <ol className="text-sm">
+                {rankedProducers.map((d) => (
+                  <li
+                    key={d.country}
+                    className="flex items-center justify-between gap-3 border-b border-black/15 py-[6px]"
+                  >
+                    <span className="font-bold uppercase tracking-wide">{d.country}</span>
+                    <span
+                      className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-xs font-bold"
+                      style={{ background: INK, color: YELLOW }}
+                    >
+                      {d.count}
+                    </span>
+                  </li>
+                ))}
+              </ol>
               <EhsaMap data={producerMap} lang={lang} />
             </div>
-            <p className="mt-4 text-xs font-semibold uppercase tracking-wide" style={{ color: "#8a7a10" }}>
+            <p
+              className="mt-6 text-xs font-bold uppercase tracking-wide"
+              style={{ color: "#7a6a10" }}
+            >
               {t.mapLegend}
             </p>
           </div>

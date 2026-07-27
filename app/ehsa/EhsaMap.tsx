@@ -4,23 +4,22 @@ import { useState } from "react";
 import geo from "@/lib/ehsa/europe-geo.json";
 import type { CountryDatum } from "@/lib/ehsa/map-data";
 
-// Producers-across-Europe bubble map. The Europe outline + dot positions are a
+// Producers-across-Europe bubble map. Europe outline + dot positions are a
 // static projected asset (lib/ehsa/europe-geo.json, generated offline with
-// d3-geo, no map library ships). Dots scale with producer count; hovering a
-// dot shows a tooltip. Matches the deck: black on brand yellow, hard edges.
+// d3-geo; no map library ships). Dots scale with producer count; hovering a
+// dot shows a tooltip. Black on brand yellow, hard edges, matching the deck.
 
 const YELLOW = "#f5c518";
 const INK = "#0c0c0c";
 
 type Geo = {
-  width: number;
-  height: number;
+  viewBox: number[];
   countries: { name: string; d: string }[];
   dots: { name: string; x: number; y: number }[];
 };
-
 const G = geo as Geo;
-const radius = (n: number) => 5 + 3 * Math.sqrt(n);
+const [VX, VY, VW, VH] = G.viewBox;
+const radius = (n: number) => 5.5 + 3.3 * Math.sqrt(n);
 
 function Tooltip({
   datum,
@@ -38,13 +37,16 @@ function Tooltip({
     `${datum.count} ${lang === "de" ? "Hersteller" : datum.count === 1 ? "producer" : "producers"}`,
     ...(datum.winner ? [`${lang === "de" ? "Sieger" : "Top winner"}: ${datum.winner}`] : []),
   ];
-  const pad = 12;
-  const lh = 22;
-  const w = Math.max(...lines.map((l) => l.length)) * 8.2 + pad * 2;
+  const pad = 11;
+  const lh = 20;
+  const w = Math.round(
+    Math.max(lines[0].length * 9.2, ...lines.slice(1).map((l) => l.length * 7.4)) + pad * 2,
+  );
   const h = lines.length * lh + pad;
-  const flip = x > G.width * 0.6;
-  const bx = flip ? x - w - 10 : x + 10;
-  const by = Math.max(4, y - h - 10);
+  let bx = x > VX + VW * 0.55 ? x - w - 10 : x + 12;
+  let by = y - h - 10;
+  bx = Math.min(Math.max(bx, VX + 2), VX + VW - w - 2);
+  by = Math.max(by, VY + 2);
   return (
     <g pointerEvents="none">
       <rect x={bx} y={by} width={w} height={h} fill={INK} />
@@ -52,8 +54,8 @@ function Tooltip({
         <text
           key={i}
           x={bx + pad}
-          y={by + pad + 12 + i * lh}
-          fontSize={i === 0 ? 16 : 14}
+          y={by + pad + 11 + i * lh}
+          fontSize={i === 0 ? 15 : 13}
           fontWeight={i === 0 ? 800 : 600}
           fill={i === 0 ? YELLOW : "#ffffff"}
         >
@@ -78,19 +80,19 @@ export function EhsaMap({
 
   return (
     <svg
-      viewBox={`0 0 ${G.width} ${G.height}`}
+      viewBox={`${VX} ${VY} ${VW} ${VH}`}
       className="h-auto w-full select-none"
       role="img"
       aria-label="Producers across Europe"
     >
-      <rect width={G.width} height={G.height} fill={YELLOW} />
+      <rect x={VX} y={VY} width={VW} height={VH} fill={YELLOW} />
       {G.countries.map((c) => (
-        <path key={c.name} d={c.d} fill="none" stroke={INK} strokeWidth={0.8} strokeOpacity={0.5} />
+        <path key={c.name} d={c.d} fill="none" stroke={INK} strokeWidth={0.7} strokeOpacity={0.5} />
       ))}
       {active.map((d) => {
         const n = data[d.name].count;
-        const r = radius(n) + (hover === d.name ? 2 : 0);
-        const fs = Math.min(13, Math.max(9, radius(n) - 2));
+        const rr = radius(n) + (hover === d.name ? 2 : 0);
+        const fs = Math.min(15, Math.max(9, radius(n) + 1));
         return (
           <g
             key={d.name}
@@ -103,11 +105,11 @@ export function EhsaMap({
             onBlur={() => setHover((h) => (h === d.name ? null : h))}
             style={{ cursor: "pointer", outline: "none" }}
           >
-            <circle cx={d.x} cy={d.y} r={r} fill={INK} />
+            <circle cx={d.x} cy={d.y} r={rr} fill={INK} />
             <text
               x={d.x}
               y={d.y}
-              dy="0.35em"
+              dy="0.34em"
               textAnchor="middle"
               fontSize={fs}
               fontWeight={800}
