@@ -155,25 +155,43 @@ export default async function WinnerProfilePage({
             {t("The maker", "Der Macher")}
           </h2>
           <span className="mt-4 block h-1.5 w-20" style={{ background: YELLOW }} />
-          <div className="mt-8 grid gap-10 md:grid-cols-5 md:gap-12">
-            <div className="md:col-span-2">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
-                <Image src={profile.portrait} alt={profile.maker} fill sizes="(min-width:768px) 40vw, 90vw" className="object-cover" />
+          <div className={`mt-8 grid gap-10 md:gap-12 ${profile.portrait ? "md:grid-cols-5" : ""}`}>
+            {profile.portrait ? (
+              <div className="md:col-span-2">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
+                  <Image
+                    src={profile.portrait}
+                    alt={profile.maker}
+                    fill
+                    sizes="(min-width:768px) 40vw, 90vw"
+                    className="object-cover"
+                  />
+                </div>
+                <p className="mt-3 text-sm font-semibold">{profile.maker}</p>
               </div>
-              <p className="mt-3 text-sm font-semibold">{profile.maker}</p>
-            </div>
-            <div className="md:col-span-3">
+            ) : null}
+            <div className={profile.portrait ? "md:col-span-3" : "max-w-2xl"}>
+              {!profile.portrait ? (
+                <p className="mb-4 text-sm font-semibold text-white/60">{profile.maker}</p>
+              ) : null}
               {profile.story[lang].map((para, i) => (
-                <p key={i} className={`${i === 0 ? "" : "mt-4"} text-base sm:text-lg leading-relaxed text-white/90`}>
+                <p
+                  key={i}
+                  className={`${i === 0 ? "" : "mt-4"} text-base sm:text-lg leading-relaxed text-white/90`}
+                >
                   {para}
                 </p>
               ))}
-              <figure className="mt-8 border-l-2 pl-5" style={{ borderColor: YELLOW }}>
-                <blockquote className="text-lg sm:text-xl font-semibold leading-snug">
-                  {profile.quote.text}
-                </blockquote>
-                <figcaption className="mt-3 text-sm text-white/60">{profile.quote.attrib}</figcaption>
-              </figure>
+              {profile.quote ? (
+                <figure className="mt-8 border-l-2 pl-5" style={{ borderColor: YELLOW }}>
+                  <blockquote className="text-lg sm:text-xl font-semibold leading-snug">
+                    {profile.quote.text}
+                  </blockquote>
+                  <figcaption className="mt-3 text-sm text-white/60">
+                    {profile.quote.attrib}
+                  </figcaption>
+                </figure>
+              ) : null}
               {profile.find.length ? (
                 <div className="mt-8 flex flex-wrap gap-3">
                   {profile.find.map((f) => (
