@@ -21,6 +21,7 @@ export interface WinnerProfile {
   find: { label: string; url: string }[];
   portrait?: string; // omit if no real maker photo available
   portraitPos?: string; // object-position for the portrait crop; default "center"
+  coverageSlug?: string; // pickups.maker_slug if it differs from the winner slug
 }
 
 export const PROFILES: Record<string, WinnerProfile> = {
@@ -250,6 +251,7 @@ export const PROFILES: Record<string, WinnerProfile> = {
     },
     find: [{ label: "gastonchilli.cz", url: "https://gastonchilli.cz" }],
     portrait: "/ehsa/winners/gaston/portrait.jpg",
+    coverageSlug: "gaston-chilli",
   },
 
   hotzeg: {
