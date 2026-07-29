@@ -14,7 +14,7 @@ export interface NavSection {
 }
 
 export interface NavArea {
-  key: "press" | "events" | "requests";
+  key: "press" | "producers" | "events" | "requests";
   label: string;
   href: string; // area landing page
   /** Press is scoped by the project switcher; Events/Requests are not. */
@@ -36,6 +36,13 @@ export const ADMIN_NAV: NavArea[] = [
       { label: "Bounces", href: "/admin/bounces" },
       { label: "Coverage", href: "/admin/coverage" },
     ],
+  },
+  {
+    key: "producers",
+    label: "Producers",
+    href: "/admin/producers",
+    projectScoped: false,
+    sections: [{ label: "Directory", href: "/admin/producers" }],
   },
   {
     key: "events",
