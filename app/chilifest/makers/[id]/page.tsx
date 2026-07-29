@@ -9,9 +9,8 @@ import { MAKERS, type Maker } from "@/lib/chilifest/makers";
 import { MAKERS_DE } from "@/lib/chilifest/makers.de";
 import { COPY, asLang, type Lang } from "@/lib/chilifest/copy";
 import { MAKER_TEMPLATES, MAKER_IMAGES } from "@/lib/chilifest/templates";
-import { makerHasContact } from "@/lib/chilifest/maker-contacts";
 import { ChiliFestNav } from "../../ChiliFestNav";
-import { ProducerContactForm } from "../../ProducerContactForm";
+import { RequestForm } from "../../RequestForm";
 
 function BottleIcon() {
   return (
@@ -73,6 +72,25 @@ function anglesOf(m: Maker, lang: Lang): string[] {
 }
 const heatLabel = (lang: Lang) => (lang === "de" ? "Schärfe" : "Heat");
 
+// Copy for the press-pass panel on maker profiles. Local to this page: the
+// shared COPY table carries plain strings only, and the intro needs the maker
+// name interpolated.
+const PASS_COPY: Record<
+  Lang,
+  { heading: string; intro: (m: string) => string }
+> = {
+  en: {
+    heading: "Get your press pass",
+    intro: (m) =>
+      `Meet ${m} in person at the industry preview, before the public doors. Press and creators can add a sample box too. Name and email to start.`,
+  },
+  de: {
+    heading: "Sichern Sie sich Ihren Presse-Pass",
+    intro: (m) =>
+      `Treffen Sie ${m} persönlich bei der Fachvorschau, vor dem Publikumseinlass. Presse und Creator können zusätzlich ein Musterpaket erhalten. Name und E-Mail genügen.`,
+  },
+};
+
 export async function generateMetadata({
   params,
   searchParams,
@@ -125,13 +143,12 @@ export default async function MakerDetailPage({
     lang === "de" && template?.pairingsDe ? template.pairingsDe : template?.pairings;
   const makersHref = lang === "de" ? "/chilifest/makers?lang=de" : "/chilifest/makers";
 
-  // Press-action deep links: carry the maker + intent into the hub request form.
+  // Press actions all land on the pass form further down this page, which
+  // already carries the maker as context.
   const isRoh = id === "republic-of-heat";
-  const q = lang === "de" ? "&lang=de" : "";
-  const reqBase = `/chilifest?maker=${encodeURIComponent(m.name)}`;
-  const sampleHref = `${reqBase}&sauce=${encodeURIComponent(m.flagship)}&ask=sample${q}#request`;
-  const infoHref = `${reqBase}&ask=info${q}#request`;
-  const interviewHref = `${reqBase}&ask=interview${q}#request`;
+  const sampleHref = "#pass";
+  const infoHref = "#pass";
+  const interviewHref = "#pass";
 
   return (
     <>
@@ -357,13 +374,22 @@ export default async function MakerDetailPage({
             </section>
           ) : null}
 
-          {makerHasContact(id) ? (
-            <section className="mt-10 border-t border-rule pt-8 print:hidden">
-              <div className="rounded-lg border-2 border-accent bg-accent/5 p-5 sm:p-7">
-                <ProducerContactForm makerId={id} makerName={m.name} lang={lang} />
+          {/* Press pass: the hub's request flow, carried onto the profile with
+              this maker as context (mirrors the hub's ink panel + white card) */}
+          <section id="pass" className="mt-10 scroll-mt-24 print:hidden">
+            <div className="rounded-2xl bg-ink p-6 text-white sm:p-8">
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+                {PASS_COPY[lang].heading}
+              </h2>
+              <span className="mt-3 block h-1 w-16 bg-accent" />
+              <p className="mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-white/85">
+                {PASS_COPY[lang].intro(m.name)}
+              </p>
+              <div className="mt-6 rounded-xl bg-white p-5 text-ink shadow-xl sm:p-7">
+                <RequestForm lang={lang} maker={m.name} />
               </div>
-            </section>
-          ) : null}
+            </div>
+          </section>
 
           <div className="mt-12 pt-8 border-t border-rule flex justify-between text-sm">
             <Link href={makersHref} className="more-link">

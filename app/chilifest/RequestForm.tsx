@@ -194,7 +194,15 @@ function track(event: string, data?: Record<string, string>) {
   }
 }
 
-export function RequestForm({ lang = "en" }: { lang?: Lang }) {
+export function RequestForm({
+  lang = "en",
+  maker: makerFromProp,
+}: {
+  lang?: Lang;
+  // Maker context when the form is embedded on a maker profile page; a ?maker=
+  // deep link still wins so hub links keep working unchanged.
+  maker?: string;
+}) {
   const f = F[lang];
 
   // Funnel events fire once per mount (focus fires on every click/tab into a
@@ -214,7 +222,7 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<RequestRole | null>(null);
   const [wantsSamples, setWantsSamples] = useState(false);
-  const [maker, setMaker] = useState<string | null>(null);
+  const [maker, setMaker] = useState<string | null>(makerFromProp ?? null);
   const [trap, setTrap] = useState("");
 
   const [street, setStreet] = useState("");
