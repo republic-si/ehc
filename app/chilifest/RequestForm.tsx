@@ -179,8 +179,32 @@ const F: Record<
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Umami is injected globally in app/layout.tsx; it may be absent (blocked,
+// not yet loaded), so every call is optional-chained — analytics must never
+// break the form.
+function track(event: string, data?: Record<string, string>) {
+  try {
+    (
+      window as unknown as {
+        umami?: { track: (e: string, d?: Record<string, string>) => void };
+      }
+    ).umami?.track(event, data);
+  } catch {
+    /* ignore */
+  }
+}
+
 export function RequestForm({ lang = "en" }: { lang?: Lang }) {
   const f = F[lang];
+
+  // Funnel events fire once per mount (focus fires on every click/tab into a
+  // field; we only care about first engagement).
+  const trackedOnce = useRef<Set<string>>(new Set());
+  function trackOnce(event: string) {
+    if (trackedOnce.current.has(event)) return;
+    trackedOnce.current.add(event);
+    track(event, { lang });
+  }
 
   const [step, setStep] = useState<Step>("contact");
   const [id, setId] = useState<string | null>(null);
@@ -268,6 +292,7 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
   async function submitContact(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    track("chilifest-form-continue-click", { lang });
     if (!name.trim() || !EMAIL_RE.test(email.trim())) return setError(f.genErr);
     setBusy(true);
     try {
@@ -286,6 +311,7 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
       } else {
         setId(res.id);
         setEditToken(res.editToken);
+        track("chilifest-form-started", { lang });
         goto("role");
       }
     } catch {
@@ -298,6 +324,7 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
   // Step 2 -> record role (best-effort background patch; re-sent authoritatively
   // at confirm) and advance immediately so the UI never stalls on the network.
   function chooseRole(next: RequestRole) {
+    track("chilifest-form-role-click", { lang, role: next });
     setRole(next);
     if (next === "trade") setWantsSamples(false);
     if (id && editToken) {
@@ -311,6 +338,7 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
   // Step 3 -> authoritative save of the full record, then mark complete. Retried
   // so a flaky connection can't leave a half-saved row.
   async function confirmOffer() {
+    track("chilifest-form-confirm-click", { lang });
     if (!id || !editToken) return setError(f.genErr);
     setBusy(true);
     setError(null);
@@ -337,6 +365,7 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
         setError(done.error);
         return;
       }
+      track("chilifest-form-completed", { lang, role: role ?? "" });
       goto("done");
     } catch {
       setError(f.genErr);
@@ -436,6 +465,7 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
               autoComplete="name"
               autoCapitalize="words"
               value={name}
+              onFocus={() => trackOnce("chilifest-form-name-focus")}
               onChange={(e) => setName(e.target.value)}
               className={INPUT}
             />
@@ -450,6 +480,7 @@ export function RequestForm({ lang = "en" }: { lang?: Lang }) {
               autoCapitalize="off"
               spellCheck={false}
               value={email}
+              onFocus={() => trackOnce("chilifest-form-email-focus")}
               onChange={(e) => setEmail(e.target.value)}
               className={INPUT}
             />
