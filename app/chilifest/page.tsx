@@ -3,7 +3,8 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 import { TopBar, SiteFooter } from "@/app/_components/SiteChrome";
-import { RequestForm } from "./RequestForm";
+import { RequestModal } from "./RequestModal";
+import { OpenRequestButton } from "./OpenRequestButton";
 import { ChiliFestNav } from "./ChiliFestNav";
 import {
   IMAGES,
@@ -180,11 +181,15 @@ export default async function ChiliFestPage({
   const makersHref = lang === "de" ? "/chilifest/makers?lang=de" : "/chilifest/makers";
 
   const actions = [
-    { href: "#request", label: t.btnRequest, solid: true },
+    { href: "#request", label: t.btnRequest, solid: true, modal: true },
     { href: makersHref, label: t.btnMeet, solid: false },
     { href: "#releases", label: t.btnReleases, solid: false },
     { href: "#media", label: t.btnMedia, solid: false },
   ];
+  const actionClass = (solid: boolean) =>
+    solid
+      ? "inline-flex items-center px-5 py-3 rounded-full bg-accent text-white text-sm font-semibold tracking-wide hover:bg-accent/90 transition-colors"
+      : "inline-flex items-center px-5 py-3 rounded-full border border-accent text-white text-sm font-semibold tracking-wide hover:bg-accent/25 transition-colors";
 
   return (
     <>
@@ -194,6 +199,7 @@ export default async function ChiliFestPage({
       />
       <TopBar />
       <ChiliFestNav lang={lang} current="home" langBase="/chilifest" />
+      <RequestModal lang={lang} />
 
       {/* Hero */}
       <section className="relative isolate">
@@ -229,19 +235,17 @@ export default async function ChiliFestPage({
             {t.heroLede}
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
-            {actions.map((a) => (
-              <Link
-                key={a.href}
-                href={a.href}
-                className={
-                  a.solid
-                    ? "inline-flex items-center px-5 py-3 rounded-full bg-accent text-white text-sm font-semibold tracking-wide hover:bg-accent/90 transition-colors"
-                    : "inline-flex items-center px-5 py-3 rounded-full border border-accent text-white text-sm font-semibold tracking-wide hover:bg-accent/25 transition-colors"
-                }
-              >
-                {a.label}
-              </Link>
-            ))}
+            {actions.map((a) =>
+              a.modal ? (
+                <OpenRequestButton key={a.href} className={actionClass(a.solid)}>
+                  {a.label}
+                </OpenRequestButton>
+              ) : (
+                <Link key={a.href} href={a.href} className={actionClass(a.solid)}>
+                  {a.label}
+                </Link>
+              ),
+            )}
           </div>
           <p className="mt-8 text-xs text-white/55">{t.photoCredit}</p>
         </div>
@@ -337,8 +341,16 @@ export default async function ChiliFestPage({
                 {t.addToCalendar}
               </a>
             </div>
-            <div className="rounded-2xl bg-white p-6 text-ink shadow-xl sm:p-8">
-              <RequestForm lang={lang} />
+            <div className="flex flex-col justify-center gap-5 rounded-2xl bg-white p-8 text-ink shadow-xl sm:p-10">
+              <p className="text-xl font-semibold tracking-tight sm:text-2xl">
+                {t.requestHeading}
+              </p>
+              <p className="text-base leading-relaxed text-muted">
+                {t.requestCardLead}
+              </p>
+              <OpenRequestButton className="inline-flex w-full items-center justify-center rounded-full bg-accent px-6 py-3.5 text-base font-semibold tracking-wide text-white transition-colors hover:bg-accent/90 sm:w-auto sm:self-start">
+                {t.requestCardCta}
+              </OpenRequestButton>
             </div>
           </div>
         </div>

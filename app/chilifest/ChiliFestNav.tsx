@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { COPY, type Lang } from "@/lib/chilifest/copy";
 import { LangToggle } from "./LangToggle";
+import { OpenRequestButton } from "./OpenRequestButton";
 
 // Sticky mini-nav for the Berlin Chili Fest microsite. Present on the hub and
 // the makers subpage; section links point at the hub's anchors so they work
@@ -60,14 +61,23 @@ export function ChiliFestNav({
             // The sign-up is the microsite's primary action: render it as a
             // filled habanero pill that stays on screen the whole scroll.
             if (it.key === "request") {
+              const pill =
+                "inline-flex items-center rounded-full bg-accent px-4 py-1.5 font-semibold text-white hover:bg-accent/90 transition-colors";
+              // On the hub the modal is mounted, so open it directly — a Next
+              // Link only updates the hash via history (no hashchange event),
+              // which wouldn't open it. On other pages, link to the hub with
+              // #request; it auto-opens on mount there.
               return (
                 <li key={it.key}>
-                  <Link
-                    href={it.href}
-                    className="inline-flex items-center rounded-full bg-accent px-4 py-1.5 font-semibold text-white hover:bg-accent/90 transition-colors"
-                  >
-                    {it.label}
-                  </Link>
+                  {current === "home" ? (
+                    <OpenRequestButton className={pill}>
+                      {it.label}
+                    </OpenRequestButton>
+                  ) : (
+                    <Link href={it.href} className={pill}>
+                      {it.label}
+                    </Link>
+                  )}
                 </li>
               );
             }

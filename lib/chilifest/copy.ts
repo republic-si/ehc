@@ -61,6 +61,8 @@ interface Copy {
   // request
   requestHeading: string;
   requestIntro: string;
+  requestCardLead: string;
+  requestCardCta: string;
   lblPressPreview: string;
   lblPlaces: string;
   addToCalendar: string;
@@ -151,6 +153,8 @@ export const COPY: Record<Lang, Copy> = {
     requestHeading: "Get your industry pass",
     requestIntro:
       "A pass to the industry preview, before the public doors, for press, creators and trade. Press and creators can add a sample box too. Name and email to start. Industry preview:",
+    requestCardLead: "Two minutes. Name and email to start — reserve your place at the industry preview.",
+    requestCardCta: "Get your pass",
     lblPressPreview: "Industry preview",
     lblPlaces: "Places",
     addToCalendar: "Add to calendar",
@@ -238,6 +242,8 @@ export const COPY: Record<Lang, Copy> = {
     requestHeading: "Sichern Sie sich Ihren Fachbesucher-Pass",
     requestIntro:
       "Ein Pass zur Fachvorschau, vor dem Publikumseinlass, für Presse, Creator und Handel. Presse und Creator können zusätzlich ein Musterpaket erhalten. Name und E-Mail genügen zum Start. Fachvorschau:",
+    requestCardLead: "Zwei Minuten. Name und E-Mail genügen — sichern Sie sich Ihren Platz bei der Fachvorschau.",
+    requestCardCta: "Pass sichern",
     lblPressPreview: "Fachvorschau",
     lblPlaces: "Plätze",
     addToCalendar: "Zum Kalender hinzufügen",
