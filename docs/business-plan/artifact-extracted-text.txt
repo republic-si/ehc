@@ -1,0 +1,291 @@
+
+European Heat Council × Republic of Heat · Business Plan
+European Heat Council× Republic of Heat
+Business Plan · Working Draft
+TAB: ◆Overview
+TAB: ⚖Solo vs EHC
+TAB: ·The two entities
+TAB: ·The revenue test
+TAB: 01The play
+TAB: 02Three lanes
+TAB: 03Revenue lines
+TAB: 04Fulfilment
+TAB: 05Build order
+TAB: 06The numbers
+TAB: !Flags & decisions
+ Prepared for
+ Simon · Nathan · Neil
+ and financing partners
+What we do · one page
+ We store hot sauce.We ship it.We make it easier to sell.
+EHC — the European Heat Council — is a shared warehouse and shipping operation for Europe's craft hot sauce makers. They send us their stock. We store it, pick it, pack it, and ship it. When a shop or a wholesaler wants to buy, they order many makers at once, on one invoice, from us. That is the whole idea.
+For makers
+A small producer can sell across Europe without building their own warehouse, courier deals, or sales team. They keep making sauce. We handle storage, packing, and shipping.
+For buyers
+A shop orders 30 makers in one delivery, on one invoice, instead of chasing 30 producers one by one.
+For shoppers
+Sauces that used to never leave their home region turn up on shelves in other countries.
+ The part that makes it safe
+ We never own the stock. Producers own their bottles and pay us to store them. We buy a bottle only at the exact moment a sale fires, and resell it in the same instant. So we carry the whole category without ever tying up cash in inventory, or taking the risk of stock that does not sell.
+80Founding makers
+~€83k/yrEHC net surplusafter founder pay
+80,000/yrBottles shippedthrough the hub
+~€5kTo open the doorsthen it self-funds
+We open on roughly €5k. Storage, wholesale, and fulfilment are all live from week one, and they pay their own way: rent, insurance, the three founders' part-time pay, and a little profit on top. A rented kitchen and a shopfront come later, each only once the stage before it pays for itself.
+Republic of Heat (ROH) is our own consumer channel, boxes and online, and one of our wholesale customers. It shows up in this plan only where the retail side needs it.
+ In one line
+EHC is the single home for European craft hot sauce — a shared warehouse, shipping desk, and buying desk that lets any maker reach any buyer, and any buyer order every maker on one invoice. We hold no stock, earn only when a maker sells, and pay our own way from day one.
+Use the tabs on the left for the detail. Each section opens with a short In brief and closes with The takeaway.
+===== PANEL: p-example =====
+A worked example
+H2: Simon's Epic Hot Sauce Co: on my own vs with EHC
+In brief
+Meet Simon's Epic Hot Sauce Co — a one-person maker shipping about 1,200 parcels a year from their own webshop. On paper, doing it all yourself looks a little cheaper per parcel. Count your own time, and it isn't — and it caps what you can ever reach.
+ | 
+ | Per parcel · ~3 bottles | On my own | With EHC · Play B
+ | Storage | garage / rented space | ~€0.40/btl/yr
+ | Box & mailer | €0.80 · buy every one | included
+ | Webshop upkeep | €30+/mo · Shopify + your time | keep yours, or use ours
+ | Courier | €6.90 · retail rate | €4.90 · pooled
+ | Pick, pack, label, post | ~12 min · your time | done for you
+ | Fulfilment fee | — | €3.70
+ | Cash out of pocket | €8.00 | €8.60
+ | Your time | ~12 min + shop admin | ~0
+ | That time, valued at €25/hr | +€5.00 | €0.00
+ | Real cost per parcel | ~€13.00 | ~€8.60
+The catch nobody costs inYour time is not free. At 1,200 parcels a year, twelve minutes each is 240 hours — six full working weeks spent packing boxes and queuing at the post office, instead of making sauce, developing recipes, or growing the business. On my own it looks about €0.60 a parcel cheaper. It is really costing me a working month and a half every year.
+And that is only the sales I can already reach. On my own, I sell to whoever finds my webshop. With EHC I also land in the wholesale catalogue that goes to shops and supermarkets across Europe — on one invoice — and in the ROH consumer channel: buyers I could never chase down alone, with none of the customs and groupage headache of shipping across borders myself.
+On the roadmapEventually EHC plugs straight into your Shopify or Amazon and pulls orders onto our floor automatically — or we host your shop on our own webshop system — so sale-to-shipped is one click and you never touch a parcel again. (See candidate line a · 3PL-as-a-service under Revenue lines.)
+Illustrative figures for one maker at ~1,200 parcels/yr. Tune the courier, box, and time values to real numbers.
+The takeaway
+Doing it solo saves about €0.60 a parcel in cash and costs me six working weeks a year, plus every wholesale shelf I'll never reach on my own. EHC buys my time back and opens the doors I can't.
+===== PANEL: p-entities =====
+Who books what
+H2: The two entities
+In brief
+EHC (Simon, Nathan and Neil) is the business: the hub that stores, ships, and sells wholesale. ROH is its consumer channel — a wholesale customer that happens to be in-house. Two sets of books, one shared operation. Pin this so it never blurs.
+EHC
+The hub · Simon, Nathan, Neil
+Owns
+Facility, carrier and van, storage and fulfilment, wholesale contracts, EHSA and AHSA
+Books
+Membership, storage, wholesale margin, fulfilment fees, inserts, events, catalogue, awards
+Risk
+No inventory (buys at the moment of sale). Does take seller liability on wholesale. See flag #1
+ROH
+Consumer channel · in-house buyer
+Owns
+The consumer brand, the boxes, the online store
+Books
+Retail margin on the stock it buys from EHC
+Risk
+Normal retail. Buys wholesale, sells retail
+The takeaway
+One engine, cleanly split: EHC earns from services and a thin wholesale margin; ROH earns a retail margin as its in-house buyer. Neither entity's books blur into the other's.
+===== PANEL: p-test =====
+The revenue test
+H2: Every line earns its place, or it's out
+In brief
+Five rules decide whether a revenue line ships. They keep the model aligned with the makers it depends on. The spine holds throughout: EHC carries no inventory risk, and only wins when the maker wins.
+Opt-in, not imposed.
+Earn only on value delivered. A buyer, a shelf, a service the maker could not self-serve. No rent for nothing.
+Transparent take. The maker always sees the cut.
+No lock-in, no exclusivity. No forever-tax, no hostage stock.
+Never compete with your own members. No house brand that undercuts them. Never turn their data against them.
+The takeaway
+If a line can't pass all five, it doesn't ship without a guardrail. That discipline is what keeps makers on the platform and the moat intact.
+===== PANEL: p-play =====
+01The play
+H2: Great sauce finally leaves its home country
+In brief
+The hard part of craft sauce is not making it. It is reaching buyers across borders, and giving retail buyers something they can actually order. EHC fixes both — for the maker, the wholesale buyer, and the shopper.
+For the maker
+H4: One pallet in, a whole market out
+Cheap groupage in, then storage, fulfilment, and access to wholesale demand they could never reach solo.
+For the wholesale buyer
+H4: One catalogue, one invoice, one delivery
+Many producers, many SKUs, in a single order. That is the whole reason a buyer comes to EHC instead of 30 makers. This is the moat.
+For the shopper
+H4: A curated brand on real shelves
+ROH — boxes and online, built on the same shelves the hub already stores and ships.
+The takeaway
+One pallet in for the maker; one invoice out for the buyer. That consolidation is the moat, and everything else in the plan is built on it.
+===== PANEL: p-lanes =====
+02How a bottle moves
+H2: Three lanes, three money mechanics
+In brief
+A producer's stock sits at the hub, producer-owned, storage paid. From there a bottle leaves one of three ways, and the money works differently in each. Keeping the lanes separate is the whole model.
+Lane 1EHC resells to an external storeEHC is the seller
+EHC buys at rate 1 → sells at rate 1 + volume margin (€3.00 → €0.40 / btl)
+Buy and sell. Delivered by EHC's own van on the Berlin milk-run.
+Lane 2EHC resells to ROHEHC is the seller
+EHC buys at rate 1 → sells to ROH at rate 1 + €0.40 flat
+Buy and sell. ROH retails the stock in its boxes and online.
+Lane 3Producer's own sale — EHC fulfils onlyNo buy · no margin
+Producer keeps the full sale → pays EHC a fulfilment fee
+Play A, own box: €4.75/parcel plus box storage, no inserts.   Play B, ROH box: €3.70/parcel, and EHC earns inserts (~€0.75).
+Rate 1 is the producer-to-EHC wholesale price, typically 30–50% off SRP depending on the maker.
+Lanes 1 and 2 do not cannibalise Lane 3. They are EHC-generated demand, a store order or an ROH box, that the producer could not win alone. A producer who grows their own webshop and lives on Lane 3 is welcome; EHC still earns fulfilment, and it cost nothing to enable.
+The margin stack is tight and volume-negotiated, Metro-style. Buy one and you pay near list. Buy five to ten and it gets serious. Buy a hundred and it lands near cost. The €3 is a small-order ceiling, not a universal margin: on a €9 SRP bought at 45% off there is only about €0.45 of room, so real orders slide down the curve as they grow.
+The takeaway
+Lanes 1–2 are demand EHC creates; Lane 3 is the maker's own sale that EHC simply ships. None cannibalises the others, and every lane earns the hub something.
+===== PANEL: p-lines =====
+03The revenue lines
+H2: Eight ways the engine earns
+In brief
+Eight lines earn for EHC, from a €150 membership floor to wholesale margin, fulfilment, inserts, events, the catalogue, and the awards. All book to EHC unless marked otherwise.
+ | 
+ | # | Line | What it is | Mechanic
+ | 1 | Membership | €150/yr founding rate (first 80), access only: the craft-sauce stamp plus the right to use the hub. Everything else is charged per use. | Recurring floor
+ | 2 | Storage | Producer owns the stock and pays to store it, below market | Producer-funded, per bottle per month
+ | 3 | Wholesale margin | Lanes 1–2. External: volume curve €3.00 → €0.40/btl. ROH: flat €0.40/btl. | Thin margin, no inventory risk
+ | 4 | Fulfilment | Lane 3, plus shipping ROH's boxes. Pick-pack plus pass-through shipping. | Splits Play A / Play B
+ | 5 | Inserts | Paid leaflets in ROH-box parcels | Near-pure margin, Play B only
+ | 6 | Event brokerage | Shared stand at mega shows. 10% → 5% → 0 declining commission on EHC-sourced deals, plus a stand fee | Value-only, time-boxed
+ | 7 | Catalogue engine | Aggressive print and digital catalogue to every wholesaler and supermarket buyer | Biggest lever on B2B volume
+ | 8 | Awards | EHSA and AHSA. Entry fees, sponsors, ticketed events, and stamp licensing | Live EHC assets, top-of-funnel
+The awards
+EHSA
+H4: European Hot Sauce Awards
+heatawards.eu. Professional and commercial, ROH-sponsored, established and revenue-positive on entry fees, sponsors, and winner services.
+AHSA
+H4: Amateur Hot Sauce Awards
+Home-cook, ROH voice, with real event history. Lean: near break-even early, with a clear path to small profit via entries, tickets, and sponsors.
+Why they matter
+H4: The cheapest acquisition channel
+Entrants discover the hub, join, store, and sell. No channel brings makers in cheaper.
+Candidate lines, rated on the test
+ | 
+ | | Line | Verdict
+ | a | 3PL-as-a-service — fulfil a maker's own Shopify or Amazon orders (Lane 3, wider) | ✓Pure aligned service
+ | b | Co-packing / kitchen access — rent a kitchen monthly, charge makers for access | ✓Phase 2, utilisation risk
+ | c | Insights — anonymised category benchmarks and trend reports for makers | ▲Opt-in and anonymised only
+ | d | Sponsored placement — makers pay to feature on ROH | ▲Labelled, fair-ranking
+ | e | Events and tastings — ticketed Sauce Sessions and competitions | ✓ROH already runs these
+ | — | EHC own-brand sauce | ✕Breaks "never compete with your members" unless collab-only
+The takeaway
+The catalogue is the biggest B2B lever and the awards are the cheapest way to bring makers in. Every candidate line still has to pass the five-rule test before it ships.
+===== PANEL: p-fulfil =====
+04Fulfilment · Lane 3 detail
+H2: The box choice sets the fee
+In brief
+On a maker's own sale, the box they choose sets the fee. The pooled ROH box (Play B) is cheaper for the maker and more profitable for EHC than the maker's own box (Play A).
+ | 
+ | Per-parcel line | A · own box | B · ROH box
+ | Pick and pack (base) | €3.50 | €3.50
+ | Packaging | own · €0.00 | ROH mailer · +€0.65
+ | Own-box handling premium | +€1.25 | —
+ | Insert discount to maker | — | −€0.45
+ | Maker fulfil fee | €4.75 | €3.70
+ | Box storage (empties) | ~€15/pallet-pos/mo | €0.00
+ | Shipping | pass-through pooled | pass-through pooled
+ | EHC insert income | €0.00 | ~€0.75 gross
+Play B is cheaper for the maker and more profitable for EHC. Inserts subsidise the freight and carry ROH into a new customer's hands. The economics steer everyone to the pooled box. Play A exists for DTC makers who will not put a competitor leaflet in their box, and who pay for that control.
+Figures are v1 defaults. Tune against real carrier, advertiser, and material quotes.
+The takeaway
+The economics steer everyone to the pooled box. Play A exists for makers who want full control of their packaging and pay a premium for it.
+===== PANEL: p-build =====
+05Build order
+H2: The engine first, then the extras
+In brief
+Build the cash-generating engine first on about €5k, then add a rented kitchen, then retail. Each phase opens only when the one before it pays for it.
+Phase 1 · the engine
+H4: Storage + wholesale + fulfilment
+~€5k capex · opens in weeks
+All three lanes live on the Phase-0 site (Zossen). Must self-fund: rent, insurance, founders' part-time pay, and a little profit.
+Phase 2 · a service, not a build
+H4: Kitchen access
+Once the engine cash-flows
+Rent a commercial kitchen monthly and charge makers for access. No kitchen capex. Only profits at decent utilisation.
+Phase 3 · end-state
+H4: Retail + events
+Once the hall is full
+Storefront end-state, added when the engine and the shelves justify it.
+The takeaway
+Nothing is built on spec. The engine self-funds from week one, and each later phase is paid for by the one before it.
+===== PANEL: p-numbers =====
+06The Founding 80
+H2: Three numbers, one model
+In brief
+At the founding-80 dials: EHC nets ~€83k/yr after founder pay, ROH earns ~€65k gross margin, and makers net €2.45–5.27 per bottle. Being in the system costs a maker only about €2/btl. Every figure sits on the dials below; turn any dial and the numbers move.
+The dials
+ | 
+ | Dial | Value
+ | Makers | 80
+ | Membership (access only) | €150/yr
+ | Avg stock on shelf | 800 btl · storage €0.40/btl/yr
+ | Bottles sold via hub / maker / yr | 1,000 → 80,000 total
+ | Lane split | 35% ext B2B · 30% ROH · 35% own-fulfil
+ | Reference SRP · rate 1 (buy cost) | €9 · €4.95 (45% off)
+ | Ext B2B blended margin (Metro curve) | ~€1.20/btl · €3 ceiling → €0.40 floor
+ | ROH toll | €0.40/btl
+ | Fulfilment fee (blended Play B) | €3.70/parcel · ~3 btl/parcel
+ | Insert | €0.75/Play-B parcel
+View A — EHC revenue, annual
+ | 
+ | Line | € / maker | × 80
+ | Membership | 150 | 12,000
+ | Storage | 320 | 25,600
+ | Wholesale margin — Lane 1 (350 btl × €1.20) | 420 | 33,600
+ | Wholesale toll — Lane 2 ROH (300 btl × €0.40) | 120 | 9,600
+ | Fulfilment (Lane 3 + ROH boxes, ~192 × €3.70) | 710 | 56,800
+ | Inserts (~169 Play-B parcels × €0.75) | 127 | 10,160
+ | Gross (ex events / catalogue) | 1,847 | 147,760
+ | + EHSA / AHSA net | | ~5,000
+ | Less: run floor (rent, insurance, cleaner, founder part-time pay: Simon, Nathan, Neil) | | (52,500)
+ | Less: mailers, van, liability insurance | | (~17,000)
+ | EHC net surplus | | ~€83k/yr
+Net is after the three founders' part-time draw (Simon, Nathan, Neil), which sits in the floor, so it is true surplus. Events and catalogue are upside on top, not yet counted.
+View B — ROH resale margin (Lane 2)
+Landed cost / btl
+H4: ~€6.28
+Buys at €4.95 plus €0.40 toll = €5.35, plus ~€0.93/btl to ship its boxes.
+Margin / btl
+H4: ~€2.72
+Sells at ~€9 retail.
+Gross margin / yr
+H4: ~€65k
+Across 24,000 btl, before ROH's own marketing and overhead, and on top of its wider subscription economics.
+View C — what the maker nets per bottle
+ | 
+ | Lane | Maker gets | − cost | Maker nets | Note
+ | 1 · ext B2B | €4.95 | €2.50 | ~€2.45 | Reaches a store they could not
+ | 2 · ROH | €4.95 | €2.50 | ~€2.45 | Feeds the ROH brand
+ | 3 · own sale | €9.00 − €1.23 | €2.50 | ~€5.27 | Best per bottle, on demand they generate
+What it costs a maker, per bottle
+Being in the system is cheap. Storage is only about €0.40 per bottle per year, and membership works out at roughly €0.15 per bottle. The variable is fulfilment. And because most makers sell and ship on their own channel, most land on Play A, their own box, which costs more than the pooled ROH box: they supply their own packaging and carry the own-box handling premium.
+ | 
+ | Per-bottle cost to the maker | Rate | Note
+ | Membership (access) | ~€0.15 | Flat, per bottle sold via the hub
+ | Storage, per year on shelf | ~€0.40 | Producer-owned stock, below market
+ | Fulfilment · Play A · own box | ~€1.58 | €4.75/parcel ÷ ~3 btl · maker also buys the box
+ | Fulfilment · Play B · ROH box | ~€1.23 | €3.70/parcel ÷ ~3 btl · box included
+ | All-in on own sales · Play A (own box) | ~€2.13 + box | The common case: maker ships themselves
+ | All-in on own sales · Play B (ROH box) | ~€1.78 | Box and insert slot included
+Most makers buy and ship themselves, so most pay Play A. Their real cost sits above the €1.78 headline once they add their own packaging and the own-box premium. Play B trades that box, plus an insert slot for ROH, for a lower fee. Either way, being stored, picked, packed, and shipped to markets they could not reach solo runs at roughly €2/btl, against an assumed ~€2.50/btl production cost.
+The takeaway
+Storage is only ~€0.40/btl/yr — being in the system is cheap. The real variable is fulfilment, and most makers self-ship on the pricier own-box play, which lands their all-in above the €1.78 headline. Every number moves with the dials.
+===== PANEL: p-flags =====
+Open flags & decisions
+H2: What is settled, and what still needs a signature
+In brief
+The structure is decided: principal buy/sell via a UG that converts to GmbH, insured, with producer indemnities. Two operational questions stay open — real capacity, and dwell-time storage pricing.
+Decided#1Seller-of-record liability
+ The moment EHC buys in Lanes 1–2 it is the legal food seller, which brings product liability and requires a proper trading entity. Rather than dodge to disclosed-agent, which fragments the one-invoice moat, the plan stays principal (buy and sell) and caps the liability:
+EHC starts as a UG (haftungsbeschränkt) and converts to GmbH later. Limited liability from day one on about €1 capital. A UG must retain 25% of annual profit to reserves until it reaches €25k capital, so roughly a quarter of early surplus stays in the company as forced saving toward the GmbH.
+Product-liability insurance (Produkthaftpflicht). The UG shields the owners, but the company still carries seller liability, so insure it. Cheap for sealed, shelf-stable goods.
+Producer indemnity clauses. Each maker warrants compliance and indemnifies EHC. EU product-liability law already channels manufacturing defects to the named producer.
+Disclosed-agent stays as a fallback only for producers who cannot or will not be clean sellers.
+Pending: a Steuerberater and lawyer to finalise the UG setup, the Kommissionär/VAT treatment, and the indemnity wording.
+Open#2Capacity is not the same as cost
+The founders' part-time pay is covered. The open question is whether the on-the-ground team can physically run 80 makers across three lanes, plus a van run, plus EHSA and AHSA, plus catalogues. The money works. The hours may not.
+Open#3Storage is dwell-time driven
+Fast movers pay little, slow movers pay more. The flat €0.40/btl/yr is a proxy for a real per-bottle-per-month rate.
+MinorBottle size and the top wholesale tier
+The model runs on 100 ml bottles, where real sauce is often 150–200 ml. The €3 top wholesale tier only survives on low-volume, high-shelf-price buyers.
+ Locked
+ Event brokerage 10 → 5 → 0 declining · Wholesale volume curve + ROH €0.40 flat · Fulfilment plays A €4.75 / B €3.70, insert 3 @ €0.25 · Membership €150/yr access-only · Kitchen rent-and-charge-for-access, Phase 2 · EHC buys at the moment of sale (no inventory risk) · Structure principal buy/sell, EHC as UG → GmbH plus product-liability insurance and producer indemnities (Steuerberater to finalise).
+ Still to pin
+ Ext B2B volume-curve breakpoints (the Metro ladder) · rate-1 standardisation per maker · the liability structure (flag #1) · a real labour and capacity plan (flag #2).
+The takeaway
+Money model: locked. Legal structure: decided, pending sign-off. The open risks are hours, not euros.
