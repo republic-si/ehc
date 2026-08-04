@@ -2,9 +2,14 @@
  * DHL label generation for EHC sample boxes.
  *
  * Ported from Republic of Heat's dhl.service.ts (DHL Parcel DE API v2, ROPC
- * auth). Uses the SAME DHL business account / tokens as ROH — labels bill to
- * the shared account. Stripped of all ROH-DB coupling: this just mints a label
- * and hands back the tracking number + PDF URL. Persistence is the caller's job.
+ * auth). Bills to the EU Heat Awards DHL business account (developer-portal app
+ * `eu_heat_awards`, owned via Neil/BCF) — NOT ROH's account. Stripped of all
+ * ROH-DB coupling: this just mints a label and hands back the tracking number +
+ * PDF URL. Persistence is the caller's job.
+ *
+ * NB: this app is provisioned for PRODUCTION only — DHL's sandbox returns
+ * `401 no apiproduct match found` for it, so DHL_MODE=production is the only
+ * working mode. Label creation does not bill; DHL charges on parcel induction.
  *
  * Sandbox vs production is selected by DHL_MODE (default: sandbox).
  */
@@ -19,8 +24,9 @@ const SAMPLE_BOX_SPECS = {
   height: 70, // mm
 } as const;
 
-// Shipper (return address) — identical to ROH's warehouse. Same account, same
-// origin. Sandbox uses DHL's canned test shipper instead (set below).
+// Shipper (return address) — the ROH warehouse (physical origin the boxes ship
+// from), billed to the eu_heat_awards account. Sandbox uses DHL's canned test
+// shipper instead (set below), but sandbox isn't provisioned for this app.
 const SHIPPER = {
   name1: "Republic of Heat",
   addressStreet: "Südostallee 124",

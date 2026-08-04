@@ -30,8 +30,8 @@ export async function updateSampleRequestStatus(
   revalidatePath("/admin/sample-requests");
 }
 
-// Mint a DHL shipping label for a sample box and mark the row shipped. Uses the
-// shared ROH DHL account (see lib/dhl.ts). Idempotent + cost-safe: if a label
+// Mint a DHL shipping label for a sample box and mark the row shipped. Bills to
+// the eu_heat_awards DHL account (see lib/dhl.ts). Idempotent + cost-safe: if a label
 // already exists we never re-mint (which would re-bill) — the admin reprints the
 // stored PDF instead. Errors (bad country, incomplete address, DHL rejection)
 // bounce back to the list with the message in ?labelError so the admin sees why.
