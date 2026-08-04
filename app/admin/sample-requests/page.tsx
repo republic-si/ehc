@@ -18,6 +18,7 @@ import {
   createManualRequest,
 } from "./actions";
 import LabelControl from "./LabelControl";
+import WeightControl from "./WeightControl";
 import { resolveCountryAlpha3 } from "@/lib/dhl";
 import {
   PageTitle,
@@ -589,6 +590,12 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                 </td>
                 <td style={tdStyle}>
                   <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                    {/* Posted-box rows get a per-box weight field until the
+                        label is minted (after which the weight is baked in and
+                        we show it read-only alongside the reprint button). */}
+                    {ls.needsLabel && !r.dhlLabelUrl && (
+                      <WeightControl id={r.id} weightKg={r.weightKg} />
+                    )}
                     <LabelControl
                       id={r.id}
                       needsLabel={ls.needsLabel}
@@ -597,6 +604,7 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                       shippable={ls.shippable}
                       addressIssue={ls.addressIssue}
                       returnTo={returnTo}
+                      weightKg={r.weightKg}
                       error={labelErrorFor === r.id ? labelError : undefined}
                     />
                     {NEXT_ACTIONS[r.status]

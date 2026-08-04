@@ -55,6 +55,8 @@ interface Props {
   addressIssue: string;
   /** Current search string, so the action redirects back to this exact view. */
   returnTo: string;
+  /** Saved per-box weight (kg), or null if the box was shipped at the default. */
+  weightKg: number | null;
   /** Error from the last mint attempt on THIS row, if any. */
   error?: string;
 }
@@ -67,6 +69,7 @@ export default function LabelControl({
   shippable,
   addressIssue,
   returnTo,
+  weightKg,
   error,
 }: Props) {
   // Door-pickup / trade rows don't get a posted label — nothing to show here.
@@ -94,6 +97,9 @@ export default function LabelControl({
             {trackingNumber}
           </span>
         )}
+        <span style={{ fontSize: 10, color: "#666" }}>
+          {weightKg != null ? `${weightKg} kg` : "1.3 kg (default)"}
+        </span>
       </div>
     );
   }

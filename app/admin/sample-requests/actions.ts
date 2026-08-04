@@ -8,6 +8,7 @@ import {
   setSampleRequestStatus,
   setSampleRequestAttended,
   setSampleRequestLabel,
+  setSampleRequestWeight,
   getSampleRequestById,
   asRequestRole,
   asAudience,
@@ -63,6 +64,10 @@ export async function printSampleLabel(formData: FormData): Promise<void> {
       city: row.addrCity,
       country: row.addrCountry,
       email: row.email || undefined,
+      // Saved per-box weight, if the admin recorded one; generateSampleLabel
+      // falls back to the 1.3 kg standard box when this is null/undefined. Box
+      // dimensions stay fixed at the standard ROH box regardless.
+      weight: row.weightKg ?? undefined,
       reference: `EHC-SAMPLE-${id}`,
     });
     await setSampleRequestLabel(id, label.trackingNumber, label.labelUrl);
@@ -81,6 +86,35 @@ export async function printSampleLabel(formData: FormData): Promise<void> {
   success.set("status", "shipped");
   success.set("labelFor", id);
   redirect(`/admin/sample-requests?${success.toString()}`);
+}
+
+// Record the per-box shipping weight (kg) for a request. Persists ONLY the
+// weight — it never mints a label, so weighing and shipping stay fully
+// decoupled. An empty field clears the weight back to "not weighed", which
+// makes the label mint fall back to the 1.3 kg default. Silently ignores a
+// non-positive or non-numeric entry (the input already guards the happy path).
+// 31.5 kg is DHL's per-parcel ceiling.
+export async function saveSampleRequestWeight(
+  formData: FormData,
+): Promise<void> {
+  await requireSession();
+
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) return;
+
+  const raw = String(formData.get("weight_kg") ?? "").trim().replace(",", ".");
+  if (raw === "") {
+    await setSampleRequestWeight(id, null);
+    revalidatePath("/admin/sample-requests");
+    return;
+  }
+
+  const weight = Number(raw);
+  if (!Number.isFinite(weight) || weight <= 0 || weight > 31.5) return;
+
+  // Round to gram precision to match the NUMERIC(6,3) column.
+  await setSampleRequestWeight(id, Math.round(weight * 1000) / 1000);
+  revalidatePath("/admin/sample-requests");
 }
 
 export async function toggleAttended(formData: FormData): Promise<void> {

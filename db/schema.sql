@@ -239,3 +239,10 @@ CREATE INDEX IF NOT EXISTS sample_requests_guest_of_idx ON sample_requests (gues
 -- same label instead of generating (and paying for) a fresh one.
 ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS dhl_tracking_number TEXT;
 ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS dhl_label_url       TEXT;
+
+-- Per-box shipping weight (kg), keyed by hand in the admin before the label is
+-- minted. NULL = not weighed yet; generateSampleLabel then falls back to the
+-- 1.3 kg default (SAMPLE_BOX_SPECS). Saving a weight is fully decoupled from
+-- minting — it never creates a label. Box DIMENSIONS stay fixed at the standard
+-- ROH box; only the weight varies per request. NUMERIC(6,3) = gram precision.
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS weight_kg NUMERIC(6,3);

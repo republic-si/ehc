@@ -76,6 +76,8 @@ export interface SampleRequestRow {
   reviewed_at: string | null;
   dhl_tracking_number: string | null;
   dhl_label_url: string | null;
+  // Postgres NUMERIC comes back over the wire as a string (or null).
+  weight_kg: string | null;
 }
 
 export interface SampleRequest {
@@ -107,6 +109,9 @@ export interface SampleRequest {
   dhlTrackingNumber: string | null;
   /** DHL-hosted PDF URL for the generated label. Null until a label exists. */
   dhlLabelUrl: string | null;
+  /** Per-box shipping weight in kg, keyed by hand in the admin. Null = not
+   *  weighed; the label mint then falls back to the 1.3 kg default. */
+  weightKg: number | null;
 }
 
 function toSampleRequest(row: SampleRequestRow): SampleRequest {
@@ -136,6 +141,7 @@ function toSampleRequest(row: SampleRequestRow): SampleRequest {
     reviewedAt: row.reviewed_at,
     dhlTrackingNumber: row.dhl_tracking_number ?? null,
     dhlLabelUrl: row.dhl_label_url ?? null,
+    weightKg: row.weight_kg != null ? Number(row.weight_kg) : null,
   };
 }
 
@@ -402,7 +408,7 @@ export async function getSampleRequestById(
            wants_press_evening, attended, extra_emails,
            completed_at::text AS completed_at, guest_of,
            status, reviewed_at::text AS reviewed_at,
-           dhl_tracking_number, dhl_label_url
+           dhl_tracking_number, dhl_label_url, weight_kg::text AS weight_kg
     FROM sample_requests
     WHERE id = ${id}::bigint
   `) as SampleRequestRow[];
@@ -431,7 +437,7 @@ export async function getSampleRequests(
            addr_country, note, source, maker, role, audience, wants_samples, wants_press_evening,
            attended, extra_emails, completed_at::text AS completed_at, guest_of,
            status, reviewed_at::text AS reviewed_at,
-           dhl_tracking_number, dhl_label_url
+           dhl_tracking_number, dhl_label_url, weight_kg::text AS weight_kg
     FROM sample_requests
     ${where}
     ORDER BY created_at DESC
@@ -491,6 +497,20 @@ export async function setSampleRequestLabel(
         dhl_label_url = ${labelUrl},
         status = 'shipped',
         reviewed_at = now()
+    WHERE id = ${id}::bigint
+  `;
+}
+
+// Persist the per-box shipping weight (kg). Decoupled from minting: this only
+// writes the number, it never creates a label. Pass null to clear a weight
+// back to "not weighed" (the label mint then falls back to the 1.3 kg default).
+export async function setSampleRequestWeight(
+  id: string,
+  weightKg: number | null,
+): Promise<void> {
+  await sql`
+    UPDATE sample_requests
+    SET weight_kg = ${weightKg}
     WHERE id = ${id}::bigint
   `;
 }
