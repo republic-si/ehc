@@ -17,6 +17,8 @@ import {
   toggleAttended,
   createManualRequest,
 } from "./actions";
+import LabelControl from "./LabelControl";
+import { resolveCountryAlpha3 } from "@/lib/dhl";
 import {
   PageTitle,
   codeStyle,
@@ -80,6 +82,34 @@ function Pill({ status }: { status: SampleRequestStatus }) {
   );
 }
 
+// A posted sample box (press/influencer) gets a DHL label; a trade box sits on
+// the door, so no label. Mirrors the address checks in lib/dhl's
+// generateSampleLabel so the button state matches what a mint would actually do.
+function labelState(r: {
+  wantsSamples: boolean;
+  audience: string;
+  addrStreet: string;
+  addrPostcode: string;
+  addrCity: string;
+  addrCountry: string;
+}): { needsLabel: boolean; shippable: boolean; addressIssue: string } {
+  const needsLabel = r.wantsSamples && r.audience !== "trade";
+  const missing: string[] = [];
+  if (!r.addrStreet?.trim()) missing.push("street");
+  if (!r.addrPostcode?.trim()) missing.push("postcode");
+  if (!r.addrCity?.trim()) missing.push("city");
+
+  let addressIssue = "";
+  if (!resolveCountryAlpha3(r.addrCountry ?? "")) {
+    addressIssue = r.addrCountry?.trim()
+      ? `Unmapped country: ${r.addrCountry}`
+      : "No country";
+  } else if (missing.length) {
+    addressIssue = `Missing ${missing.join(", ")}`;
+  }
+  return { needsLabel, shippable: addressIssue === "", addressIssue };
+}
+
 const VIEWS = [
   { key: "samples", label: "Samples", filter: { wantsSamples: true } },
   {
@@ -107,7 +137,13 @@ const AUDIENCE_VIEWS = [
 ] as const;
 
 interface Props {
-  searchParams: Promise<{ status?: string; source?: string; audience?: string }>;
+  searchParams: Promise<{
+    status?: string;
+    source?: string;
+    audience?: string;
+    labelError?: string;
+    labelFor?: string;
+  }>;
 }
 
 export default async function SampleRequestsPage({ searchParams }: Props) {
@@ -133,6 +169,16 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
 
   // Preserve the active audience filter across the source/status links.
   const audParam = audience ? `&audience=${audience}` : "";
+
+  // Passed to the label action so its redirects land back on this exact view.
+  const returnTo = new URLSearchParams({
+    status: filter,
+    ...(sp.source ? { source: sp.source } : {}),
+    ...(audience ? { audience } : {}),
+  }).toString();
+  // Set when a label generation just failed, so we show the reason on its row.
+  const labelError = typeof sp.labelError === "string" ? sp.labelError : "";
+  const labelErrorFor = typeof sp.labelFor === "string" ? sp.labelFor : "";
 
   return (
     <>
@@ -385,8 +431,20 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
             </tr>
           </thead>
           <tbody>
-            {requests.map((r) => (
-              <tr key={r.id}>
+            {requests.map((r) => {
+              const ls = labelState(r);
+              // Just-labelled row we redirected to: highlight it so the fresh
+              // "Print label" is easy to spot. (labelFor with no error = success.)
+              const justShipped = labelErrorFor === r.id && !labelError;
+              return (
+              <tr
+                key={r.id}
+                style={
+                  justShipped
+                    ? { boxShadow: "inset 3px 0 0 #ea580c", background: "#fdf2ea" }
+                    : undefined
+                }
+              >
                 <td style={{ ...tdStyle, ...codeStyle, whiteSpace: "nowrap" }}>
                   {r.createdAt.slice(0, 16)}
                   {!r.completedAt && r.source === "chilifest" ? (
@@ -531,7 +589,25 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                 </td>
                 <td style={tdStyle}>
                   <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                    {NEXT_ACTIONS[r.status].map((next) => (
+                    <LabelControl
+                      id={r.id}
+                      needsLabel={ls.needsLabel}
+                      labelUrl={r.dhlLabelUrl}
+                      trackingNumber={r.dhlTrackingNumber}
+                      shippable={ls.shippable}
+                      addressIssue={ls.addressIssue}
+                      returnTo={returnTo}
+                      error={labelErrorFor === r.id ? labelError : undefined}
+                    />
+                    {NEXT_ACTIONS[r.status]
+                      // For a posted sample box the label IS the ship step, so
+                      // hide the manual "Mark shipped" (it would ship with no
+                      // label). Door/trade rows keep it.
+                      .filter(
+                        (next) =>
+                          !(next === "shipped" && ls.needsLabel && !r.dhlLabelUrl),
+                      )
+                      .map((next) => (
                       <form key={next} action={updateSampleRequestStatus}>
                         <input type="hidden" name="id" value={r.id} />
                         <input type="hidden" name="status" value={next} />
@@ -563,7 +639,8 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                   </div>
                 </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       )}

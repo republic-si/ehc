@@ -233,3 +233,9 @@ ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS completed_at TIMESTAMPTZ;
 ALTER TABLE sample_requests
   ADD COLUMN IF NOT EXISTS guest_of BIGINT REFERENCES sample_requests(id) ON DELETE CASCADE;
 CREATE INDEX IF NOT EXISTS sample_requests_guest_of_idx ON sample_requests (guest_of);
+
+-- DHL sample-box labels. Once a label is minted (and billed) we keep its
+-- tracking number + the DHL-hosted PDF URL on the row, so reprints reuse the
+-- same label instead of generating (and paying for) a fresh one.
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS dhl_tracking_number TEXT;
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS dhl_label_url       TEXT;

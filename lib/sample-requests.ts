@@ -74,6 +74,8 @@ export interface SampleRequestRow {
   guest_of: string | null;
   status: string;
   reviewed_at: string | null;
+  dhl_tracking_number: string | null;
+  dhl_label_url: string | null;
 }
 
 export interface SampleRequest {
@@ -101,6 +103,10 @@ export interface SampleRequest {
   guestOf: string | null;
   status: SampleRequestStatus;
   reviewedAt: string | null;
+  /** DHL tracking number, set once a shipping label has been generated. */
+  dhlTrackingNumber: string | null;
+  /** DHL-hosted PDF URL for the generated label. Null until a label exists. */
+  dhlLabelUrl: string | null;
 }
 
 function toSampleRequest(row: SampleRequestRow): SampleRequest {
@@ -128,6 +134,8 @@ function toSampleRequest(row: SampleRequestRow): SampleRequest {
     guestOf: row.guest_of ? String(row.guest_of) : null,
     status: (row.status as SampleRequestStatus) ?? "new",
     reviewedAt: row.reviewed_at,
+    dhlTrackingNumber: row.dhl_tracking_number ?? null,
+    dhlLabelUrl: row.dhl_label_url ?? null,
   };
 }
 
@@ -384,6 +392,23 @@ function pushRequestFilter(
   }
 }
 
+export async function getSampleRequestById(
+  id: string,
+): Promise<SampleRequest | null> {
+  const rows = (await sql`
+    SELECT id, created_at::text AS created_at, name, email, organisation,
+           web_or_instagram, addr_street, addr_postcode, addr_city,
+           addr_country, note, source, maker, role, audience, wants_samples,
+           wants_press_evening, attended, extra_emails,
+           completed_at::text AS completed_at, guest_of,
+           status, reviewed_at::text AS reviewed_at,
+           dhl_tracking_number, dhl_label_url
+    FROM sample_requests
+    WHERE id = ${id}::bigint
+  `) as SampleRequestRow[];
+  return rows.length ? toSampleRequest(rows[0]) : null;
+}
+
 export async function getSampleRequests(
   status?: SampleRequestStatus,
   limit = 500,
@@ -405,7 +430,8 @@ export async function getSampleRequests(
            web_or_instagram, addr_street, addr_postcode, addr_city,
            addr_country, note, source, maker, role, audience, wants_samples, wants_press_evening,
            attended, extra_emails, completed_at::text AS completed_at, guest_of,
-           status, reviewed_at::text AS reviewed_at
+           status, reviewed_at::text AS reviewed_at,
+           dhl_tracking_number, dhl_label_url
     FROM sample_requests
     ${where}
     ORDER BY created_at DESC
@@ -448,6 +474,23 @@ export async function setSampleRequestStatus(
   await sql`
     UPDATE sample_requests
     SET status = ${status}, reviewed_at = now()
+    WHERE id = ${id}::bigint
+  `;
+}
+
+// Stamp a freshly generated DHL label onto the row and mark it shipped. The
+// label URL is DHL-hosted and reused on reprint, so we never re-mint (re-bill).
+export async function setSampleRequestLabel(
+  id: string,
+  trackingNumber: string,
+  labelUrl: string,
+): Promise<void> {
+  await sql`
+    UPDATE sample_requests
+    SET dhl_tracking_number = ${trackingNumber},
+        dhl_label_url = ${labelUrl},
+        status = 'shipped',
+        reviewed_at = now()
     WHERE id = ${id}::bigint
   `;
 }

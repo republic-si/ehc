@@ -1,16 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { requireSession } from "@/lib/auth-helpers";
 import {
   createSampleRequest,
   setSampleRequestStatus,
   setSampleRequestAttended,
+  setSampleRequestLabel,
+  getSampleRequestById,
   asRequestRole,
   asAudience,
   SAMPLE_REQUEST_STATUSES,
   type SampleRequestStatus,
 } from "@/lib/sample-requests";
+import { generateSampleLabel } from "@/lib/dhl";
 
 export async function updateSampleRequestStatus(
   formData: FormData,
@@ -24,6 +28,59 @@ export async function updateSampleRequestStatus(
 
   await setSampleRequestStatus(id, status as SampleRequestStatus);
   revalidatePath("/admin/sample-requests");
+}
+
+// Mint a DHL shipping label for a sample box and mark the row shipped. Uses the
+// shared ROH DHL account (see lib/dhl.ts). Idempotent + cost-safe: if a label
+// already exists we never re-mint (which would re-bill) — the admin reprints the
+// stored PDF instead. Errors (bad country, incomplete address, DHL rejection)
+// bounce back to the list with the message in ?labelError so the admin sees why.
+export async function printSampleLabel(formData: FormData): Promise<void> {
+  await requireSession();
+
+  const id = String(formData.get("id") ?? "").trim();
+  const returnTo = String(formData.get("returnTo") ?? "status=approved");
+  if (!id) return;
+
+  const base = `/admin/sample-requests?${returnTo}`;
+
+  const row = await getSampleRequestById(id);
+  if (!row) {
+    redirect(`${base}&labelError=${encodeURIComponent("Request not found")}&labelFor=${id}`);
+  }
+  // Already labelled — do not re-mint (would re-charge). Just refresh.
+  if (row.dhlLabelUrl) {
+    redirect(base);
+  }
+
+  let errorMsg: string | null = null;
+  try {
+    const label = await generateSampleLabel({
+      name: row.name,
+      name2: row.organisation || undefined,
+      street: row.addrStreet,
+      postcode: row.addrPostcode,
+      city: row.addrCity,
+      country: row.addrCountry,
+      email: row.email || undefined,
+      reference: `EHC-SAMPLE-${id}`,
+    });
+    await setSampleRequestLabel(id, label.trackingNumber, label.labelUrl);
+  } catch (e) {
+    errorMsg = e instanceof Error ? e.message : "Label generation failed";
+  }
+
+  revalidatePath("/admin/sample-requests");
+  if (errorMsg) {
+    redirect(`${base}&labelError=${encodeURIComponent(errorMsg)}&labelFor=${id}`);
+  }
+  // The row just flipped to 'shipped', so it's gone from the Approved view.
+  // Land on the Shipped view (keeping source/audience) where its new
+  // "Print label" button now lives, instead of an empty-looking Approved list.
+  const success = new URLSearchParams(returnTo);
+  success.set("status", "shipped");
+  success.set("labelFor", id);
+  redirect(`/admin/sample-requests?${success.toString()}`);
 }
 
 export async function toggleAttended(formData: FormData): Promise<void> {
