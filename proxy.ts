@@ -19,8 +19,15 @@ import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
 export const config = {
-  matcher: ["/admin/:path*", "/portal/:path*"],
+  matcher: ["/admin/:path*", "/portal/:path*", "/strategy.html"],
 };
+
+// Shared-password gate for the distilled strategy doc. It's a static file in
+// public/, so the only place to gate it is here. HTTP Basic Auth (native
+// browser prompt, no login page) against a HARDCODED password — deliberately
+// not an env var, because Vercel has silently dropped this site's env vars 3×.
+// Low-stakes noindex doc; fail-closed if the header is missing/wrong.
+const STRATEGY_PASS = "chilioil2026";
 
 // Next.js 16 proxy files are loaded via the named `proxy` export (the
 // loader reads `mod.proxy` first and only falls back to `mod.default`,
@@ -29,6 +36,27 @@ export const config = {
 // async handler function, so the named const satisfies the loader.
 export const proxy = auth((req) => {
   const path = req.nextUrl.pathname;
+
+  // Strategy doc: shared-password Basic Auth, resolved before any Auth.js
+  // session logic so it never touches the admin/portal magic-link flow.
+  if (path === "/strategy.html") {
+    const hdr = req.headers.get("authorization") ?? "";
+    const [scheme, encoded] = hdr.split(" ");
+    let ok = false;
+    if (scheme === "Basic" && encoded) {
+      const decoded = atob(encoded); // "user:pass"
+      ok = decoded.slice(decoded.indexOf(":") + 1) === STRATEGY_PASS;
+    }
+    if (!ok) {
+      return new NextResponse("Authentication required.", {
+        status: 401,
+        headers: {
+          "WWW-Authenticate": 'Basic realm="EHC Strategy", charset="UTF-8"',
+        },
+      });
+    }
+    return NextResponse.next();
+  }
 
   // Set x-pathname so server layouts can read it via headers() and skip
   // the requireSession() call on login pages (avoids a redirect loop).
