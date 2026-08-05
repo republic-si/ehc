@@ -66,6 +66,14 @@ export function AdminShell({
             <Link href="/" className="text-white/60 hover:text-white hidden sm:inline">
               Site
             </Link>
+            <a
+              href="https://umami-analytics-swart-six.vercel.app"
+              target="_blank"
+              rel="noreferrer"
+              className="text-white/60 hover:text-white hidden sm:inline"
+            >
+              Analytics
+            </a>
             <form action={logoutAction}>
               <button
                 type="submit"
