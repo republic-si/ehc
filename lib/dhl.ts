@@ -61,6 +61,10 @@ export interface SampleLabelResult {
   pdf: Uint8Array;
 }
 
+export interface VoidSampleLabelResult {
+  trackingNumber: string;
+}
+
 export class DhlAmbiguousError extends Error {
   constructor(message: string, public readonly trackingNumber?: string) {
     super(message);
@@ -454,4 +458,74 @@ export async function generateSampleLabel(
     trackingNumber: item.shipmentNo,
     pdf,
   };
+}
+
+/**
+ * Cancel a shipment before DHL's end-of-day manifest closes it. DHL requires
+ * shipment and profile as query parameters on DELETE /orders.
+ */
+export async function voidSampleLabel(
+  trackingNumber: string,
+): Promise<VoidSampleLabelResult> {
+  validateConfig();
+  const shipment = trackingNumber.trim();
+  if (!shipment) throw new Error("A DHL tracking number is required");
+
+  const token = await getAccessToken();
+  const params = new URLSearchParams({
+    shipment,
+    profile: "STANDARD_GRUPPENPROFIL",
+  });
+  let response: Response;
+  try {
+    response = await fetch(`${DHL_CONFIG.shippingUrl}/orders?${params}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Accept-Language": "de-DE",
+      },
+    });
+  } catch (error) {
+    throw new DhlAmbiguousError(
+      `DHL cancellation request lost its response: ${error instanceof Error ? error.message : "network error"}`,
+      shipment,
+    );
+  }
+
+  const text = await response.text();
+  if (!response.ok) {
+    let detail = text;
+    try {
+      const data = JSON.parse(text) as { detail?: string; title?: string };
+      detail = data.detail ?? data.title ?? text;
+    } catch {
+      // Keep DHL's plain-text response.
+    }
+    throw new Error(
+      `DHL could not void ${shipment} (${response.status}): ${detail || response.statusText}`,
+    );
+  }
+
+  if (text) {
+    try {
+      const data = JSON.parse(text) as {
+        items?: Array<{ sstatus?: { status?: number; title?: string } }>;
+      };
+      const status = data.items?.[0]?.sstatus;
+      if (status?.status && status.status >= 300) {
+        throw new Error(status.title || `DHL returned item status ${status.status}`);
+      }
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new DhlAmbiguousError(
+          `DHL accepted the cancellation request for ${shipment} but returned an unreadable response`,
+          shipment,
+        );
+      }
+      throw error;
+    }
+  }
+
+  return { trackingNumber: shipment };
 }

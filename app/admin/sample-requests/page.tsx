@@ -148,6 +148,7 @@ interface Props {
     audience?: string;
     labelError?: string;
     labelFor?: string;
+    labelVoided?: string;
     batchError?: string;
     batchEmpty?: string;
   }>;
@@ -188,6 +189,7 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
   // Set when a label generation just failed, so we show the reason on its row.
   const labelError = typeof sp.labelError === "string" ? sp.labelError : "";
   const labelErrorFor = typeof sp.labelFor === "string" ? sp.labelFor : "";
+  const labelVoided = sp.labelVoided === "1";
 
   return (
     <>
@@ -494,7 +496,8 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
               const ls = labelState(r);
               // Just-labelled row we redirected to: highlight it so the fresh
               // "Print label" is easy to spot. (labelFor with no error = success.)
-              const justShipped = labelErrorFor === r.id && !labelError;
+              const justShipped =
+                labelErrorFor === r.id && !labelError && !labelVoided;
               return (
               <tr
                 key={r.id}
@@ -645,6 +648,11 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                 )}
                 <td style={tdStyle}>
                   <Pill status={r.status} />
+                  {labelVoided && labelErrorFor === r.id && (
+                    <div style={{ marginTop: 4, fontSize: 10, color: "#137333", fontWeight: 700 }}>
+                      DHL label voided
+                    </div>
+                  )}
                 </td>
                 <td style={tdStyle}>
                   <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>

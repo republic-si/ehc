@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { printSampleLabel } from "./actions";
+import { printSampleLabel, voidDhlLabel } from "./actions";
 
 // BCF (Berlin Chili Fest) palette — orange accent + deep-green ink, per the
 // public Chili Fest pages (--accent / --ink-deep in globals.css). NOT the
@@ -39,6 +39,25 @@ function GenerateButton() {
       }}
     >
       {pending ? "Generating…" : "🏷 Generate label"}
+    </button>
+  );
+}
+
+function VoidButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      style={{
+        ...btnBase,
+        background: "#fff",
+        color: pending ? "#999" : "#b00020",
+        borderColor: pending ? "#ccc" : "#b00020",
+        cursor: pending ? "wait" : "pointer",
+      }}
+    >
+      {pending ? "Voiding…" : "Void label"}
     </button>
   );
 }
@@ -119,6 +138,21 @@ export default function LabelControl({
         <span style={{ fontSize: 10, color: "#666" }}>
           {weightKg != null ? `${weightKg} kg` : "1.3 kg (default)"}
         </span>
+        <form
+          action={voidDhlLabel}
+          onSubmit={(event) => {
+            if (!window.confirm(`Void DHL label ${trackingNumber}? It cannot be used after this.`)) {
+              event.preventDefault();
+            }
+          }}
+        >
+          <input type="hidden" name="id" value={id} />
+          <input type="hidden" name="returnTo" value={returnTo} />
+          <VoidButton />
+        </form>
+        {error && (
+          <span style={{ fontSize: 10, color: "#c00", lineHeight: 1.3 }}>{error}</span>
+        )}
       </div>
     );
   }

@@ -110,6 +110,64 @@ export async function getStoredLabelPdf(requestId: string): Promise<Uint8Array |
   return rows[0] ? Uint8Array.from(Buffer.from(rows[0].pdf_base64, "base64")) : null;
 }
 
+// Finalize a DHL-confirmed cancellation locally. If the label had already been
+// included in a combined PDF, invalidate that whole batch and release its
+// other labels back to the queue: a PDF containing a void label must never
+// remain available for printing.
+export async function completeLabelVoid(
+  requestId: string,
+  trackingNumber: string,
+): Promise<boolean> {
+  const rows = (await sql`
+    WITH eligible AS MATERIALIZED (
+      SELECT id
+        FROM sample_requests
+       WHERE id = ${requestId}::bigint
+         AND dhl_tracking_number = ${trackingNumber}
+         AND dhl_label_state IN ('ready', 'uncertain')
+       FOR UPDATE
+    ), affected_batches AS MATERIALIZED (
+      SELECT DISTINCT i.batch_id
+        FROM dhl_label_batch_items i
+        JOIN eligible e ON e.id = i.sample_request_id
+    ), failed_batches AS (
+      UPDATE dhl_label_batches b
+         SET state = 'failed', failed_at = now(), ready_at = NULL,
+             failure_reason = ${`Invalidated because DHL label ${trackingNumber} was voided`}
+       WHERE b.id IN (SELECT batch_id FROM affected_batches)
+      RETURNING b.id
+    ), deleted_artifacts AS (
+      DELETE FROM dhl_label_batch_artifacts a
+       WHERE a.batch_id IN (SELECT id FROM failed_batches)
+      RETURNING a.batch_id
+    ), released_items AS (
+      DELETE FROM dhl_label_batch_items i
+       WHERE i.batch_id IN (SELECT batch_id FROM affected_batches)
+         AND (SELECT count(*) FROM deleted_artifacts) >= 0
+      RETURNING i.sample_request_id
+    ), deleted_document AS (
+      DELETE FROM dhl_label_documents d
+       USING eligible e
+       WHERE d.sample_request_id = e.id
+         AND (SELECT count(*) FROM released_items) >= 0
+      RETURNING d.sample_request_id
+    )
+      UPDATE sample_requests
+         SET dhl_tracking_number = NULL,
+             dhl_label_url = NULL,
+             dhl_label_state = 'idle',
+             dhl_label_attempt_ref = NULL,
+             dhl_label_started_at = NULL,
+             dhl_label_error = NULL,
+             status = 'approved',
+             reviewed_at = now()
+       WHERE id IN (SELECT id FROM eligible)
+         AND (SELECT count(*) FROM deleted_document) >= 0
+      RETURNING id
+  `) as Array<{ id: string }>;
+  return rows.length === 1;
+}
+
 export async function getNewLabelCount(): Promise<number> {
   const rows = (await sql`
     SELECT count(*)::int AS n

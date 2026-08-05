@@ -15,12 +15,13 @@ import {
   SAMPLE_REQUEST_STATUSES,
   type SampleRequestStatus,
 } from "@/lib/sample-requests";
-import { DhlAmbiguousError, generateSampleLabel } from "@/lib/dhl";
+import { DhlAmbiguousError, generateSampleLabel, voidSampleLabel } from "@/lib/dhl";
 import {
   buildNewLabelBatch,
   claimIndividualLabel,
   completeIndividualLabel,
   failIndividualLabel,
+  completeLabelVoid,
 } from "@/lib/dhl-labels";
 
 export async function updateSampleRequestStatus(
@@ -142,6 +143,47 @@ export async function createNewLabelBatch(): Promise<void> {
     redirect("/admin/sample-requests?status=shipped&source=samples&batchEmpty=1");
   }
   redirect(`/admin/sample-requests/label-batches/${batchId}`);
+}
+
+export async function voidDhlLabel(formData: FormData): Promise<void> {
+  await requireRole("admin");
+
+  const id = String(formData.get("id") ?? "").trim();
+  const returnTo = String(formData.get("returnTo") ?? "status=shipped");
+  if (!id) return;
+  const base = `/admin/sample-requests?${returnTo}`;
+
+  const row = await getSampleRequestById(id);
+  if (
+    !row?.dhlTrackingNumber ||
+    !["ready", "uncertain"].includes(row.dhlLabelState)
+  ) {
+    redirect(`${base}&labelError=${encodeURIComponent("This label is no longer eligible to be voided")}&labelFor=${id}`);
+  }
+
+  let error: string | null = null;
+  try {
+    const voided = await voidSampleLabel(row.dhlTrackingNumber);
+    const saved = await completeLabelVoid(id, voided.trackingNumber);
+    if (!saved) {
+      error = `DHL voided ${voided.trackingNumber}, but the local reset did not complete. Do not retry.`;
+    }
+  } catch (cause) {
+    error = cause instanceof Error ? cause.message : "DHL label cancellation failed";
+    if (cause instanceof DhlAmbiguousError) {
+      error += " Check DHL before retrying.";
+    }
+  }
+
+  revalidatePath("/admin/sample-requests");
+  if (error) {
+    redirect(`${base}&labelError=${encodeURIComponent(error)}&labelFor=${id}`);
+  }
+  const success = new URLSearchParams(returnTo);
+  success.set("status", "approved");
+  success.set("labelFor", id);
+  success.set("labelVoided", "1");
+  redirect(`/admin/sample-requests?${success.toString()}`);
 }
 
 // Record the per-box shipping weight (kg) for a request. Persists ONLY the
