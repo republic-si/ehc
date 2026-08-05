@@ -245,15 +245,24 @@ export async function buildNewLabelBatch(userId: number): Promise<string | null>
         VALUES (${batchId}::uuid, decode(${base64}, 'base64'), ${sha256}, ${pdf.byteLength})
         ON CONFLICT (batch_id) DO NOTHING
         RETURNING batch_id
+      ), available AS (
+        SELECT batch_id FROM artifact
+        UNION ALL
+        SELECT batch_id FROM dhl_label_batch_artifacts
+         WHERE batch_id = ${batchId}::uuid
       )
       UPDATE dhl_label_batches
          SET state = 'ready', ready_at = now(), failure_reason = NULL
        WHERE id = ${batchId}::uuid
          AND state = 'building'
-         AND EXISTS (
-           SELECT 1 FROM dhl_label_batch_artifacts a WHERE a.batch_id = ${batchId}::uuid
-         )
+         AND EXISTS (SELECT 1 FROM available)
     `;
+    const finalized = (await sql`
+      SELECT 1 FROM dhl_label_batches b
+      JOIN dhl_label_batch_artifacts a ON a.batch_id = b.id
+      WHERE b.id = ${batchId}::uuid AND b.state = 'ready'
+    `).length > 0;
+    if (!finalized) throw new Error("Batch PDF was stored but finalization did not complete");
     return batchId;
   } catch (error) {
     const message = error instanceof Error ? error.message : "PDF merge failed";
