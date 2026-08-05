@@ -80,19 +80,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       verifyRequest: "/admin/login/check-email",
     },
     callbacks: {
-      // Door lock: only @republicofheat.com may sign in. Auth.js fires this
+      // Door lock: only active users explicitly provisioned in the database
+      // may sign in. Auth.js fires this
       // callback for the email provider BOTH before sending the magic link
       // (email.verificationRequest === true) AND again when the link is
       // clicked. Returning false in the first phase means the link is never
       // even sent; in the second it blocks account/session creation. Either
-      // way a non-ROH address cannot mint an account.
-      //
-      // NB: this gates ALL sign-in, including future /portal producers. If a
-      // non-ROH producer ever needs access, switch this to an explicit
-      // allowlist (e.g. "email already exists in users") rather than domain.
+      // way an unprovisioned address cannot mint an account.
       async signIn({ user }) {
         const email = (user?.email ?? "").toLowerCase();
-        return email.endsWith("@republicofheat.com");
+        if (!email) return false;
+
+        const result = await pool.query(
+          "SELECT 1 FROM users WHERE email = $1 AND is_active = TRUE LIMIT 1",
+          [email],
+        );
+        return result.rowCount === 1;
       },
       // With the database session strategy the adapter passes the DB `user`
       // row into this callback. We surface `user.id` on session.user so
