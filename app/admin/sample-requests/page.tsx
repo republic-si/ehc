@@ -657,6 +657,7 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                     <LabelControl
                       id={r.id}
                       needsLabel={ls.needsLabel}
+                      labelUrl={r.dhlLabelUrl}
                       hasStoredLabel={r.hasStoredLabel}
                       trackingNumber={r.dhlTrackingNumber}
                       shippable={ls.shippable}

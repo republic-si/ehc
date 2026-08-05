@@ -47,6 +47,8 @@ interface Props {
   id: string;
   /** Whether this row's box is actually posted (press sample) vs door pickup. */
   needsLabel: boolean;
+  /** Temporary DHL fallback for labels created before durable storage. */
+  labelUrl: string | null;
   hasStoredLabel: boolean;
   trackingNumber: string | null;
   /** True only if the address resolves to a DHL-shippable form. */
@@ -64,6 +66,7 @@ interface Props {
 export default function LabelControl({
   id,
   needsLabel,
+  labelUrl,
   hasStoredLabel,
   trackingNumber,
   shippable,
@@ -93,6 +96,15 @@ export default function LabelControl({
             }}
           >
             🏷 Print label
+          </a>
+        ) : labelUrl ? (
+          <a
+            href={labelUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ ...btnBase, background: "#fff8ec", color: "#b06000", textDecoration: "none" }}
+          >
+            ⚠ Print existing DHL label
           </a>
         ) : (
           <span style={{ ...btnBase, background: "#fff8ec", color: "#b06000" }}>
