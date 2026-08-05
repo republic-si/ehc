@@ -47,7 +47,7 @@ interface Props {
   id: string;
   /** Whether this row's box is actually posted (press sample) vs door pickup. */
   needsLabel: boolean;
-  labelUrl: string | null;
+  hasStoredLabel: boolean;
   trackingNumber: string | null;
   /** True only if the address resolves to a DHL-shippable form. */
   shippable: boolean;
@@ -64,7 +64,7 @@ interface Props {
 export default function LabelControl({
   id,
   needsLabel,
-  labelUrl,
+  hasStoredLabel,
   trackingNumber,
   shippable,
   addressIssue,
@@ -75,23 +75,30 @@ export default function LabelControl({
   // Door-pickup / trade rows don't get a posted label — nothing to show here.
   if (!needsLabel) return null;
 
-  // Already minted → reprint the stored PDF (never re-bills). Show tracking.
-  if (labelUrl) {
+  // Tracking proves DHL already created the shipment. Reprint only the durable
+  // app-stored PDF; a missing document must never unlock another mint.
+  if (trackingNumber) {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        <a
-          href={labelUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            ...btnBase,
-            background: ACCENT,
-            color: "#fff",
-            textDecoration: "none",
-          }}
-        >
-          🏷 Print label
-        </a>
+        {hasStoredLabel ? (
+          <a
+            href={`/admin/sample-requests/labels/${id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              ...btnBase,
+              background: ACCENT,
+              color: "#fff",
+              textDecoration: "none",
+            }}
+          >
+            🏷 Print label
+          </a>
+        ) : (
+          <span style={{ ...btnBase, background: "#fff8ec", color: "#b06000" }}>
+            ⚠ PDF unavailable — do not remint
+          </span>
+        )}
         {trackingNumber && (
           <span style={{ fontSize: 10, color: INK, fontFamily: "monospace" }}>
             {trackingNumber}

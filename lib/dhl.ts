@@ -57,7 +57,15 @@ export interface SampleLabelRequest {
 
 export interface SampleLabelResult {
   trackingNumber: string;
-  labelUrl: string;
+  /** Embedded PDF returned by DHL with includeDocs=DATA. */
+  pdf: Uint8Array;
+}
+
+export class DhlAmbiguousError extends Error {
+  constructor(message: string, public readonly trackingNumber?: string) {
+    super(message);
+    this.name = "DhlAmbiguousError";
+  }
 }
 
 // ==================== COUNTRY RESOLUTION ====================
@@ -160,6 +168,18 @@ export function resolveCountryAlpha3(input: string): string | null {
   return ALPHA3_BY_NAME[key] ?? null;
 }
 
+// V1 deliberately excludes customs destinations and special address products.
+// Keep this explicit rather than treating every mapped country as shippable.
+const SUPPORTED_EU_COUNTRIES = new Set([
+  "AUT", "BEL", "CZE", "DEU", "DNK", "ESP", "FIN", "FRA", "IRL",
+  "ITA", "NLD", "POL", "PRT", "SWE",
+]);
+
+export function isSupportedDhlDestination(input: string): boolean {
+  const country = resolveCountryAlpha3(input);
+  return country != null && SUPPORTED_EU_COUNTRIES.has(country);
+}
+
 // ==================== CONFIG + AUTH ====================
 
 function getDhlConfig() {
@@ -199,6 +219,15 @@ function validateConfig(): void {
   }
   if (DHL_CONFIG.mode === "production" && !DHL_CONFIG.accountNumber) {
     throw new Error("DHL_ACCOUNT_NUMBER is required in production mode");
+  }
+  if (DHL_CONFIG.mode === "production") {
+    for (const key of [
+      "DHL_ACCOUNT_KLEINPAKET",
+      "DHL_ACCOUNT_WARENPOST_INT",
+      "DHL_ACCOUNT_PAKET_INT",
+    ] as const) {
+      if (!process.env[key]) throw new Error(`${key} is required in production mode`);
+    }
   }
 }
 
@@ -249,6 +278,11 @@ export async function generateSampleLabel(
       `Unrecognised country "${req.country}" — cannot map to an ISO code. Fix the address or extend the country map in lib/dhl.ts.`,
     );
   }
+  if (!SUPPORTED_EU_COUNTRIES.has(country)) {
+    throw new Error(
+      `Destination "${req.country}" is outside the supported EU label lanes.`,
+    );
+  }
   if (!req.street.trim() || !req.postcode.trim() || !req.city.trim()) {
     throw new Error("Incomplete address — street, postcode and city are all required.");
   }
@@ -285,13 +319,13 @@ export async function generateSampleLabel(
   } else if (isGermany) {
     product = isLightweight ? "V62KP" : "V01PAK";
     billingNumber = isLightweight
-      ? (process.env.DHL_ACCOUNT_KLEINPAKET ?? "63906239186201")
+      ? process.env.DHL_ACCOUNT_KLEINPAKET!
       : accountNumber;
   } else {
     product = isLightweight ? "V66WPI" : "V53WPAK";
     billingNumber = isLightweight
-      ? (process.env.DHL_ACCOUNT_WARENPOST_INT ?? "63906239186601")
-      : (process.env.DHL_ACCOUNT_PAKET_INT ?? "63906239185301");
+      ? process.env.DHL_ACCOUNT_WARENPOST_INT!
+      : process.env.DHL_ACCOUNT_PAKET_INT!;
   }
 
   const shipper =
@@ -340,19 +374,26 @@ export async function generateSampleLabel(
   };
 
   const token = await getAccessToken();
-  const response = await fetch(
-    `${DHL_CONFIG.shippingUrl}/orders?includeDocs=URL`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Accept-Language": "de-DE",
+  let response: Response;
+  try {
+    response = await fetch(
+      `${DHL_CONFIG.shippingUrl}/orders?includeDocs=DATA`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "Accept-Language": "de-DE",
+        },
+        body: JSON.stringify(payload),
       },
-      body: JSON.stringify(payload),
-    },
-  );
+    );
+  } catch (error) {
+    throw new DhlAmbiguousError(
+      `DHL order request lost its response: ${error instanceof Error ? error.message : "network error"}`,
+    );
+  }
 
   const text = await response.text();
   if (!response.ok) {
@@ -367,13 +408,18 @@ export async function generateSampleLabel(
     throw new Error(msg);
   }
 
-  const data = JSON.parse(text) as {
+  let data: {
     items: Array<{
       shipmentNo: string;
-      label?: { url: string };
+      label?: { b64?: string; url?: string };
       sstatus?: { title: string; status: number };
     }>;
   };
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new DhlAmbiguousError("DHL returned an unreadable order response");
+  }
   const item = data.items?.[0];
   if (!item || !item.shipmentNo) {
     if (item?.sstatus && item.sstatus.status > 200) {
@@ -382,8 +428,30 @@ export async function generateSampleLabel(
     throw new Error("No shipment number returned by DHL");
   }
 
+  const encoded = item.label?.b64;
+  if (!encoded) {
+    throw new DhlAmbiguousError(
+      `DHL created shipment ${item.shipmentNo} but returned no embedded label PDF`,
+      item.shipmentNo,
+    );
+  }
+  const pdf = Uint8Array.from(Buffer.from(encoded, "base64"));
+  if (pdf.byteLength < 5 || Buffer.from(pdf.subarray(0, 5)).toString("ascii") !== "%PDF-") {
+    throw new DhlAmbiguousError(
+      `DHL created shipment ${item.shipmentNo} but returned an invalid label PDF`,
+      item.shipmentNo,
+    );
+  }
+  const maxBytes = Number(process.env.DHL_LABEL_MAX_BYTES ?? 2_000_000);
+  if (pdf.byteLength > maxBytes) {
+    throw new DhlAmbiguousError(
+      `DHL label PDF is too large (${pdf.byteLength} bytes; limit ${maxBytes})`,
+      item.shipmentNo,
+    );
+  }
+
   return {
     trackingNumber: item.shipmentNo,
-    labelUrl: item.label?.url ?? "",
+    pdf,
   };
 }

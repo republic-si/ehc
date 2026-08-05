@@ -2,12 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireSession } from "@/lib/auth-helpers";
+import { randomUUID } from "node:crypto";
+import { requireRole, requireSession } from "@/lib/auth-helpers";
 import {
   createSampleRequest,
   setSampleRequestStatus,
   setSampleRequestAttended,
-  setSampleRequestLabel,
   setSampleRequestWeight,
   getSampleRequestById,
   asRequestRole,
@@ -15,7 +15,13 @@ import {
   SAMPLE_REQUEST_STATUSES,
   type SampleRequestStatus,
 } from "@/lib/sample-requests";
-import { generateSampleLabel } from "@/lib/dhl";
+import { DhlAmbiguousError, generateSampleLabel } from "@/lib/dhl";
+import {
+  buildNewLabelBatch,
+  claimIndividualLabel,
+  completeIndividualLabel,
+  failIndividualLabel,
+} from "@/lib/dhl-labels";
 
 export async function updateSampleRequestStatus(
   formData: FormData,
@@ -31,13 +37,11 @@ export async function updateSampleRequestStatus(
   revalidatePath("/admin/sample-requests");
 }
 
-// Mint a DHL shipping label for a sample box and mark the row shipped. Bills to
-// the eu_heat_awards DHL account (see lib/dhl.ts). Idempotent + cost-safe: if a label
-// already exists we never re-mint (which would re-bill) — the admin reprints the
-// stored PDF instead. Errors (bad country, incomplete address, DHL rejection)
-// bounce back to the list with the message in ?labelError so the admin sees why.
+// Mint one DHL label, persist its embedded PDF, and mark the row shipped. The
+// atomic claim prevents two tabs from minting the same request. Once the order
+// call may have reached DHL, ambiguous failures are never retried automatically.
 export async function printSampleLabel(formData: FormData): Promise<void> {
-  await requireSession();
+  await requireRole("admin");
 
   const id = String(formData.get("id") ?? "").trim();
   const returnTo = String(formData.get("returnTo") ?? "status=approved");
@@ -49,9 +53,15 @@ export async function printSampleLabel(formData: FormData): Promise<void> {
   if (!row) {
     redirect(`${base}&labelError=${encodeURIComponent("Request not found")}&labelFor=${id}`);
   }
-  // Already labelled — do not re-mint (would re-charge). Just refresh.
-  if (row.dhlLabelUrl) {
+  // Tracking is canonical proof that DHL already created the shipment.
+  if (row.dhlTrackingNumber) {
     redirect(base);
+  }
+
+  const attemptRef = randomUUID();
+  const claimed = await claimIndividualLabel(id, attemptRef);
+  if (!claimed) {
+    redirect(`${base}&labelError=${encodeURIComponent("Label is already being generated or is no longer eligible")}&labelFor=${id}`);
   }
 
   let errorMsg: string | null = null;
@@ -68,11 +78,38 @@ export async function printSampleLabel(formData: FormData): Promise<void> {
       // falls back to the 1.3 kg standard box when this is null/undefined. Box
       // dimensions stay fixed at the standard ROH box regardless.
       weight: row.weightKg ?? undefined,
-      reference: `EHC-SAMPLE-${id}`,
+      reference: `EHC-${id}-${attemptRef.slice(0, 8)}`,
     });
-    await setSampleRequestLabel(id, label.trackingNumber, label.labelUrl);
+    const saved = await completeIndividualLabel(
+      id,
+      attemptRef,
+      label.trackingNumber,
+      label.pdf,
+    );
+    if (!saved) {
+      await failIndividualLabel(
+        id,
+        attemptRef,
+        "uncertain",
+        "DHL returned a label but the local atomic save did not complete",
+        label.trackingNumber,
+      );
+      errorMsg = "DHL created the shipment, but saving it is uncertain. Do not retry.";
+    }
   } catch (e) {
     errorMsg = e instanceof Error ? e.message : "Label generation failed";
+    if (e instanceof DhlAmbiguousError) {
+      await failIndividualLabel(
+        id,
+        attemptRef,
+        "uncertain",
+        errorMsg,
+        e.trackingNumber,
+      );
+      errorMsg += " Do not retry this label automatically.";
+    } else {
+      await failIndividualLabel(id, attemptRef, "rejected", errorMsg);
+    }
   }
 
   revalidatePath("/admin/sample-requests");
@@ -86,6 +123,25 @@ export async function printSampleLabel(formData: FormData): Promise<void> {
   success.set("status", "shipped");
   success.set("labelFor", id);
   redirect(`/admin/sample-requests?${success.toString()}`);
+}
+
+export async function createNewLabelBatch(): Promise<void> {
+  const { user } = await requireRole("admin");
+  let batchId: string | null = null;
+  let error: string | null = null;
+  try {
+    batchId = await buildNewLabelBatch(user.id);
+  } catch (e) {
+    error = e instanceof Error ? e.message : "Label batch failed";
+  }
+  revalidatePath("/admin/sample-requests");
+  if (error) {
+    redirect(`/admin/sample-requests?status=shipped&source=samples&batchError=${encodeURIComponent(error)}`);
+  }
+  if (!batchId) {
+    redirect("/admin/sample-requests?status=shipped&source=samples&batchEmpty=1");
+  }
+  redirect(`/admin/sample-requests/label-batches/${batchId}`);
 }
 
 // Record the per-box shipping weight (kg) for a request. Persists ONLY the

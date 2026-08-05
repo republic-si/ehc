@@ -19,7 +19,9 @@ import {
 } from "./actions";
 import LabelControl from "./LabelControl";
 import WeightControl from "./WeightControl";
-import { resolveCountryAlpha3 } from "@/lib/dhl";
+import BatchLabelButton from "./BatchLabelButton";
+import { isSupportedDhlDestination, resolveCountryAlpha3 } from "@/lib/dhl";
+import { getLabelBatchHistory, getNewLabelCount } from "@/lib/dhl-labels";
 import {
   PageTitle,
   codeStyle,
@@ -105,6 +107,8 @@ function labelState(r: {
     addressIssue = r.addrCountry?.trim()
       ? `Unmapped country: ${r.addrCountry}`
       : "No country";
+  } else if (!isSupportedDhlDestination(r.addrCountry ?? "")) {
+    addressIssue = "Destination not supported in EU-only labels";
   } else if (missing.length) {
     addressIssue = `Missing ${missing.join(", ")}`;
   }
@@ -144,6 +148,8 @@ interface Props {
     audience?: string;
     labelError?: string;
     labelFor?: string;
+    batchError?: string;
+    batchEmpty?: string;
   }>;
 }
 
@@ -163,9 +169,11 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
     : undefined;
 
   const reqFilter = { ...view.filter, ...(audience ? { audience } : {}) };
-  const [requests, counts] = await Promise.all([
+  const [requests, counts, newLabelCount, batchHistory] = await Promise.all([
     getSampleRequests(filter, 500, reqFilter),
     getSampleRequestCounts(reqFilter),
+    getNewLabelCount(),
+    getLabelBatchHistory(),
   ]);
 
   // Preserve the active audience filter across the source/status links.
@@ -405,6 +413,56 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
         })}
       </div>
 
+      {filter === "shipped" && view.key === "samples" && (
+        <section
+          style={{
+            border: "1px solid #ddd",
+            background: "#fafafa",
+            padding: 14,
+            marginBottom: 18,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <BatchLabelButton count={newLabelCount} />
+            <span style={{ fontSize: 12, color: "#666" }}>
+              Individual labels are included in their first successful print batch only.
+            </span>
+          </div>
+          {sp.batchError && (
+            <p style={{ color: "#b00020", fontSize: 12, margin: "10px 0 0" }}>
+              Batch failed: {sp.batchError}
+            </p>
+          )}
+          {sp.batchEmpty && (
+            <p style={{ color: "#666", fontSize: 12, margin: "10px 0 0" }}>
+              There were no new stored labels to batch.
+            </p>
+          )}
+          {batchHistory.length > 0 && (
+            <div style={{ marginTop: 12 }}>
+              <strong style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                Batch history
+              </strong>
+              <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 6 }}>
+                {batchHistory.map((batch) => (
+                  <div key={batch.id} style={{ fontSize: 12, display: "flex", gap: 8 }}>
+                    <span>{new Date(batch.createdAt).toLocaleString("en-GB")}</span>
+                    <span>{batch.labelCount} labels</span>
+                    <span>{batch.state}</span>
+                    {batch.state === "ready" && (
+                      <a href={`/admin/sample-requests/label-batches/${batch.id}`}>
+                        Download PDF
+                      </a>
+                    )}
+                    {batch.failureReason && <span style={{ color: "#b00020" }}>{batch.failureReason}</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
       {requests.length === 0 ? (
         <p style={{ color: "#666", fontSize: 13 }}>
           No {SAMPLE_REQUEST_STATUS_LABELS[filter].toLowerCase()} requests.
@@ -599,7 +657,7 @@ export default async function SampleRequestsPage({ searchParams }: Props) {
                     <LabelControl
                       id={r.id}
                       needsLabel={ls.needsLabel}
-                      labelUrl={r.dhlLabelUrl}
+                      hasStoredLabel={r.hasStoredLabel}
                       trackingNumber={r.dhlTrackingNumber}
                       shippable={ls.shippable}
                       addressIssue={ls.addressIssue}

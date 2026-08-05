@@ -234,9 +234,9 @@ ALTER TABLE sample_requests
   ADD COLUMN IF NOT EXISTS guest_of BIGINT REFERENCES sample_requests(id) ON DELETE CASCADE;
 CREATE INDEX IF NOT EXISTS sample_requests_guest_of_idx ON sample_requests (guest_of);
 
--- DHL sample-box labels. Once a label is minted (and billed) we keep its
--- tracking number + the DHL-hosted PDF URL on the row, so reprints reuse the
--- same label instead of generating (and paying for) a fresh one.
+-- DHL sample-box labels. Tracking is canonical proof that DHL created the
+-- shipment. dhl_label_url is retained for schema compatibility; new labels
+-- store their permanent PDF in dhl_label_documents instead.
 ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS dhl_tracking_number TEXT;
 ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS dhl_label_url       TEXT;
 
@@ -246,3 +246,54 @@ ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS dhl_label_url       TEXT;
 -- minting — it never creates a label. Box DIMENSIONS stay fixed at the standard
 -- ROH box; only the weight varies per request. NUMERIC(6,3) = gram precision.
 ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS weight_kg NUMERIC(6,3);
+
+-- Durable DHL label workflow. A tracking number is canonical proof that DHL
+-- created a shipment; the state prevents concurrent/ambiguous retries.
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS dhl_label_state TEXT NOT NULL DEFAULT 'idle'
+  CHECK (dhl_label_state IN ('idle','generating','ready','rejected','uncertain'));
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS dhl_label_attempt_ref TEXT;
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS dhl_label_started_at TIMESTAMPTZ;
+ALTER TABLE sample_requests ADD COLUMN IF NOT EXISTS dhl_label_error TEXT;
+
+-- Individual label PDFs are retained by EHC because DHL's download URLs
+-- expire. BYTEA stays out of the normal sample_requests list queries.
+CREATE TABLE IF NOT EXISTS dhl_label_documents (
+  sample_request_id BIGINT PRIMARY KEY REFERENCES sample_requests(id) ON DELETE CASCADE,
+  pdf               BYTEA NOT NULL,
+  sha256            TEXT NOT NULL,
+  byte_size         INTEGER NOT NULL CHECK (byte_size > 0),
+  created_at        TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Print batches are application-side only: DHL labels are still minted one at
+-- a time. A ready batch owns an immutable combined PDF; failed batches release
+-- their items so those labels return to the "new labels" queue.
+CREATE TABLE IF NOT EXISTS dhl_label_batches (
+  id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state          TEXT NOT NULL CHECK (state IN ('building','ready','failed')),
+  created_by     BIGINT REFERENCES users(id) ON DELETE SET NULL,
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
+  ready_at       TIMESTAMPTZ,
+  failed_at      TIMESTAMPTZ,
+  failure_reason TEXT
+);
+
+CREATE TABLE IF NOT EXISTS dhl_label_batch_items (
+  batch_id          UUID NOT NULL REFERENCES dhl_label_batches(id) ON DELETE CASCADE,
+  sample_request_id BIGINT NOT NULL REFERENCES sample_requests(id) ON DELETE RESTRICT,
+  position          INTEGER NOT NULL CHECK (position > 0),
+  PRIMARY KEY (batch_id, sample_request_id),
+  UNIQUE (sample_request_id),
+  UNIQUE (batch_id, position)
+);
+
+CREATE TABLE IF NOT EXISTS dhl_label_batch_artifacts (
+  batch_id    UUID PRIMARY KEY REFERENCES dhl_label_batches(id) ON DELETE CASCADE,
+  pdf         BYTEA NOT NULL,
+  sha256      TEXT NOT NULL,
+  byte_size   INTEGER NOT NULL CHECK (byte_size > 0),
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS dhl_label_batches_created_idx
+  ON dhl_label_batches (created_at DESC);

@@ -76,6 +76,8 @@ export interface SampleRequestRow {
   reviewed_at: string | null;
   dhl_tracking_number: string | null;
   dhl_label_url: string | null;
+  dhl_label_state?: string;
+  has_label_document?: boolean;
   // Postgres NUMERIC comes back over the wire as a string (or null).
   weight_kg: string | null;
 }
@@ -107,8 +109,10 @@ export interface SampleRequest {
   reviewedAt: string | null;
   /** DHL tracking number, set once a shipping label has been generated. */
   dhlTrackingNumber: string | null;
-  /** DHL-hosted PDF URL for the generated label. Null until a label exists. */
+  /** Legacy DHL-hosted URL. New labels use the durable document table. */
   dhlLabelUrl: string | null;
+  dhlLabelState: "idle" | "generating" | "ready" | "rejected" | "uncertain";
+  hasStoredLabel: boolean;
   /** Per-box shipping weight in kg, keyed by hand in the admin. Null = not
    *  weighed; the label mint then falls back to the 1.3 kg default. */
   weightKg: number | null;
@@ -141,6 +145,8 @@ function toSampleRequest(row: SampleRequestRow): SampleRequest {
     reviewedAt: row.reviewed_at,
     dhlTrackingNumber: row.dhl_tracking_number ?? null,
     dhlLabelUrl: row.dhl_label_url ?? null,
+    dhlLabelState: (row.dhl_label_state as SampleRequest["dhlLabelState"]) ?? "idle",
+    hasStoredLabel: row.has_label_document ?? false,
     weightKg: row.weight_kg != null ? Number(row.weight_kg) : null,
   };
 }
@@ -408,7 +414,9 @@ export async function getSampleRequestById(
            wants_press_evening, attended, extra_emails,
            completed_at::text AS completed_at, guest_of,
            status, reviewed_at::text AS reviewed_at,
-           dhl_tracking_number, dhl_label_url, weight_kg::text AS weight_kg
+           dhl_tracking_number, dhl_label_url, dhl_label_state,
+           EXISTS (SELECT 1 FROM dhl_label_documents d WHERE d.sample_request_id = sample_requests.id) AS has_label_document,
+           weight_kg::text AS weight_kg
     FROM sample_requests
     WHERE id = ${id}::bigint
   `) as SampleRequestRow[];
@@ -437,7 +445,9 @@ export async function getSampleRequests(
            addr_country, note, source, maker, role, audience, wants_samples, wants_press_evening,
            attended, extra_emails, completed_at::text AS completed_at, guest_of,
            status, reviewed_at::text AS reviewed_at,
-           dhl_tracking_number, dhl_label_url, weight_kg::text AS weight_kg
+           dhl_tracking_number, dhl_label_url, dhl_label_state,
+           EXISTS (SELECT 1 FROM dhl_label_documents d WHERE d.sample_request_id = sample_requests.id) AS has_label_document,
+           weight_kg::text AS weight_kg
     FROM sample_requests
     ${where}
     ORDER BY created_at DESC
@@ -481,23 +491,7 @@ export async function setSampleRequestStatus(
     UPDATE sample_requests
     SET status = ${status}, reviewed_at = now()
     WHERE id = ${id}::bigint
-  `;
-}
-
-// Stamp a freshly generated DHL label onto the row and mark it shipped. The
-// label URL is DHL-hosted and reused on reprint, so we never re-mint (re-bill).
-export async function setSampleRequestLabel(
-  id: string,
-  trackingNumber: string,
-  labelUrl: string,
-): Promise<void> {
-  await sql`
-    UPDATE sample_requests
-    SET dhl_tracking_number = ${trackingNumber},
-        dhl_label_url = ${labelUrl},
-        status = 'shipped',
-        reviewed_at = now()
-    WHERE id = ${id}::bigint
+      AND (dhl_tracking_number IS NULL OR ${status} = 'shipped')
   `;
 }
 
