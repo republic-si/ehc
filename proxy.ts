@@ -19,14 +19,33 @@ import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
 export const config = {
-  matcher: ["/admin/:path*", "/portal/:path*", "/strategy.html"],
+  matcher: [
+    "/admin/:path*",
+    "/portal/:path*",
+    "/strategy.html",
+    "/strategy-makers.html",
+    "/makers-brief.html",
+    "/strategy-makers.pdf",
+    "/makers-brief.pdf",
+  ],
 };
 
-// Shared-password gate for the distilled strategy doc. It's a static file in
-// public/, so the only place to gate it is here. HTTP Basic Auth (native
+// Static strategy docs behind the shared password. Add the path here AND to
+// the matcher above — the matcher decides whether the proxy runs at all, so a
+// path missing from it is served straight from public/ with no gate.
+const GATED_DOCS = new Set([
+  "/strategy.html",
+  "/strategy-makers.html",
+  "/makers-brief.html",
+  "/strategy-makers.pdf",
+  "/makers-brief.pdf",
+]);
+
+// Shared-password gate for the strategy docs. They're static files in
+// public/, so the only place to gate them is here. HTTP Basic Auth (native
 // browser prompt, no login page) against a HARDCODED password — deliberately
 // not an env var, because Vercel has silently dropped this site's env vars 3×.
-// Low-stakes noindex doc; fail-closed if the header is missing/wrong.
+// Low-stakes noindex docs; fail-closed if the header is missing/wrong.
 const STRATEGY_PASS = "chilioil2026";
 
 // Next.js 16 proxy files are loaded via the named `proxy` export (the
@@ -37,9 +56,9 @@ const STRATEGY_PASS = "chilioil2026";
 export const proxy = auth((req) => {
   const path = req.nextUrl.pathname;
 
-  // Strategy doc: shared-password Basic Auth, resolved before any Auth.js
+  // Strategy docs: shared-password Basic Auth, resolved before any Auth.js
   // session logic so it never touches the admin/portal magic-link flow.
-  if (path === "/strategy.html") {
+  if (GATED_DOCS.has(path)) {
     const hdr = req.headers.get("authorization") ?? "";
     const [scheme, encoded] = hdr.split(" ");
     let ok = false;
