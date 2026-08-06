@@ -84,6 +84,12 @@ const SOURCES: Source[] = [
       "Greenberg Traurig LLP, EU Packaging and Packaging Waste Regulation: New Compliance Requirements for E-Commerce.",
     url: "https://www.gtlaw.com/en/insights/2025/8/eu-packaging-and-packaging-waste-regulation-new-compliance-requirements-for-e-commerce",
   },
+  {
+    n: 10,
+    text:
+      "Regulation (EU) 2025/40, full text — Article 24 (obligation related to excessive packaging) and Article 10 (packaging minimisation). Primary source; consulted in preference to secondary summaries.",
+    url: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32025R0040",
+  },
 ];
 
 function Ref({ ns }: { ns: number[] }) {
@@ -216,11 +222,17 @@ export default function PositionSevenPage() {
               different recycling chemistry of glass; however, glass
               packaging remains subject to PPWR&rsquo;s recyclability,
               reporting, design, and labelling obligations
-              <Ref ns={[7]} />. The 40-per-cent empty-space rule applying to
-              e-commerce parcels from 12 August 2026 affects glass-bottled
-              products that are typically shipped with significant
-              protective void volume
-              <Ref ns={[9]} />. Independent legal analysis confirms that the
+              <Ref ns={[7]} />. Article 24(1) sets a 50-per-cent maximum
+              empty-space ratio for e-commerce, grouped and transport
+              packaging, applying from 1 January 2030 or three years from the
+              entry into force of the implementing acts establishing the
+              calculation methodology, whichever is the later; the Commission
+              must adopt that methodology by 12 February 2028. It bears on
+              glass-bottled products, which are typically shipped with
+              significant protective void volume, and Article 24(3) counts
+              filling materials such as air cushions, paper and foam chips as
+              empty space
+              <Ref ns={[10]} />. Independent legal analysis confirms that the
               regulation&rsquo;s practical effect on glass-using producers
               comes through design, labelling, reuse-system, and parcel-space
               obligations rather than through recycled-content thresholds
@@ -249,13 +261,15 @@ export default function PositionSevenPage() {
                 acknowledgement of this; they are not a full solution.
               </li>
               <li>
-                The 40-per-cent empty-space rule applying to e-commerce
-                parcels from 12 August 2026 is a particular concern for
-                glass-bottled producers, whose protective void volumes
-                exceed that threshold under most current packaging designs.
-                The Council holds that operational guidance from the
-                Commission and Member States should reflect the structural
-                difference between glass and other packaging formats.
+                The 50-per-cent empty-space limit under Article 24, applying
+                from 1 January 2030 at the earliest, is a particular concern
+                for glass-bottled producers, whose protective void volumes may
+                exceed that threshold under current packaging designs and
+                whose protective filling counts towards it. The Council holds
+                that the calculation methodology due from the Commission by
+                12 February 2028, and the operational guidance that follows
+                it, should reflect the structural difference between glass and
+                other packaging formats.
               </li>
             </ol>
 
@@ -275,6 +289,9 @@ export default function PositionSevenPage() {
                 implementing acts, particularly where the operational
                 interpretation of the empty-space rule, the digital labelling
                 requirement, and the recyclability grading is being settled.
+                The empty-space calculation methodology is due from the
+                Commission by 12 February 2028 and is the Council&rsquo;s
+                priority intervention.
               </li>
               <li>
                 Track Commission and Member State guidance on micro-enterprise
