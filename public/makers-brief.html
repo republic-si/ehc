@@ -14,8 +14,9 @@
     font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;
     font-size:10.6pt; line-height:1.48;
   }
+  /* DRAFT MODE: pages grow instead of clipping. Restore height:297mm + overflow:hidden once the copy is chopped back to 3pp. */
   .page{
-    width:210mm; height:297mm; margin:0 auto 8mm; padding:12mm 14mm 10mm; overflow:hidden;
+    width:210mm; min-height:297mm; margin:0 auto 8mm; padding:12mm 14mm 10mm; overflow:visible;
     background:var(--ground); position:relative;
     box-shadow:0 2px 14px rgba(0,0,0,.13);
   }
@@ -38,6 +39,9 @@
   .band--dark{background:var(--ink); color:#ecefe7}
   .band--dark h2,.band--dark h3,.band--dark strong{color:#fff}
   .band--dark p{color:#cddbd0}
+  .band--turn{margin:4mm 0 0}
+  .band--turn h3{font-size:13pt; line-height:1.18; margin:0 0 2.5mm}
+  .band--turn .turnline{font-size:11.4pt; font-weight:800; line-height:1.28; color:#fff; margin:0}
   .cols-2{display:grid; grid-template-columns:1fr 1fr; gap:5mm 8mm}
   .cols-3{display:grid; grid-template-columns:repeat(3,1fr); gap:5mm 6mm}
   .cols-4{display:grid; grid-template-columns:repeat(4,1fr); gap:4mm 5mm}
@@ -97,7 +101,7 @@
   @page{size:A4 portrait; margin:0}
   @media print{
     body{background:#fff}
-    .page{margin:0; box-shadow:none; break-after:page; height:297mm}
+    .page{margin:0; box-shadow:none; break-after:page; min-height:297mm}
     .page:last-child{break-after:auto}
     a{color:inherit; text-decoration:none}
   }
@@ -114,7 +118,7 @@
   <h1>The courier earns more from your bottle than you do.</h1>
   <p class="sub">EHC gets you a big company’s shipping, a range a buyer will actually take, and you keep your name on the bottle.</p>
 
-  <p>You are the warehouse, the packing bench, the export desk, the sales team and the advertising agency. On an average €8.84 bottle, domestic walk-in postage takes 41–47% of what your customer pays. Across a border, even inside the EU, shipping can cost more than the sauce. <strong>Your customer does not reject your sauce. They abandon the basket.</strong></p>
+  <p>You are the warehouse, the packing bench, the export desk, the sales team and the advertising agency. On an average €8.84 bottle, domestic walk-in postage takes 41–47% of what your customer pays. Across a border, even inside the EU, it costs €10.49–11.99 to send that same bottle — more than the sauce inside it. <strong>Your customer does not reject your sauce. They abandon the basket.</strong></p>
   <p>And when you stop, the business stops. Take a holiday and you close the shop.</p>
 
   <div class="cols-3" style="margin:5mm 0">
@@ -154,15 +158,22 @@
     <p class="barlbl">Through one shared hub: one parcel</p>
     <div class="bar">
       <span class="seg seg--sauce" style="width:42.75%">Same sauces €44.80</span>
-      <span class="seg seg--post" style="width:3.81%; min-width:9mm"></span>
-      <span class="price">€3.99</span>
+      <span class="seg seg--post" style="width:4.95%; min-width:9mm"></span>
+      <span class="price">€5.19</span>
     </div>
   </div>
-  <p class="note"><strong>That is postage only.</strong> Storage and the per-parcel fee are charged separately, and are set out on page 2.</p>
+  <p class="note"><strong>That is postage only.</strong> A five-bottle parcel on a pooled domestic carrier, at published rates. Storage and the per-parcel fee are charged separately, and are set out on page 2.</p>
 
   <figure class="ph"><div class="box">[ IMAGE PLACEHOLDER · PACKING BENCH ]</div>
     <figcaption>One maker, one parcel at a time. This is the job that eats your evenings and 41–47% of the order.</figcaption>
   </figure>
+
+  <div class="band band--dark band--turn">
+    <h3>So how, exactly, are you supposed to grow?</h3>
+    <p>You make the sauce. Then you buy the boxes, book the courier, eat the postage, learn the customs codes, register for packaging in six separate countries, chase the invoice, answer the emails, work the stall, shoot the photos, and start again on Monday. On an €8.84 bottle.</p>
+    <p>It is ridiculous. It is why hot sauce in Europe stays a hobby for most of us.</p>
+    <p class="turnline">EHC exists to stop that. Not to make you a better hobbyist — to make this fucking real.</p>
+  </div>
 </section>
 
 <!-- ============ PAGE 2 ============ -->
@@ -188,16 +199,20 @@
   <p><strong>Four things you cannot do at your size.</strong> Get a customer’s first taste and keep them buying all year. Reach a trade buyer as one range instead of one small supplier. Carry a medal and a mark that buyer can defend upwards. Ship on pooled rates you could never reach on your own volume.</p>
 
   <div class="band">
-    <h3>You own every bottle. We never buy your stock.</h3>
-    <p style="margin:0">Your sauce sits in the hub in your name until a customer buys it. Nobody discounts it, dumps it, or decides which of your sauces deserves the space. Your fee pays for the building, never for someone else’s stock. The risk also stays where it already is: you paid to make it, and you pay storage while it sits.</p>
+    <h3>You own every bottle until we have a customer for it.</h3>
+    <p style="margin:0">Your sauce sits in the hub in your name. We buy it from you only when we have somewhere for it to go — a Republic of Heat customer, or a trade buyer we have signed. We never buy stock we have not already sold, so nobody discounts it, dumps it, or decides which of your sauces deserves the space. Finding those buyers is the job you pay us to do. The risk stays where it is: you paid to make it, and you pay storage while it sits.</p>
   </div>
+
+  <p><strong>We do not replace you in your home market.</strong> Your own shop, your stall and your local stockists stay exactly as they are — we do not touch them and we do not want them. EHC's job is the order you were never going to get anyway: the customer two countries away who would have abandoned the basket at €10.49 postage, and the buyer who was never going to find you alone. Every order through the hub is an extra one, on top of what you already do.</p>
 
   <h2>What you pay</h2>
   <div class="cols-3" style="margin:3mm 0 3mm">
-    <div class="item"><p class="lbl">Membership</p><p><strong>[ € per year ]</strong><br>One annual fee. Buys shared buying power, the Maker Mark and the routes to market.</p></div>
-    <div class="item"><p class="lbl">Storage</p><p><strong>[ € per carton, per month ]</strong><br>You pay for the shelf space you use. Orders go out while you are asleep, at a wedding, or making the next batch.</p></div>
-    <div class="item"><p class="lbl">Fulfilment</p><p><strong>[ € per parcel ]</strong><br>Charged when stock moves. Carriage is passed through at the pooled contract rate, with no mark-up.</p></div>
+    <div class="item"><p class="lbl">Membership</p><p><strong>€150 per year</strong><br>One flat fee for the founding cohort. Buys shared buying power, the Maker Mark and the routes to market.</p></div>
+    <div class="item"><p class="lbl">Storage</p><p><strong>€2–3 per carton, per month</strong><br>A carton is a standard 400×300 Euro container: 48 bottles. You pay for the shelf space you use, and orders go out while you are asleep, at a wedding, or making the next batch.</p></div>
+    <div class="item"><p class="lbl">Fulfilment</p><p><strong>€3.50–3.70 per parcel</strong><br>Charged when stock moves, and priced to cover picking, packing and materials — nothing else. Carriage is passed through at the pooled contract rate, with no mark-up.</p></div>
   </div>
+  <p><strong>You decide how deep to stock, and you can do the maths yourself.</strong> Storage is billed by the carton, by the month — 48 bottles, €2–3 — so there is no unit to fill and no lease to commit to. A typical member holds around 350 bottles: eight cartons, about €22 a month for their whole range. Stock deep and send one consignment a year. Stock shallow and send smaller ones more often. Either way you pay for the shelf you actually use.</p>
+
   <p class="note">Those are the only three charges, and there is no commission on your sales. Every maker who joins after you makes your share of the fixed costs smaller, which is the honest reason to be early rather than eightieth.</p>
 
   <hr class="rule">
