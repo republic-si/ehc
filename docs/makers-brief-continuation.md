@@ -18,14 +18,14 @@ Every claim gets traced back to a source file before it stays. **Four claims hav
 
 1. **€3.99 postage** (s1) — was the DPD ≤2 kg 2-bottle rate applied to a five-bottle basket. → **€5.19** GLS ≤5 kg, `shipping-outbound.md:32`.
 2. **"shipping can cost more than the sauce"** (s1) — true but unquantified. → **€10.49–11.99** DHL DE→EU Zone 1 ≤1 kg.
-3. **The 69% Ferment Island stat** (s2) — the numbers were all real but added up an order nobody can place: €9 + €20 ignores the **€15 minimum order** (`producer-fragmentation.md:48`), and `:62` still lists the FI shipping figure as an unclosed follow-up. → rebuilt on the real floor: **€35**.
+3. **The 69% Maker K stat** (s2) — the numbers were all real but added up an order nobody can place: €9 + €20 ignores the **€15 minimum order** (`producer-fragmentation.md:48`), and `:62` still lists the FI shipping figure as an unclosed follow-up. → rebuilt on the real floor: **€35**.
 4. **"40% empty space from 12 August 2026"** (s2) — wrong number *and* wrong date. Art. 24(1) of Reg. (EU) 2025/40 says **50%**, and **"by 1 January 2030 or 3 years from the entry into force of the implementing acts, whichever is the latest"**. Art. 10 minimisation is also 2030, not 2026. → card rebuilt on penalties; 50%/2030 moved to the note.
 
 **Rule learned the hard way:** two law firms (Greenberg Traurig, Gleiss Lutz) published the wrong dates on this. Cite EUR-Lex directly, never a summary. Full correction record in `~/ehc-regulation/PPWR/analysis/packaging-epr.md`.
 
 ## Applied session 2 (all local, all in `makers-brief.html`)
 
-- [x] Ferment Island card **69% → €35** — the smallest order a Berlin customer can actually place
+- [x] Maker K card **69% → €35** — the smallest order a Berlin customer can actually place
 - [x] EPR card 3 **"And your box" → "And the penalties"**, €200,000 correctly attributed to German **VerpackG**, not PPWR
 - [x] EPR note gains the **50%-from-2030** empty-space point, honestly dated
 - [x] visitBerlin **"launch with" → "launch for 2027, with visitBerlin behind them"** — drops the co-launch implication
@@ -57,7 +57,7 @@ Every claim gets traced back to a source file before it stays. **Four claims hav
 
 - [x] **`app/positions/07-packaging-ppwr/page.tsx` — corrected 2026-08-06.** Carried the 40%/12-August-2026 error in Finding 3 and Position item 3. **Not yet live**, so it was updated, not publicly corrected — no revision marker, no correction note. Root cause: its own source 9 was the Greenberg Traurig article carrying the error. Primary EUR-Lex text added as source 10.
 - [ ] `contact@republicofheat.com` is a ROH address on an EHC doc whose own footer separates the two companies. Fine "for now" per Simon; wants an `@europeanheatcouncil.eu` address before this goes wide.
-- [ ] `producer-fragmentation.md:27` flags **Little Red's as "currently sold out"** — the p1 five-maker table presents it as a live basket.
+- [ ] `producer-fragmentation.md:27` flags **Maker D as "currently sold out"** — the p1 five-maker table presents it as a live basket.
 - [ ] **"a small maker's licensing can be under €100 a year"** is unverified — no published dual-system rate sourced. Flagged 🟡 in `~/ehc-regulation/PPWR/analysis/packaging-epr.md`.
 - [ ] visitBerlin: get Alexander's surname/role/email, and convert goodwill into a named support instrument with a date.
 
